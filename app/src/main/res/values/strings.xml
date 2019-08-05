@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">心密之家</string>
+    <string name="text_check_internet">check your network connection</string>
+    <string name="text_wait_try">Please try again later</string>
+    <string name="loading">loading…</string>
+    <string name="main_bottom_home">首页</string>
+    <string name="main_bottom_mine">我的</string>
+    <string name="main_bottom_more">更多</string>
+
+    <string name="exit_app" >在点一下退出app</string>
+</resources>

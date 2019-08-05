@@ -1,0 +1,105 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>    <!-- toolbar背景颜色-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>  <!-- 顶部状态栏背景颜色-->
+        <item name="colorAccent">@color/colorAccent</item> <!-- EditView 背景 ，RadioButton 圆圈颜色-->
+        <!-- 禁止文件自动转为大写-->
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="line_height_05">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_0_5</item>
+        <item name="android:background">@color/line_color</item>
+    </style>
+
+    <style name="line_height_1">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dp_1</item>
+        <item name="android:background">@color/line_color</item>
+    </style>
+
+    <style name="line_width_05">
+        <item name="android:layout_width">@dimen/dp_0_5</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/line_color</item>
+    </style>
+
+    <style name="line_width_1">
+        <item name="android:layout_width">@dimen/dp_1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/line_color</item>
+    </style>
+
+    <!--布局封装-->
+    <!--水平垂直居中-->
+    <style name="LayoutCenterHV">
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+        <item name="layout_constraintRight_toRightOf">parent</item>
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+    <!--水平居中-->
+    <style name="LayoutCenterH">
+        <item name="layout_constraintLeft_toLeftOf">parent</item>
+        <item name="layout_constraintRight_toRightOf">parent</item>
+    </style>
+
+    <!--垂直居中-->
+    <style name="LayoutCenterV">
+        <item name="layout_constraintTop_toTopOf">parent</item>
+        <item name="layout_constraintBottom_toBottomOf">parent</item>
+    </style>
+
+
+    <style name="person_center_photo_Style">
+        <item name="android:background">@color/white</item>
+        <item name="android:layout_height">@dimen/dp_50</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">16.0dip</item>
+        <item name="android:textColor">@color/tab_text_normal</item>
+    </style>
+
+
+    <!-- 双向进度条-->
+    <declare-styleable name="TwoWayRattingBar">
+        <attr name="color_line_normal" format="color" />
+        <attr name="color_line_select" format="color" />
+        <attr name="stroke_width_normal" format="dimension" />
+        <attr name="stroke_width_select" format="dimension" />
+        <attr name="progress_icon" format="reference" />
+        <attr name="text_size" format="dimension" />
+        <attr name="text_color" format="color" />
+    </declare-styleable>
+
+    <!--加载中-->
+    <style name="loading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/color_transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!--喜欢-->
+    <style name="like_dialog" parent="android:style/Theme.Dialog">
+        <!--是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item><!-- 设置dialog背景不变暗 -->
+    </style>
+
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">@dimen/sp_12</item>
+    </style>
+
+</resources>
