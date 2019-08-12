@@ -7,5 +7,5 @@
     <string name="main_bottom_mine">我的</string>
     <string name="main_bottom_more">更多</string>
 
-    <string name="exit_app" >在点一下退出app</string>
+    <string name="exit_app">在按一次退出</string>
 </resources>

@@ -7,7 +7,7 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
-    <color name="app_color">#1296db</color>
+    <color name="app_color">#F2D33B</color>
     <color name="app_color_80">#80EB544D</color>
     <color name="line_color">#E5E5E5</color>
     <color name="app_bg_color">#F9F9F9</color>
@@ -57,4 +57,5 @@
     <color name="fab_color">#8160FF</color>
     <color name="vip_bg_color">#FFBC00</color>
     <color name="photo_check_text_color">#FF7007 </color>
+    <color name="app_color_bg">#F9F6ED</color>
 </resources>

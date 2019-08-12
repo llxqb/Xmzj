@@ -72,7 +72,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      * 设置白底黑字状态栏
      */
     public void setStatusBar() {
-        StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.white));
+        StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.app_color));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View content = ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
             if (content != null && !isUseFullScreenMode()) {
