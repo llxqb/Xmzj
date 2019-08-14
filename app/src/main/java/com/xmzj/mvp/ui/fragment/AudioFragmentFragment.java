@@ -5,14 +5,21 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseFragment;
+import com.xmzj.entity.response.AudioContentResponse;
+import com.xmzj.mvp.ui.adapter.AudioAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +27,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
- *AudioFragmentFragment
+ * AudioFragmentFragment
  */
 
 public class AudioFragmentFragment extends BaseFragment {
@@ -34,12 +41,22 @@ public class AudioFragmentFragment extends BaseFragment {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     Unbinder unbinder;
+    private List<AudioContentResponse> audioContentResponses = new ArrayList<>();
+    private AudioAdapter mAudioAdapter;
+    /**
+     * 音频一级标题筛选
+     */
     private int mType;
+    /**
+     * 音频二级标题筛选
+     */
+    private int mType2;
 
-    public static AudioFragmentFragment getInstance(int type) {
+    public static AudioFragmentFragment getInstance(int type, int type2) {
         AudioFragmentFragment fragment = new AudioFragmentFragment();
         Bundle bd = new Bundle();
         bd.putInt("type", type);
+        bd.putInt("type2", type2);
         fragment.setArguments(bd);
         return fragment;
     }
@@ -49,6 +66,7 @@ public class AudioFragmentFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mType = getArguments().getInt("type");
+            mType2 = getArguments().getInt("type2");
         }
     }
 
@@ -66,13 +84,37 @@ public class AudioFragmentFragment extends BaseFragment {
 
     @Override
     public void initView() {
-//        if(){
-//
-//        }
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAudioAdapter = new AudioAdapter(getActivity(), audioContentResponses);
+        mRecyclerView.setAdapter(mAudioAdapter);
     }
 
     @Override
     public void initData() {
+        switch (mType) {
+            case 0:
+                if (mType2 == 0) {
+                    for (int i = 0; i < 5; i++) {
+                        AudioContentResponse audioContentResponse = new AudioContentResponse();
+                        audioContentResponse.title = "明心见性";
+                        audioContentResponse.playNum = 500;
+                        audioContentResponse.lookNum = 3000;
+                        audioContentResponse.playDuration = "80分钟";
+                        audioContentResponse.uploadDate = "2019-08-10";
+                        audioContentResponse.url = "https://v.qq.com/txp/iframe/player.html?vid=m0524y9cv04";
+                        audioContentResponses.add(audioContentResponse);
+                    }
+                }
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
     }
 
 

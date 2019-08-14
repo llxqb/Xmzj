@@ -113,4 +113,6 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:3.1.1'
     //banner
     implementation 'com.youth.banner:banner:1.4.10'  //最新版本
+    //视频加载库
+    implementation 'cn.jzvd:jiaozivideoplayer:7.0.4'
 }

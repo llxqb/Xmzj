@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * MyFragmentAdapter
+ * 首页FragmentAdapter
  */
 
 public class MyFragmentAdapter extends FragmentPagerAdapter {

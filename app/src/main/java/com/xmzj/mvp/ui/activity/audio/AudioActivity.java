@@ -15,6 +15,7 @@ import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.AudioFragment;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,14 +45,13 @@ public class AudioActivity extends BaseActivity {
     protected void initContentView() {
         setContentView(R.layout.activity_audio);
         setStatusBar();
-
     }
 
     @Override
     protected void initView() {
         List<Fragment> fragmentList = new ArrayList<>();
-        String[] titleString = {"全部", "佛教常识", "佛经", "心中心", "宗趣归宿"};
-        for (int i = 0; i < 5; i++) {
+        String[] titleString = {"佛教常识", "佛经", "心中心", "宗趣归宿","其它"};
+        for (int i = 0; i < titleString.length; i++) {
             fragmentList.add(AudioFragment.getInstance(i));
         }
         mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
@@ -60,6 +60,9 @@ public class AudioActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+
+
+
 
     }
 

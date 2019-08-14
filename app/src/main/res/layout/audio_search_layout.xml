@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:padding="@dimen/dp_8"
+        android:padding="@dimen/dp_10"
         android:src="@mipmap/huancun" />
 
     <ImageView
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toStartOf="@id/upload_history_iv"
-        android:padding="@dimen/dp_8"
+        android:padding="@dimen/dp_10"
         android:src="@mipmap/history" />
 
 

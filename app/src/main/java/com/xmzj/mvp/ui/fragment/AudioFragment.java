@@ -71,43 +71,43 @@ public class AudioFragment extends BaseFragment {
                 fragmentList.clear();
                 titleString = new String[]{"全部", "因果", "出离", "觉悟"};
                 for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(i));
+                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
                 mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
             case 1:
                 fragmentList.clear();
-                titleString = new String[]{"全部", "因果", "出离", "觉悟"};
+                titleString = new String[]{"全部", "基本教理", "心经", "金刚经", "楞严经", "佛心经", "其它"};
                 for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(i));
+                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
                 mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
             case 2:
                 fragmentList.clear();
-                titleString = new String[]{"全部", "基本教理", "心经", "金刚经", "楞严经", "佛心经", "其它"};
+                titleString = new String[]{"全部", "认识心密", "百坐", "千坐", "打七打九", "方便与其它", "六字大明咒"};
                 for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(i));
+                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
                 mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
             case 3:
                 fragmentList.clear();
-                titleString = new String[]{"全部", "认识心密", "百坐", "千坐", "打七打九", "方便与其它", "六字大明咒"};
+                titleString = new String[]{"全部", "明心见性", "除习与妙用", "以禅为体", "关于净土"};
                 for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(i));
+                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
                 mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
             case 4:
                 fragmentList.clear();
-                titleString = new String[]{"全部", "明心见性", "除习与妙用", "以禅为体", "关于净土"};
+                titleString = new String[]{"其它"};
                 for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(i));
+                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
                 mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
