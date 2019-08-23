@@ -1,19 +1,15 @@
 package com.xmzj.mvp.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.xmzj.R;
 import com.xmzj.XmzjApp;
 import com.xmzj.di.components.DaggerHomeFragmentComponent;
@@ -23,15 +19,13 @@ import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.response.HomeBottomFunctionResponse;
 import com.xmzj.entity.response.HomeFunctionResponse;
 import com.xmzj.help.GlideImageLoader;
-import com.xmzj.help.GlideLoader;
-import com.xmzj.help.ImageLoaderHelper;
 import com.xmzj.mvp.ui.activity.audio.AudioActivity;
 import com.xmzj.mvp.ui.activity.main.HomeFragmentControl;
+import com.xmzj.mvp.ui.activity.video.VideoActivity;
 import com.xmzj.mvp.ui.adapter.HomeBottomAdapter;
 import com.xmzj.mvp.ui.adapter.HomeTopAdapter;
 import com.xmzj.mvp.utils.StatusBarUtil;
 import com.youth.banner.Banner;
-import com.youth.banner.loader.ImageLoaderInterface;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,8 +57,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     private List<String> bannerImgList = new ArrayList<>();
     private List<HomeFunctionResponse> functionResponseList = new ArrayList<>();
     private List<HomeBottomFunctionResponse> bottomFunctionResponseList = new ArrayList<>();
-    private HomeTopAdapter mHomeTopAdapter;
-    private HomeBottomAdapter mHomeBottomAdapter;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -88,7 +80,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     public void initView() {
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
         mHomeTopRecyclerView.setLayoutManager(gridLayoutManager);
-        mHomeTopAdapter = new HomeTopAdapter(getActivity(), functionResponseList, mImageLoaderHelper);
+        HomeTopAdapter mHomeTopAdapter = new HomeTopAdapter(getActivity(), functionResponseList, mImageLoaderHelper);
         mHomeTopRecyclerView.setAdapter(mHomeTopAdapter);
         mHomeTopAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             HomeFunctionResponse homeFunctionResponse = (HomeFunctionResponse) adapter.getItem(position);
@@ -97,11 +89,13 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
             if (view.getId() == R.id.home_top_item_ll) {
                 if (position == 2) {
                     startActivitys(AudioActivity.class);
+                } else if (position == 1) {
+                    startActivitys(VideoActivity.class);
                 }
             }
         });
         mHomeBottomRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-        mHomeBottomAdapter = new HomeBottomAdapter(getActivity(), bottomFunctionResponseList, mImageLoaderHelper);
+        HomeBottomAdapter mHomeBottomAdapter = new HomeBottomAdapter(getActivity(), bottomFunctionResponseList, mImageLoaderHelper);
         mHomeBottomRecyclerView.setAdapter(mHomeBottomAdapter);
 
     }
@@ -136,7 +130,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
         bannerImgList.add(bannerImg2);
         mBanner.setImages(bannerImgList);
         //设置轮播时间
-        mBanner.setDelayTime(1500);
+        mBanner.setDelayTime(5000);
         //banner设置方法全部调用完毕时最后调用
         mBanner.start();
     }

@@ -21,6 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".mvp.ui.activity.video.VideoDetailActivity"></activity>
+        <activity
+            android:name=".mvp.ui.activity.video.VideoActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".mvp.ui.activity.audio.AudioPlayDetailActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
