@@ -1,10 +1,8 @@
-<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/toolbar"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_50"
-    android:layout_marginTop="@dimen/dp_20"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:title=" ">
@@ -13,28 +11,31 @@
         android:id="@+id/common_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:paddingStart="@dimen/dp_2"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:paddingStart="@dimen/dp_10"
         android:paddingTop="@dimen/dp_10"
         android:paddingEnd="@dimen/dp_10"
         android:paddingBottom="@dimen/dp_10"
-        android:src="@mipmap/back" />
+        android:src="@mipmap/back_black" />
 
     <TextView
         android:id="@+id/common_title_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
         android:text="@string/app_name"
-        android:textColor="@color/white"
+        android:textColor="@color/color333"
         android:textSize="@dimen/sp_16" />
 
     <ImageView
         android:id="@+id/common_iv_right"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/dp_5"
         android:padding="@dimen/dp_10" />
 
-</android.support.v7.widget.Toolbar>
+</RelativeLayout>

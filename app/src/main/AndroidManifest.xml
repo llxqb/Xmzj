@@ -21,7 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".mvp.ui.activity.audio.AudioPlayDetailActivity"></activity>
+        <activity
+            android:name=".mvp.ui.activity.audio.AudioPlayDetailActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".mvp.ui.activity.audio.AudioActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />

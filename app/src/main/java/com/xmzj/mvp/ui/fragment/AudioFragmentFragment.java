@@ -3,19 +3,19 @@ package com.xmzj.mvp.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.response.AudioContentResponse;
+import com.xmzj.mvp.ui.activity.audio.AudioPlayDetailActivity;
 import com.xmzj.mvp.ui.adapter.AudioAdapter;
 
 import java.util.ArrayList;
@@ -87,6 +87,25 @@ public class AudioFragmentFragment extends BaseFragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAudioAdapter = new AudioAdapter(getActivity(), audioContentResponses);
         mRecyclerView.setAdapter(mAudioAdapter);
+
+        mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
+            @Override
+            public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                AudioContentResponse audioContentResponse = (AudioContentResponse) adapter.getItem(position);
+                switch (view.getId()) {
+                    case R.id.audio_item_layout:
+                        assert audioContentResponse != null;
+                        AudioPlayDetailActivity.start(getActivity(),audioContentResponse);
+                        break;
+                    case R.id.upload_iv:
+                        showToast("下载...");
+                        break;
+                    case R.id.share_iv:
+                        showToast("分享...");
+                        break;
+                }
+            }
+        });
     }
 
     @Override

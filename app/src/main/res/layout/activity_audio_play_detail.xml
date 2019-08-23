@@ -12,6 +12,8 @@
 
     <View style="@style/line_height_1" />
 
-
-
+    <com.xmzj.mvp.views.JzvdStdMp3
+        android:id="@+id/jzvdStdMp3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>
