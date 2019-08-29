@@ -25,7 +25,7 @@ public class BuProcessor {
 
     public boolean isValidLogin() {
         loginUser = (LoginUser) mSharePreferenceUtil.readObjData("user");
-        return loginUser != null && !TextUtils.isEmpty(loginUser.token);
+        return loginUser != null && !TextUtils.isEmpty(loginUser.phone);
     }
 
 
@@ -41,7 +41,6 @@ public class BuProcessor {
     public void setLoginUser(LoginUser loginUser) {
         mSharePreferenceUtil.saveObjData(SpConstant.LOGIN_USER, loginUser);
     }
-
 
 
     /**

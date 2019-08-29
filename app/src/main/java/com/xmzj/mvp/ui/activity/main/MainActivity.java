@@ -1,13 +1,14 @@
 package com.xmzj.mvp.ui.activity.main;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerMainComponent;
 import com.xmzj.di.modules.ActivityModule;
@@ -25,7 +26,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener,MainControl.MainView {
+public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MainControl.MainView {
 
     @BindView(R.id.main_bottom_navigation)
     BottomNavigationView mMainBottomNavigation;
@@ -35,27 +36,22 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     public static final int SWITCH_MESSAGE_PAGE = 1;
     public static final int SWITCH_MINE_PAGE = 2;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        initInjectData();
-    }
 
     @Override
     protected void initContentView() {
         setContentView(R.layout.activity_main);
+        initInjectData();
     }
 
     @Override
     public void initView() {
         mMainBottomNavigation.setItemIconTintList(null);
-//        if (!mBuProcessor.isValidLogin() || !mBuProcessor.isFinishFirstWrite()) {
-//            startActivitys(LoginActivity.class);
-//            finish();
-//        } else {
-//            Log.e("ddd", "loginUser:" + new Gson().toJson(mBuProcessor.getLoginUser()));
-//            initData();
-//        }
+        if (!mBuProcessor.isValidLogin()) {
+            startActivitys(LoginActivity.class);
+            finish();
+        } else {
+            Log.e("ddd", "loginUser:" + new Gson().toJson(mBuProcessor.getLoginUser()));
+        }
         List<Fragment> fragments = new ArrayList<>();
         HomeFragment homeFragment = HomeFragment.newInstance();
         MineFragment mimeFragment = MineFragment.newInstance();

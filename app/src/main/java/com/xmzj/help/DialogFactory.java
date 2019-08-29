@@ -17,9 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseActivity;
+import com.xmzj.mvp.views.dialog.CommonDialog;
 
 import java.util.Calendar;
 
@@ -153,16 +153,32 @@ public class DialogFactory {
      *
      * @param context 上下文
      * @param content 内容
-     * @param type    类型  1：底部左右两按钮   2;底部一按钮
      * @return commonDialog
+     * 在activity中调用
      */
-//    public static void showCommonDialog(Activity context, String content, int type) {
-//        CommonDialog commonDialog = CommonDialog.newInstance();
-//        commonDialog.setListener((CommonDialog.CommonDialogListener) context);
-//        commonDialog.setContent(content);
-//        commonDialog.setStyle(type);
-//        DialogFactory.showDialogFragment(((BaseActivity) context).getSupportFragmentManager(), commonDialog, CommonDialog.TAG);
-//    }
+    public static void showCommonDialog(Activity context, String content, String title) {
+        CommonDialog commonDialog = CommonDialog.newInstance();
+        commonDialog.setListener((CommonDialog.CommonDialogListener) context);
+        commonDialog.setContent(content);
+        commonDialog.setTitle(title);
+        DialogFactory.showDialogFragment(((BaseActivity) context).getSupportFragmentManager(), commonDialog, CommonDialog.TAG);
+    }
+
+    /**
+     * 显示公共dialog
+     *
+     * @param context 上下文
+     * @param content 内容
+     * @return commonDialog
+     * 在fragment中调用
+     */
+    public static void showCommonDialogFragemnt(Context context, Fragment fragment, String content, int type) {
+        CommonDialog commonDialog = CommonDialog.newInstance();
+        commonDialog.setListener((CommonDialog.CommonDialogListener) fragment);
+        commonDialog.setContent(content);
+        commonDialog.setStyle(type);
+        DialogFactory.showDialogFragment(((BaseActivity) context).getSupportFragmentManager(), commonDialog, CommonDialog.TAG);
+    }
 
 
     public static ProgressDialog showProgressDialog(Context context, String msg) {
@@ -184,8 +200,6 @@ public class DialogFactory {
         loadingDialog.setContentView(v);
         return loadingDialog;
     }
-
-
 
 
 }

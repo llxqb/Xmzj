@@ -4,7 +4,6 @@ package com.xmzj.di.modules;
 import com.xmzj.di.scopes.PerActivity;
 import com.xmzj.mvp.presenter.LoadDataView;
 import com.xmzj.mvp.ui.activity.main.HomeFragmentControl;
-import com.xmzj.mvp.ui.activity.main.MineFragmentControl;
 import com.xmzj.mvp.ui.activity.main.MoreFragmentControl;
 
 import dagger.Module;
@@ -16,11 +15,11 @@ import dagger.Provides;
 @Module
 public class MoreFragmentModule {
 
-    private MoreFragmentControl.HomeView mMoreFragmentView;
+    private MoreFragmentControl.MoreFragmentView mMoreFragmentView;
 
     public MoreFragmentModule(LoadDataView view) {
         if (view instanceof HomeFragmentControl.HomeView) {
-            mMoreFragmentView = (MoreFragmentControl.HomeView) view;
+            mMoreFragmentView = (MoreFragmentControl.MoreFragmentView) view;
         }
     }
 
@@ -31,7 +30,7 @@ public class MoreFragmentModule {
      */
     @Provides
     @PerActivity
-    MoreFragmentControl.HomeView MoreFragmentView() {
+    MoreFragmentControl.MoreFragmentView MoreFragmentView() {
         return this.mMoreFragmentView;
     }
 

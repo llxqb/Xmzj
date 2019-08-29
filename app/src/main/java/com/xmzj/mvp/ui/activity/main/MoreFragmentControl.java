@@ -9,12 +9,12 @@ import com.xmzj.mvp.presenter.Presenter;
  */
 
 public class MoreFragmentControl {
-    public interface HomeView extends LoadDataView {
+    public interface MoreFragmentView extends LoadDataView {
 //        void getInfoSuccess(HomeFragmentResponse response);
 
     }
 
-    public interface moreFragmentPresenter extends Presenter<HomeView> {
+    public interface moreFragmentPresenter extends Presenter<MoreFragmentView> {
         /**
          * 请求homeFragment list 数据
          */

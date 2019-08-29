@@ -27,7 +27,7 @@ public class AudioAdapter extends BaseQuickAdapter<AudioContentResponse, BaseVie
     @Override
     protected void convert(BaseViewHolder helper, AudioContentResponse item) {
         if (item == null) return;
-        helper.addOnClickListener(R.id.audio_item_layout).addOnClickListener(R.id.upload_iv).addOnClickListener(R.id.share_iv);
+        helper.addOnClickListener(R.id.upload_iv).addOnClickListener(R.id.share_iv).addOnClickListener(R.id.audio_item_layout);
         helper.setText(R.id.audio_title, item.title)
                 .setText(R.id.play_time, String.valueOf(item.playNum))
                 .setText(R.id.look_time, String.valueOf(item.lookNum))

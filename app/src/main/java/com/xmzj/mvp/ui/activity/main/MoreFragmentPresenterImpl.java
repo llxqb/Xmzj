@@ -13,15 +13,15 @@ import javax.inject.Inject;
 
 public class MoreFragmentPresenterImpl implements MoreFragmentControl.moreFragmentPresenter {
 
-    private MoreFragmentControl.HomeView mHomeView;
+    private MoreFragmentControl.MoreFragmentView mMoreFragmentView;
     private final MainModel mHomeFragmentModel;
     private final Context mContext;
 
     @Inject
-    public MoreFragmentPresenterImpl(Context context, MainModel model, MoreFragmentControl.HomeView homeView) {
+    public MoreFragmentPresenterImpl(Context context, MainModel model, MoreFragmentControl.MoreFragmentView moreFragmentView) {
         mContext = context;
         mHomeFragmentModel = model;
-        mHomeView = homeView;
+        mMoreFragmentView = moreFragmentView;
     }
 
 
@@ -32,7 +32,7 @@ public class MoreFragmentPresenterImpl implements MoreFragmentControl.moreFragme
 
     @Override
     public void onDestroy() {
-        mHomeView = null;
+        mMoreFragmentView = null;
     }
 
 

@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
 
     <TextView
+        android:id="@+id/test"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="更多"
-        />
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/ripple_bg"
+        android:drawableEnd="@mipmap/next_step"
+        android:gravity="start|center_vertical"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingEnd="@dimen/dp_20"
+        android:text="退出登录"
+        android:visibility="gone"
+        android:textColor="@color/first_text_color"
+        android:textSize="@dimen/sp_14" />
+
+    <TextView
+        android:id="@+id/logout_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_30"
+        android:background="@drawable/ripple_bg"
+        android:drawableEnd="@mipmap/next_step"
+        android:gravity="start|center_vertical"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingEnd="@dimen/dp_20"
+        android:text="退出登录"
+        android:textColor="@color/first_text_color"
+        android:textSize="@dimen/sp_14" />
+
+    <View style="@style/line_height_1" />
 </LinearLayout>
