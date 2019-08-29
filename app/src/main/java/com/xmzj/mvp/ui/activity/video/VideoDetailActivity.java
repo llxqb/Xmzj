@@ -4,16 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.CommentResponse;
 import com.xmzj.entity.response.VideoResponse;
+import com.xmzj.listener.DownloadListener;
 import com.xmzj.mvp.ui.adapter.VideoCommentAdapter;
+import com.xmzj.mvp.utils.DownloadUtil;
+import com.xmzj.mvp.utils.LogUtils;
+import com.xmzj.mvp.views.KbWithWordsCircleProgressBar;
 import com.xmzj.mvp.views.MyJzvdStd;
 
 import java.util.ArrayList;
@@ -24,7 +31,7 @@ import butterknife.OnClick;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 
-public class VideoDetailActivity extends BaseActivity {
+public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzStdListener {
     @BindView(R.id.common_back)
     ImageView mCommonBack;
     @BindView(R.id.common_title_tv)
@@ -41,6 +48,11 @@ public class VideoDetailActivity extends BaseActivity {
     TextView mShareTv;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+    @BindView(R.id.fl_circle_progress)
+    FrameLayout mCircleProgressLayout;
+    @BindView(R.id.circle_progress)
+    KbWithWordsCircleProgressBar mCircleProgress;
+
 
     private VideoResponse videoResponse;
     private List<CommentResponse> commentResponseList = new ArrayList<>();
@@ -58,11 +70,13 @@ public class VideoDetailActivity extends BaseActivity {
 
     @Override
     protected void initView() {
+        mMyJzvdStd.setListener(this);
         if (getIntent() != null) {
             videoResponse = getIntent().getParcelableExtra("videoResponse");
             mCommonTitleTv.setText(videoResponse.title);
-            mMyJzvdStd.setUp(videoResponse.url, videoResponse.title);
+
             Glide.with(this).load(videoResponse.coverPic).into(mMyJzvdStd.thumbImageView);
+            url = videoResponse.url;
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         VideoCommentAdapter mVideoCommentAdapter = new VideoCommentAdapter(this, commentResponseList);
@@ -80,6 +94,8 @@ public class VideoDetailActivity extends BaseActivity {
         }
     }
 
+    String url;
+    String mVideoPath;
 
     @OnClick({R.id.common_back, R.id.common_iv_right, R.id.collection_tv, R.id.download_tv, R.id.share_tv})
     public void onViewClicked(View view) {
@@ -92,16 +108,82 @@ public class VideoDetailActivity extends BaseActivity {
             case R.id.collection_tv:
                 break;
             case R.id.download_tv:
-//                showToast("开发中...");
-//                String url = videoResponse.url;
-//                String pathName = videoResponse.author + "/" + videoResponse.title;
-//                downloadFile(url, pathName);
+                downloadVideo(); //处理具体下载过程
                 break;
             case R.id.share_tv:
                 break;
         }
     }
 
+
+    /**
+     * 下载视频文件
+     */
+    private void downloadVideo() {
+        DownloadUtil mDownloadUtil = new DownloadUtil();
+        mDownloadUtil.downloadFile(url, new DownloadListener() {
+            @Override
+            public void onStart() {
+                LogUtils.e("onStart: ");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("下载中...");
+                        mCircleProgressLayout.setVisibility(View.VISIBLE);
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(final int currentLength) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("下载成功");
+                        mCircleProgress.setProgress(currentLength);
+                    }
+                });
+            }
+
+            @Override
+            public void onFinish(String localPath) {
+                mVideoPath = localPath;
+                LogUtils.e("onFinish: " + localPath);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCircleProgressLayout.setVisibility(View.GONE);
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final String erroInfo) {
+                LogUtils.e("onFailure: " + erroInfo);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCircleProgressLayout.setVisibility(View.GONE);
+                        Toast.makeText(VideoDetailActivity.this, erroInfo, Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+            }
+        });
+    }
+
+    @Override
+    public void startBtnCLick() {
+        String localFilePath = DownloadUtil.checkFileIsExist(url);
+        LogUtils.e("localFilePath:" + localFilePath);
+        if (!TextUtils.isEmpty(localFilePath)) {
+            //本地有资源
+            showToast("播放本地视频");
+            mMyJzvdStd.setUp(localFilePath, videoResponse.title, Jzvd.SCREEN_NORMAL);
+        } else {
+            mMyJzvdStd.setUp(url, videoResponse.title);
+        }
+    }
 
 
     @Override

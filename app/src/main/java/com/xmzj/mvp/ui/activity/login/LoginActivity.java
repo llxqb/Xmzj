@@ -17,6 +17,7 @@ import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.LoginResponse;
 import com.xmzj.entity.user.LoginUser;
 import com.xmzj.mvp.ui.activity.main.MainActivity;
+import com.xmzj.mvp.utils.PermissionUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -80,6 +81,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
                 finish();
             } else {
                 showToast("请打开所有权限");
+                PermissionUtils.goSetting(this); //跳转至当前app的权限设置界面
             }
         });
     }

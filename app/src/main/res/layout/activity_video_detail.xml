@@ -41,8 +41,8 @@
             android:layout_marginEnd="@dimen/dp_10"
             android:background="@drawable/video_detail_comment_btn_bg"
             android:gravity="center"
-            android:textSize="@dimen/sp_14"
-            android:hint="发表评论" />
+            android:hint="发表评论"
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/collection_tv"
@@ -64,7 +64,7 @@
             android:drawableBottom="@mipmap/detail_download"
             android:drawablePadding="@dimen/dp_2"
             android:padding="@dimen/dp_4"
-            android:text="缓存"
+            android:text="下载"
             android:textSize="@dimen/sp_12" />
 
 
@@ -85,8 +85,27 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_6"
         android:layout_above="@id/bottom_layout_rl"
-        android:layout_below="@id/jzvdStd_layout" />
+        android:layout_below="@id/jzvdStd_layout"
+        android:layout_marginTop="@dimen/dp_6" />
 
+
+    <!--环形进度条-->
+    <FrameLayout
+        android:id="@+id/fl_circle_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/dp_22"
+        android:layout_marginBottom="@dimen/dp_60"
+        android:visibility="gone">
+
+        <com.xmzj.mvp.views.KbWithWordsCircleProgressBar
+            android:id="@+id/circle_progress"
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 </RelativeLayout>
