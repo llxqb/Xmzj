@@ -7,8 +7,8 @@ import com.xmzj.BuildConfig;
 import com.xmzj.di.scopes.PerActivity;
 import com.xmzj.mvp.model.LoginModel;
 import com.xmzj.mvp.model.ModelTransform;
-import com.xmzj.mvp.ui.activity.login.LoginControl;
-import com.xmzj.mvp.ui.activity.login.LoginPresenterImpl;
+import com.xmzj.mvp.ui.activity.register.RegisterControl;
+import com.xmzj.mvp.ui.activity.register.RegisterPresenterImpl;
 import com.xmzj.network.RetrofitUtil;
 import com.xmzj.network.networkApi.LoginApi;
 
@@ -19,16 +19,16 @@ import dagger.Provides;
  * Created by li.liu on 16/3/20.
  */
 @Module
-public class LoginModule {
+public class RegisterModule {
     private final AppCompatActivity activity;
-    private LoginControl.LoginView view;
+    private RegisterControl.RegisterView view;
 
-    public LoginModule(AppCompatActivity activity, LoginControl.LoginView view) {
+    public RegisterModule(AppCompatActivity activity, RegisterControl.RegisterView view) {
         this.activity = activity;
         this.view = view;
     }
 
-    public LoginModule(AppCompatActivity activity) {
+    public RegisterModule(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -40,14 +40,14 @@ public class LoginModule {
 
     @Provides
     @PerActivity
-    LoginControl.LoginView view() {
+    RegisterControl.RegisterView view() {
         return this.view;
     }
 
     @Provides
     @PerActivity
-    LoginControl.PresenterLogin providePresenterLogin(LoginPresenterImpl loginPresenter) {
-        return loginPresenter;
+    RegisterControl.PresenterRegister providePresenterRegister(RegisterPresenterImpl registerPresenter) {
+        return registerPresenter;
     }
 
     @Provides
@@ -62,8 +62,6 @@ public class LoginModule {
                 .builder()
                 .create(LoginApi.class), gson, modelTransform);
     }
-
-
 
 
 }

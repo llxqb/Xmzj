@@ -38,5 +38,9 @@ public class Constant {
     //recyclerView item 中某一/某些控件刷新
     public static final String ITEM_UPDATE = "itemUpdate";
     //设备标识
-    public static final String FROM = "Android";
+    /**
+     * 客户端类型(1：安卓，2：苹果，3：电脑浏览器，4：手机浏览器，5：微信)
+     */
+    public static final int FROM = 1;
+
 }

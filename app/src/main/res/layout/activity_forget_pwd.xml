@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".mvp.ui.activity.register.ForgetPwdActivity">
+
+    <include layout="@layout/common_toolbar" />
+
+    <View style="@style/line_height_1" />
+
+    <EditText
+        android:id="@+id/forget_pwd_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:background="@drawable/login_gray_round_bg"
+        android:gravity="start|center_vertical"
+        android:hint="请输入新密码"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingEnd="@dimen/dp_20"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="@dimen/sp_16" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_10">
+
+        <EditText
+            android:id="@+id/forget_pwd_verify_et"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_15"
+            android:background="@drawable/login_gray_round_bg"
+            android:gravity="start|center_vertical"
+            android:hint="请输入验证码"
+            android:inputType="number"
+            android:paddingStart="@dimen/dp_20"
+            android:paddingEnd="@dimen/dp_20"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
+            android:textSize="@dimen/sp_16" />
+
+        <com.xmzj.mvp.views.TimeButton
+            android:id="@+id/code_bt"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_30"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_30"
+            android:background="@drawable/verify_text_background"
+            android:text="获取验证码"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_13" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/forget_pwd_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_42"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:background="@drawable/login_app_btn_round_bg"
+        android:gravity="center"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_18" />
+</LinearLayout>

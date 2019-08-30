@@ -13,7 +13,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.LinearLayout;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -21,8 +20,7 @@ import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DecimalFormat;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,6 +33,7 @@ public class ValueUtil {
 
     /**
      * MD5 加密
+     *
      * @param info 需要MD5加密的字符穿
      * @return String result MD5加密后返回的结果
      */
@@ -59,6 +58,7 @@ public class ValueUtil {
 
     /**
      * 将2进制字节数组转换为16进制字符串
+     *
      * @param bytes 字节数组
      * @return String hex 返回16进制内容的字符串，比较类似UDB的密钥
      */
@@ -357,6 +357,20 @@ public class ValueUtil {
     public static int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * 产生一个随机的六位数
+     */
+    public static String randomSixNum() {
+        int flag = 100000;
+        for (int i = 0; i <= 100; i++) {
+            flag = new Random().nextInt(999999);
+            if (flag < 100000) {
+                flag += 100000;
+            }
+        }
+        return String.valueOf(flag);
     }
 
 

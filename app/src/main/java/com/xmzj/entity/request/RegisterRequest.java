@@ -1,6 +1,6 @@
 package com.xmzj.entity.request;
 
-public class LoginRequest {
+public class RegisterRequest {
     /**
      * 账号(手机号码/邮箱)
      */

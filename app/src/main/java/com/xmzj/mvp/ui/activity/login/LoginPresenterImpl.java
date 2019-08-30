@@ -38,7 +38,7 @@ public class LoginPresenterImpl implements LoginControl.PresenterLogin {
     @Override
     public void onRequestLogin(LoginRequest loginRequest) {
         mLoginView.showLoading(mContext.getResources().getString(R.string.loading));
-        Disposable disposable = mLoginModel.onRequestHomeUserInfo(loginRequest).compose(mLoginView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
+        Disposable disposable = mLoginModel.onRequestLoginInfo(loginRequest).compose(mLoginView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
                 .subscribe(this::requestLoginSuccess, throwable -> mLoginView.showErrMessage(throwable),
                         () -> mLoginView.dismissLoading());
         mLoginView.addSubscription(disposable);
