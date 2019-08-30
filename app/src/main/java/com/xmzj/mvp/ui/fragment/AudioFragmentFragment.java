@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,11 @@ import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.response.AudioContentResponse;
+import com.xmzj.listener.DownloadListener;
 import com.xmzj.mvp.ui.activity.audio.AudioPlayDetailActivity;
 import com.xmzj.mvp.ui.adapter.AudioAdapter;
+import com.xmzj.mvp.utils.DownloadUtil;
+import com.xmzj.mvp.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +45,7 @@ public class AudioFragmentFragment extends BaseFragment {
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     Unbinder unbinder;
-    private List<AudioContentResponse> audioContentResponses = new ArrayList<>();
+    private List<AudioContentResponse> audioContentResponseList = new ArrayList<>();
     private AudioAdapter mAudioAdapter;
     /**
      * 音频一级标题筛选
@@ -51,6 +55,14 @@ public class AudioFragmentFragment extends BaseFragment {
      * 音频二级标题筛选
      */
     private int mType2;
+    /**
+     * 视频url路径
+     */
+    String urlPath;
+    /**
+     * 下载到本地视频路径
+     */
+    String mVideoPath;
 
     public static AudioFragmentFragment getInstance(int type, int type2) {
         AudioFragmentFragment fragment = new AudioFragmentFragment();
@@ -85,7 +97,7 @@ public class AudioFragmentFragment extends BaseFragment {
     @Override
     public void initView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAudioAdapter = new AudioAdapter(getActivity(), audioContentResponses);
+        mAudioAdapter = new AudioAdapter(getActivity(), audioContentResponseList);
         mRecyclerView.setAdapter(mAudioAdapter);
 
         mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
@@ -95,10 +107,20 @@ public class AudioFragmentFragment extends BaseFragment {
                 switch (view.getId()) {
                     case R.id.audio_item_layout:
                         assert audioContentResponse != null;
-                        AudioPlayDetailActivity.start(getActivity(),audioContentResponse);
+                        AudioPlayDetailActivity.start(getActivity(), audioContentResponse);
                         break;
                     case R.id.upload_iv:
-                        showToast("下载...");
+                        assert audioContentResponse != null;
+                        urlPath = audioContentResponse.url;
+                        if (!TextUtils.isEmpty(urlPath)) {
+                            if (TextUtils.isEmpty(DownloadUtil.checkFileIsExist(urlPath))) {
+                                downloadVideo(); //处理具体下载过程
+                            } else {
+                                showToast("已下载");
+                            }
+                        } else {
+                            showToast("资源不存在");
+                        }
                         break;
                     case R.id.share_iv:
                         showToast("分享...");
@@ -120,8 +142,8 @@ public class AudioFragmentFragment extends BaseFragment {
                         audioContentResponse.lookNum = 3000;
                         audioContentResponse.playDuration = "80分钟";
                         audioContentResponse.uploadDate = "2019-08-10";
-                        audioContentResponse.url = "https://v.qq.com/txp/iframe/player.html?vid=m0524y9cv04";
-                        audioContentResponses.add(audioContentResponse);
+                        audioContentResponse.url = "https://www.xinmizj.com/res/audio/src/dsbushiczsh.mp3";
+                        audioContentResponseList.add(audioContentResponse);
                     }
                 }
                 break;
@@ -148,6 +170,59 @@ public class AudioFragmentFragment extends BaseFragment {
                 break;
         }
     }
+
+    /**
+     * 下载音频文件
+     */
+    private void downloadVideo() {
+        DownloadUtil mDownloadUtil = new DownloadUtil();
+        mDownloadUtil.downloadFile(urlPath, new DownloadListener() {
+            @Override
+            public void onStart() {
+                LogUtils.e("onStart: ");
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("下载中...");
+                    }
+                });
+            }
+
+            @Override
+            public void onProgress(final int currentLength) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFinish(String localPath) {
+                mVideoPath = localPath;
+                LogUtils.e("onFinish: " + localPath);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("下载完成");
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final String erroInfo) {
+                LogUtils.e("onFailure: " + erroInfo);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast(erroInfo);
+                    }
+                });
+            }
+        });
+    }
+
 
     @Override
     public void onDestroyView() {

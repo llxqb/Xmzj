@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:src="@mipmap/share_icon" />
+            android:src="@mipmap/share" />
 
         <ImageView
             android:id="@+id/upload_iv"
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_10"
             android:layout_toStartOf="@id/share_iv"
-            android:src="@mipmap/upload_icon" />
+            android:src="@mipmap/detail_download" />
 
         <TextView
             android:id="@+id/upload_time"

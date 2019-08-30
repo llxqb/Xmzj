@@ -29,6 +29,17 @@ public class JzvdStdMp3 extends JzvdStd {
         bottomContainer.setVisibility(VISIBLE);
     }
 
+    private JzStdMp3Listener mJzStdMp3Listener;
+    private int mFirstClick = 1;
+
+    public void setListener(JzStdMp3Listener jzStdMp3Listener) {
+        mJzStdMp3Listener = jzStdMp3Listener;
+    }
+
+    public interface JzStdMp3Listener {
+        void startBtnCLick();
+    }
+
     @Override
     public int getLayoutId() {
         return R.layout.jz_layout_standard_mp3;
@@ -36,7 +47,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     public void setThumb1(Context context, int url) {
 
-        CircleImageView  circleImageView = findViewById(R.id.thumb1);
+        CircleImageView circleImageView = findViewById(R.id.thumb1);
         Glide.with(this)
                 .load(url)
                 .into(circleImageView);
@@ -57,8 +68,16 @@ public class JzvdStdMp3 extends JzvdStd {
                         state == STATE_PAUSE)) {
             onClickUiToggle();
         } else if (v.getId() == R.id.fullscreen) {
-
         } else {
+            if (v.getId() == R.id.start) {
+                Log.i(TAG, "onClick: start button");
+                if (mJzStdMp3Listener != null) {
+                    if (mFirstClick == 1) {
+                        mFirstClick++;
+                        mJzStdMp3Listener.startBtnCLick();
+                    }
+                }
+            }
             super.onClick(v);
         }
     }
