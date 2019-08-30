@@ -47,6 +47,24 @@
         android:textColorHint="@color/white"
         android:textSize="@dimen/sp_16" />
 
+    <EditText
+        android:id="@+id/register_phone_et"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginStart="@dimen/dp_15"
+        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginEnd="@dimen/dp_15"
+        android:background="@drawable/login_gray_round_bg"
+        android:drawableStart="@mipmap/login_phone_icon"
+        android:drawablePadding="@dimen/dp_20"
+        android:gravity="start|center_vertical"
+        android:hint="请输入手机号码/邮箱"
+        android:paddingStart="@dimen/dp_20"
+        android:paddingEnd="@dimen/dp_20"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:textSize="@dimen/sp_16" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -80,7 +98,8 @@
             android:background="@drawable/verify_text_background"
             android:text="获取验证码"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_13" />
+            android:textSize="@dimen/sp_13"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <TextView

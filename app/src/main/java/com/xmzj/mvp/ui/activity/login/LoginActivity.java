@@ -2,7 +2,9 @@ package com.xmzj.mvp.ui.activity.login;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -83,7 +85,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     protected void initView() {
         mCommonBack.setVisibility(View.GONE);
         mCommonTitleTv.setText("登录");
-
+        mLoginPhoneEt.addTextChangedListener(search_text_OnChange);
     }
 
     @Override
@@ -139,7 +141,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     private boolean verification() {
         if (loginType == 0) {
             if (TextUtils.isEmpty(mLoginPhoneEt.getText().toString())) {
-                showToast("手机号不能为空");
+                showToast("手机号/邮箱不能为空");
                 return false;
             }
             if (TextUtils.isEmpty(mLoginVerifyEt.getText().toString())) {
@@ -206,6 +208,29 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     public void getLoginSuccess(LoginResponse loginResponse) {
 
     }
+
+
+    public TextWatcher search_text_OnChange = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (ValueUtil.isMobilePhone(s.toString())) {
+                mCodeBt.setVisibility(View.VISIBLE);
+            } else {
+                mCodeBt.setVisibility(View.GONE);
+            }
+        }
+    };
+
 
     private void initInjectData() {
         DaggerLoginComponent.builder().appComponent(getAppComponent())

@@ -1,6 +1,8 @@
 package com.xmzj.mvp.ui.activity.register;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,10 +13,9 @@ import com.xmzj.di.components.DaggerRegisterComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.RegisterModule;
 import com.xmzj.entity.base.BaseActivity;
-import com.xmzj.entity.constants.Constant;
-import com.xmzj.entity.request.RegisterRequest;
 import com.xmzj.entity.response.ForgetPwdResponse;
 import com.xmzj.entity.response.RegisterResponse;
+import com.xmzj.mvp.utils.ValueUtil;
 import com.xmzj.mvp.views.TimeButton;
 
 import javax.inject.Inject;
@@ -30,6 +31,8 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
     TextView mCommonTitleTv;
     @BindView(R.id.register_user_et)
     EditText mRegisterUserEt;
+    @BindView(R.id.register_phone_et)
+    EditText mRegisterPhoneEt;
     @BindView(R.id.register_pwd_et)
     EditText mRegisterPwdEt;
     @BindView(R.id.register_verify_et)
@@ -52,6 +55,7 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
     @Override
     protected void initView() {
         mCommonTitleTv.setText("注册");
+        mRegisterPhoneEt.addTextChangedListener(search_text_OnChange);
     }
 
     @Override
@@ -68,14 +72,22 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
                 break;
             case R.id.code_bt:
                 if (verification()) {
+                    if (TextUtils.isEmpty(mRegisterPhoneEt.getText().toString())) {
+                        showToast("手机号不能为空");
+                        return;
+                    }
                     mCodeBt.setRun(true);
                 }
                 break;
             case R.id.register_btn:
                 if (verification()) {
+                    if (TextUtils.isEmpty(mRegisterPhoneEt.getText().toString())) {
+                        showToast("手机号/邮箱不能为空");
+                        return;
+                    }
                     if (TextUtils.isEmpty(mRegisterVerifyEt.getText().toString())) {
                         showToast("验证码不能为空");
-                        return ;
+                        return;
                     }
                     onRequestRegister();
                 }
@@ -87,12 +99,14 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
      * 注册
      */
     private void onRequestRegister() {
-        RegisterRequest registerRequest = new RegisterRequest();
-        registerRequest.account = mRegisterUserEt.getText().toString();
-        registerRequest.pwd = mRegisterPwdEt.getText().toString();
-        registerRequest.code = mRegisterVerifyEt.getText().toString();
-        registerRequest.clientType = Constant.FROM;
-        mPresenter.onRequestRegister(registerRequest);
+//        RegisterRequest registerRequest = new RegisterRequest();
+//        registerRequest.account = mRegisterUserEt.getText().toString();
+//        registerRequest.pwd = mRegisterPwdEt.getText().toString();
+//        registerRequest.code = mRegisterVerifyEt.getText().toString();
+//        registerRequest.clientType = Constant.FROM;
+//        mPresenter.onRequestRegister(registerRequest);
+        showLoading("注册成功");
+        finish();
     }
 
     /**
@@ -125,6 +139,29 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
     public void getForgetPwdSuccess(ForgetPwdResponse forgetPwdResponse) {
 
     }
+
+
+    public TextWatcher search_text_OnChange = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (ValueUtil.isMobilePhone(s.toString())) {
+                mCodeBt.setVisibility(View.VISIBLE);
+            } else {
+                mCodeBt.setVisibility(View.GONE);
+            }
+        }
+    };
+
 
     private void initInjectData() {
         DaggerRegisterComponent.builder().appComponent(getAppComponent())

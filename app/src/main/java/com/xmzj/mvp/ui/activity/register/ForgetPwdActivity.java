@@ -1,6 +1,8 @@
 package com.xmzj.mvp.ui.activity.register;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,9 +13,9 @@ import com.xmzj.di.components.DaggerRegisterComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.RegisterModule;
 import com.xmzj.entity.base.BaseActivity;
-import com.xmzj.entity.request.ForgetPwdRequest;
 import com.xmzj.entity.response.ForgetPwdResponse;
 import com.xmzj.entity.response.RegisterResponse;
+import com.xmzj.mvp.utils.ValueUtil;
 import com.xmzj.mvp.views.TimeButton;
 
 import javax.inject.Inject;
@@ -27,6 +29,8 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
     ImageView mCommonBack;
     @BindView(R.id.common_title_tv)
     TextView mCommonTitleTv;
+    @BindView(R.id.forget_pwd_phone_et)
+    EditText mForgetPwdPhoneEt;
     @BindView(R.id.forget_pwd_et)
     EditText mForgetPwdEt;
     @BindView(R.id.forget_pwd_verify_et)
@@ -49,6 +53,7 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
     @Override
     protected void initView() {
         mCommonTitleTv.setText("忘记密码");
+        mForgetPwdPhoneEt.addTextChangedListener(search_text_OnChange);
     }
 
     @Override
@@ -64,18 +69,26 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
                 finish();
                 break;
             case R.id.code_bt:
+                if (TextUtils.isEmpty(mForgetPwdPhoneEt.getText().toString())) {
+                    showToast("手机号不能为空");
+                    return;
+                }
                 if (verification()) {
                     mCodeBt.setRun(true);
                 }
                 break;
             case R.id.forget_pwd_btn:
-                if (verification()) {
-                    if (TextUtils.isEmpty(mForgetPwdVerifyEt.getText().toString())) {
-                        showToast("验证码不能为空");
-                        return;
-                    }
+                if (TextUtils.isEmpty(mForgetPwdPhoneEt.getText().toString())) {
+                    showToast("手机号/邮箱不能为空");
+                    return;
                 }
-//                onRequestForgetPwd();
+                if (TextUtils.isEmpty(mForgetPwdVerifyEt.getText().toString())) {
+                    showToast("验证码不能为空");
+                    return;
+                }
+                if (verification()) {
+                    onRequestForgetPwd();
+                }
                 break;
         }
     }
@@ -92,9 +105,14 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
     }
 
 
+    /**
+     * 请求 -忘记密码
+     */
     private void onRequestForgetPwd() {
-        ForgetPwdRequest forgetPwdRequest = new ForgetPwdRequest();
-        mPresenter.onRequestForgetPwd(forgetPwdRequest);
+//        ForgetPwdRequest forgetPwdRequest = new ForgetPwdRequest();
+//        mPresenter.onRequestForgetPwd(forgetPwdRequest);
+        showToast("修改密码成功");
+        finish();
     }
 
     /**
@@ -111,6 +129,27 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
     public void getForgetPwdSuccess(ForgetPwdResponse forgetPwdResponse) {
 
     }
+
+    public TextWatcher search_text_OnChange = new TextWatcher() {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (ValueUtil.isMobilePhone(s.toString())) {
+                mCodeBt.setVisibility(View.VISIBLE);
+            } else {
+                mCodeBt.setVisibility(View.GONE);
+            }
+        }
+    };
 
     private void initInjectData() {
         DaggerRegisterComponent.builder().appComponent(getAppComponent())

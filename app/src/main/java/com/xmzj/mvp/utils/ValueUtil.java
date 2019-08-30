@@ -102,11 +102,11 @@ public class ValueUtil {
     //是否是有效的手机号
     public static boolean isMobilePhone(String mobileNO) {
         if (TextUtils.isEmpty(mobileNO)) {
-            return true;
+            return false;
         } else {
             Pattern p = Pattern.compile("^\\d{11}$");
             Matcher m = p.matcher(mobileNO);
-            return !m.matches();
+            return m.matches();
         }
     }
 
