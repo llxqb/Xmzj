@@ -41,6 +41,7 @@
         android:drawablePadding="@dimen/dp_20"
         android:gravity="start|center_vertical"
         android:hint="请输入密码"
+        android:digits="01234567890123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:paddingStart="@dimen/dp_20"
         android:paddingEnd="@dimen/dp_20"
         android:textColor="@color/white"
@@ -98,8 +99,7 @@
             android:background="@drawable/verify_text_background"
             android:text="获取验证码"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_13"
-            android:visibility="gone" />
+            android:textSize="@dimen/sp_13" />
     </RelativeLayout>
 
     <TextView

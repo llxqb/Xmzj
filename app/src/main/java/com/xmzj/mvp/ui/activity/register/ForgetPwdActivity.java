@@ -53,7 +53,7 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
     @Override
     protected void initView() {
         mCommonTitleTv.setText("忘记密码");
-        mForgetPwdPhoneEt.addTextChangedListener(search_text_OnChange);
+//        mForgetPwdPhoneEt.addTextChangedListener(search_text_OnChange);
     }
 
     @Override
@@ -70,12 +70,14 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
                 break;
             case R.id.code_bt:
                 if (TextUtils.isEmpty(mForgetPwdPhoneEt.getText().toString())) {
-                    showToast("手机号不能为空");
+                    showToast("手机号/邮箱不能为空");
                     return;
                 }
                 if (verification()) {
                     mCodeBt.setRun(true);
                 }
+                mForgetPwdVerifyEt.setText(ValueUtil.randomSixNum());
+                mCodeBt.setAfterBg(R.drawable.verify_text_background);
                 break;
             case R.id.forget_pwd_btn:
                 if (TextUtils.isEmpty(mForgetPwdPhoneEt.getText().toString())) {
@@ -127,6 +129,14 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
      */
     @Override
     public void getForgetPwdSuccess(ForgetPwdResponse forgetPwdResponse) {
+
+    }
+
+    /**
+     * 获取验证码成功
+     */
+    @Override
+    public void getVerifyCodeSuccess(String code) {
 
     }
 

@@ -46,4 +46,10 @@ public class LoginModel {
     public Observable<ResponseData> onRequestForgetPwd(ForgetPwdRequest request) {
         return mLoginApi.onRequestForgetPwd(mGson.toJson(request)).map(mTransform::transformCommon);
     }
+    /**
+     * 获取验证码
+     */
+    public Observable<ResponseData> onRequestVerifyCode(String account,int type) {
+        return mLoginApi.onRequestVerifyCode(account,type).map(mTransform::transformCommon);
+    }
 }

@@ -1,6 +1,8 @@
 package com.xmzj.network;
 
 import android.content.Context;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,12 +11,18 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.FormBody;
+import okhttp3.HttpUrl;
+import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
 import retrofit2.Converter;
@@ -68,50 +76,54 @@ public class RetrofitUtil {
                         .readTimeout(60, TimeUnit.SECONDS)
                         .writeTimeout(60 * 1000, TimeUnit.SECONDS);
 
-        okHttpClientBuilder.addInterceptor(new com.shushan.kencanme.app.network.LogInterceptor());
-//        okHttpClientBuilder.addInterceptor(new Interceptor() {
-//            @Override
-//            public Response intercept(Chain chain) throws IOException {
-//                Request request = chain.request();
-//                Request newRequest;
-//                String method = request.method();
-//                TreeMap<String, Object> rootMap = new TreeMap<>();
-//                if (method.equals("GET")) {
-//                    HttpUrl httpUrlurl = request.url();
-//                    Set<String> parameterNames = httpUrlurl.queryParameterNames();
-//
-//                    for (String key : parameterNames) {
-//                        rootMap.put(key, httpUrlurl.queryParameter(key));
-//                    }
-//                    String APPSIGN = "xfsgTDhtdwci0qef4Fd1u2dwci0qef4QCiMdLper4MdLpe";
-//                    String sign = ValueUtil.getSign1(rootMap, APPSIGN);
-//                    newRequest = request.newBuilder().addHeader("FmSign", "68ae2ad3f28864072d65f19ea7af32fc").build();
-//                    LogUtils.i("newRequest=" + newRequest.toString());
-//                    return chain.proceed(newRequest);
-//                } else {
-//                    RequestBody requestBody = request.body();
-//                    if (requestBody instanceof FormBody) {
-//                        for (int i = 0; i < ((FormBody) requestBody).size(); i++) {
-//                            rootMap.put(((FormBody) requestBody).encodedName(i), ((FormBody) requestBody).encodedValue(i));
-//                        }
-//                    } else {
-//                        Buffer buffer = new Buffer();
-//                        requestBody.writeTo(buffer);
-//                        String oldParamsJson = buffer.readUtf8();
-//                        if (!TextUtils.isEmpty(oldParamsJson)) {
-////                            rootMap = JSON.parseObject(oldParamsJson, TreeMap.class);
-//                            rootMap =  new Gson().fromJson(oldParamsJson, TreeMap.class);
-//
-//                        }
-//                    }
-//                    String sign = ValueUtil.getSign(rootMap);
-//                    newRequest = request.newBuilder().addHeader("ssapp-token", sign).build();
-//                    return chain.proceed(newRequest);
-//                }
-//
-//            }
-//        });
+//        okHttpClientBuilder.addInterceptor(new LogInterceptor());
+        okHttpClientBuilder.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                Request request = chain.request();
+                Request newRequest;
+                String method = request.method();
+                TreeMap<String, Object> rootMap = new TreeMap<>();
+                if (method.equals("GET")) {
+                    HttpUrl httpUrlurl = request.url();
+                    Set<String> parameterNames = httpUrlurl.queryParameterNames();
 
+                    for (String key : parameterNames) {
+                        rootMap.put(key, httpUrlurl.queryParameter(key));
+                    }
+                } else {
+                    RequestBody requestBody = request.body();
+                    if (requestBody instanceof FormBody) {
+                        for (int i = 0; i < ((FormBody) requestBody).size(); i++) {
+                            rootMap.put(((FormBody) requestBody).encodedName(i), ((FormBody) requestBody).encodedValue(i));
+                        }
+                    } else {
+                        Buffer buffer = new Buffer();
+                        requestBody.writeTo(buffer);
+                        String oldParamsJson = buffer.readUtf8();
+                        if (!TextUtils.isEmpty(oldParamsJson)) {
+                            rootMap = new Gson().fromJson(oldParamsJson, TreeMap.class);
+                        }
+                    }
+                }
+//                String sign = ValueUtil.getSign(rootMap);
+//                newRequest = request.newBuilder().addHeader("ssapp-token", sign).build();
+
+                long startTime = System.currentTimeMillis();
+                Response response = chain.proceed(request);
+                long endTime = System.currentTimeMillis();
+                Log.e("LogInterceptor", "response:" + new Gson().toJson(response));
+//                String content = response.body().string();
+//                if(method.equals("GET")){
+//                    Log.i("LogInterceptor","\nURL:" + request.url() + "（耗时" + (endTime - startTime) + "ms)" +
+//                            "\nResponse BODY:" + content +"");
+//                }else {
+//                    Log.i("LogInterceptor","\nURL:" + request.url() + "（耗时" + (endTime - startTime) + "ms)" + " \nREQEUST BODY:" + bodyToString(request)+
+//                            "\nResponse BODY:" + content);
+//                }
+                return response;
+            }
+        });
 //        if (isHttps) {
 //            SSLSocketFactory ssl = new SSLSocketUtil.Builder()
 //                    .context(context)
@@ -124,8 +136,6 @@ public class RetrofitUtil {
 //                            org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 //        }
         okHttpClient = okHttpClientBuilder.build();
-
-
 
 
         Retrofit.Builder retrofitBuilder = new Retrofit.Builder().baseUrl(baseUrl);

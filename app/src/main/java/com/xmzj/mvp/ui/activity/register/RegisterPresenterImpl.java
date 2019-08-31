@@ -82,6 +82,31 @@ public class RegisterPresenterImpl implements RegisterControl.PresenterRegister 
             mRegisterView.showToast(responseData.errorMsg);
         }
     }
+    /**
+     * 获取验证码
+     */
+    @Override
+    public void onRequestVerifyCode(String account,int type) {
+        mRegisterView.showLoading(mContext.getResources().getString(R.string.loading));
+        Disposable disposable = mLoginModel.onRequestVerifyCode(account,type).compose(mRegisterView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
+                .subscribe(this::requestVerifyCodeSuccess, throwable -> mRegisterView.showErrMessage(throwable),
+                        () -> mRegisterView.dismissLoading());
+        mRegisterView.addSubscription(disposable);
+    }
+
+
+    private void requestVerifyCodeSuccess(ResponseData responseData) {
+        if (responseData.resultCode == 0) {
+//            responseData.parseData(ForgetPwdResponse.class);
+//            if (responseData.parsedData != null) {
+//                ForgetPwdResponse response = (ForgetPwdResponse) responseData.parsedData;
+//                mRegisterView.getForgetPwdSuccess(response);
+//            }
+//            mRegisterView.getVerifyCodeSuccess();
+        } else {
+            mRegisterView.showToast(responseData.errorMsg);
+        }
+    }
 
     @Override
     public void onCreate() {

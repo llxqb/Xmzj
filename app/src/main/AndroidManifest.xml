@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".mvp.ui.activity.register.ForgetPwdActivity"></activity>
+        <activity android:name=".mvp.ui.activity.register.ForgetPwdActivity"/>
         <activity android:name=".mvp.ui.activity.register.RegisterActivity" />
         <activity
             android:name=".mvp.ui.activity.video.VideoDetailActivity"

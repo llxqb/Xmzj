@@ -17,6 +17,7 @@ public class RegisterControl {
 
         void getRegisterSuccess(RegisterResponse registerResponse);
         void getForgetPwdSuccess(ForgetPwdResponse forgetPwdResponse);
+        void getVerifyCodeSuccess(String code);
     }
 
     public interface PresenterRegister extends Presenter<RegisterView> {
@@ -29,6 +30,11 @@ public class RegisterControl {
          * 忘记密码
          */
         void onRequestForgetPwd(ForgetPwdRequest forgetPwdRequest);
+        /**
+         * 获取验证码
+         * 验证类型(注册：100001，重置密码：100002,登录：100003)
+         */
+        void onRequestVerifyCode(String account,int type);
 
     }
 

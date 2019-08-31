@@ -42,5 +42,11 @@ public class Constant {
      * 客户端类型(1：安卓，2：苹果，3：电脑浏览器，4：手机浏览器，5：微信)
      */
     public static final int FROM = 1;
+    /**
+     * 验证码类型(注册：100001，重置密码：100002,登录：100003)
+     */
+    public static final int VerifyCode_REGISTER = 100001;
+    public static final int VerifyCode_RETPWD = 100002;
+    public static final int VerifyCode_LOGIN = 100003;
 
 }

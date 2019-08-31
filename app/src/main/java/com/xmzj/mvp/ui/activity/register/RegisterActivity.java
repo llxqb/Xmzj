@@ -55,12 +55,12 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
     @Override
     protected void initView() {
         mCommonTitleTv.setText("注册");
-        mRegisterPhoneEt.addTextChangedListener(search_text_OnChange);
+//        mRegisterPhoneEt.addTextChangedListener(search_text_OnChange);
     }
 
     @Override
     protected void initData() {
-
+        mRegisterPhoneEt.setText("960555267@qq.com");
     }
 
 
@@ -73,10 +73,13 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
             case R.id.code_bt:
                 if (verification()) {
                     if (TextUtils.isEmpty(mRegisterPhoneEt.getText().toString())) {
-                        showToast("手机号不能为空");
+                        showToast("手机号/邮箱不能为空");
                         return;
                     }
                     mCodeBt.setRun(true);
+//                    onRequestVerifyCode(mRegisterPhoneEt.getText().toString(), Constant.VerifyCode_REGISTER);
+                    mRegisterVerifyEt.setText(ValueUtil.randomSixNum());
+                    mCodeBt.setAfterBg(R.drawable.verify_text_background);
                 }
                 break;
             case R.id.register_btn:
@@ -93,6 +96,16 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
                 }
                 break;
         }
+    }
+
+    /**
+     * 获取验证码
+     *
+     * @param account 手机号码/邮箱
+     * @param type    验证类型(注册：100001，重置密码：100002,登录：100003)
+     */
+    private void onRequestVerifyCode(String account, int type) {
+        mPresenter.onRequestVerifyCode(account, type);
     }
 
     /**
@@ -138,6 +151,16 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
     @Override
     public void getForgetPwdSuccess(ForgetPwdResponse forgetPwdResponse) {
 
+    }
+
+    /**
+     * 获取验证码成功
+     */
+    @Override
+    public void getVerifyCodeSuccess(String code) {
+        if (ValueUtil.isValidityEmail(mRegisterPhoneEt.getText().toString())) {
+            showToast("获取验证码成功，请去邮箱查看");
+        }
     }
 
 

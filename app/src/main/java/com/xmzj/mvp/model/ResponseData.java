@@ -20,15 +20,15 @@ public class ResponseData {
     }
 
     public ResponseData(JSONObject jsonObject) {
-        resultCode = jsonObject.optInt("error");
-        errorMsg = jsonObject.optString("msg");
+        resultCode = jsonObject.optInt("code");
+        errorMsg = jsonObject.optString("desc");
         result = jsonObject.optString("data");
     }
 
     //list
     public ResponseData(JSONObject jsonObject, boolean isList){
-        resultCode = jsonObject.optInt("error");
-        errorMsg = jsonObject.optString("msg");
+        resultCode = jsonObject.optInt("code");
+        errorMsg = jsonObject.optString("desc");
         mJsonObject = jsonObject;
     }
 

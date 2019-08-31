@@ -85,7 +85,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     protected void initView() {
         mCommonBack.setVisibility(View.GONE);
         mCommonTitleTv.setText("登录");
-        mLoginPhoneEt.addTextChangedListener(search_text_OnChange);
+//        mLoginPhoneEt.addTextChangedListener(search_text_OnChange);
     }
 
     @Override
@@ -113,11 +113,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
                 break;
             case R.id.code_bt:
                 if (TextUtils.isEmpty(mLoginPhoneEt.getText().toString())) {
-                    showToast("请填写手机号");
-                    return;
-                }
-                if (mLoginPhoneEt.getText().length() != 11) {
-                    showToast("请填写正确的手机号格式");
+                    showToast("手机号/邮箱不能为空");
                     return;
                 }
                 mCodeBt.setRun(true);
@@ -196,8 +192,13 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
 //        mPresenter.onRequestLogin(loginRequest);
 
         LoginUser loginUser = new LoginUser();
-        loginUser.phone = mLoginUserEt.getText().toString();
-        loginUser.pwd = mLoginPwdEt.getText().toString();
+        if(loginType==0){
+            loginUser.phone = mLoginPhoneEt.getText().toString();
+            loginUser.pwd = mLoginVerifyEt.getText().toString();
+        }else {
+            loginUser.phone = mLoginUserEt.getText().toString();
+            loginUser.pwd = mLoginPwdEt.getText().toString();
+        }
         mBuProcessor.setLoginUser(loginUser);
         startActivitys(MainActivity.class);
         finish();
