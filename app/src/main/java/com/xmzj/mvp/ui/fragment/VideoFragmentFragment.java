@@ -3,6 +3,7 @@ package com.xmzj.mvp.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,15 +13,21 @@ import android.view.ViewGroup;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.xmzj.R;
+import com.xmzj.XmzjApp;
+import com.xmzj.di.components.DaggerVideoFragmentComponent;
+import com.xmzj.di.modules.VideoFragmentModule;
+import com.xmzj.di.modules.VideoModule;
 import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.response.VideoResponse;
 import com.xmzj.help.GlideImageLoader;
 import com.xmzj.mvp.ui.activity.video.VideoDetailActivity;
+import com.xmzj.mvp.ui.activity.video.VideoFragmentControl;
 import com.xmzj.mvp.ui.adapter.VideoAdapter;
 import com.youth.banner.Banner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +37,7 @@ import butterknife.Unbinder;
  * VideoFragmentFragment
  */
 
-public class VideoFragmentFragment extends BaseFragment {
+public class VideoFragmentFragment extends BaseFragment implements VideoFragmentControl.VideoFragmentView {
 
     Unbinder unbinder;
     @BindView(R.id.video_banner)
@@ -75,6 +82,7 @@ public class VideoFragmentFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_video, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initializeInjector();
         initView();
         initData();
         return view;
@@ -158,10 +166,18 @@ public class VideoFragmentFragment extends BaseFragment {
         mVideoBanner.start();
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    private void initializeInjector() {
+        DaggerVideoFragmentComponent.builder().appComponent(((XmzjApp) Objects.requireNonNull(getActivity()).getApplication()).getAppComponent())
+                .videoModule(new VideoModule((AppCompatActivity) getActivity()))
+                .videoFragmentModule(new VideoFragmentModule(this))
+                .build().inject(this);
+    }
+
+
 }

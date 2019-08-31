@@ -90,6 +90,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
 
     @Override
     protected void initData() {
+        mLoginPhoneEt.setText("13262253731");
         mLoginUserEt.setText("13262253731");
         mLoginPwdEt.setText("123456");
     }

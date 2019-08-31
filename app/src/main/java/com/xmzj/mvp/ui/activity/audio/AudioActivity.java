@@ -8,6 +8,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.xmzj.R;
+import com.xmzj.di.components.DaggerAudioComponent;
+import com.xmzj.di.modules.ActivityModule;
+import com.xmzj.di.modules.AudioModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.AudioFragment;
@@ -18,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class AudioActivity extends BaseActivity {
+public class AudioActivity extends BaseActivity implements AudioControl.AudioView{
 
     @BindView(R.id.back_iv)
     ImageView mBackIv;
@@ -39,6 +42,7 @@ public class AudioActivity extends BaseActivity {
     protected void initContentView() {
         setContentView(R.layout.activity_audio);
         setStatusBar();
+        initInjectData();
     }
 
     @Override
@@ -70,5 +74,11 @@ public class AudioActivity extends BaseActivity {
             case R.id.search_iv:
                 break;
         }
+    }
+
+    private void initInjectData() {
+        DaggerAudioComponent.builder().appComponent(getAppComponent())
+                .audioModule(new AudioModule(this, this))
+                .activityModule(new ActivityModule(this)).build().inject(this);
     }
 }

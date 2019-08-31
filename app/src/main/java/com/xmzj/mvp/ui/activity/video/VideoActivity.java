@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.xmzj.R;
+import com.xmzj.di.components.DaggerVideoComponent;
+import com.xmzj.di.modules.ActivityModule;
+import com.xmzj.di.modules.VideoModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.VideoFragment;
@@ -19,8 +22,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class VideoActivity extends BaseActivity {
-
+public class VideoActivity extends BaseActivity implements VideoControl.VideoView {
 
     @BindView(R.id.back_iv)
     ImageView mBackIv;
@@ -42,6 +44,8 @@ public class VideoActivity extends BaseActivity {
     @Override
     protected void initContentView() {
         setContentView(R.layout.activity_video);
+        setStatusBar();
+        initInjectData();
     }
 
     @Override
@@ -74,5 +78,12 @@ public class VideoActivity extends BaseActivity {
                 showToast("播放历史");
                 break;
         }
+    }
+
+
+    private void initInjectData() {
+        DaggerVideoComponent.builder().appComponent(getAppComponent())
+                .videoModule(new VideoModule(this, this))
+                .activityModule(new ActivityModule(this)).build().inject(this);
     }
 }

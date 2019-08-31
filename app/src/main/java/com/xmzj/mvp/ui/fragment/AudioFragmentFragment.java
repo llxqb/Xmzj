@@ -3,6 +3,7 @@ package com.xmzj.mvp.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -14,9 +15,14 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
 import com.xmzj.R;
+import com.xmzj.XmzjApp;
+import com.xmzj.di.components.DaggerAudioFragmentComponent;
+import com.xmzj.di.modules.AudioFragmentModule;
+import com.xmzj.di.modules.AudioModule;
 import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.response.AudioContentResponse;
 import com.xmzj.listener.DownloadListener;
+import com.xmzj.mvp.ui.activity.audio.AudioFragmentControl;
 import com.xmzj.mvp.ui.activity.audio.AudioPlayDetailActivity;
 import com.xmzj.mvp.ui.adapter.AudioAdapter;
 import com.xmzj.mvp.utils.DownloadUtil;
@@ -24,6 +30,7 @@ import com.xmzj.mvp.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,7 +41,7 @@ import butterknife.Unbinder;
  * AudioFragmentFragment
  */
 
-public class AudioFragmentFragment extends BaseFragment {
+public class AudioFragmentFragment extends BaseFragment implements AudioFragmentControl.AudioFragmentView {
 
     @BindView(R.id.upload_all_tv)
     TextView mUploadAllTv;
@@ -88,6 +95,7 @@ public class AudioFragmentFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_fragment_audio, container, false);
         unbinder = ButterKnife.bind(this, view);
+        initializeInjector();
         initView();
         initData();
         return view;
@@ -180,21 +188,13 @@ public class AudioFragmentFragment extends BaseFragment {
             @Override
             public void onStart() {
                 LogUtils.e("onStart: ");
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast("下载中...");
-                    }
-                });
+                Objects.requireNonNull(getActivity()).runOnUiThread(() -> showToast("下载中..."));
             }
 
             @Override
             public void onProgress(final int currentLength) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+                Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
 
-                    }
                 });
             }
 
@@ -202,7 +202,7 @@ public class AudioFragmentFragment extends BaseFragment {
             public void onFinish(String localPath) {
                 mVideoPath = localPath;
                 LogUtils.e("onFinish: " + localPath);
-                getActivity().runOnUiThread(new Runnable() {
+                Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         showToast("下载完成");
@@ -213,12 +213,7 @@ public class AudioFragmentFragment extends BaseFragment {
             @Override
             public void onFailure(final String erroInfo) {
                 LogUtils.e("onFailure: " + erroInfo);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast(erroInfo);
-                    }
-                });
+                Objects.requireNonNull(getActivity()).runOnUiThread(() -> showToast(erroInfo));
             }
         });
     }
@@ -229,4 +224,12 @@ public class AudioFragmentFragment extends BaseFragment {
         super.onDestroyView();
         unbinder.unbind();
     }
+
+    private void initializeInjector() {
+        DaggerAudioFragmentComponent.builder().appComponent(((XmzjApp) Objects.requireNonNull(getActivity()).getApplication()).getAppComponent())
+                .audioModule(new AudioModule((AppCompatActivity) getActivity()))
+                .audioFragmentModule(new AudioFragmentModule(this))
+                .build().inject(this);
+    }
+
 }
