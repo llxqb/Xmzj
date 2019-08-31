@@ -16,6 +16,7 @@ import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.AudioFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,7 +53,7 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
         for (int i = 0; i < titleString.length; i++) {
             fragmentList.add(AudioFragment.getInstance(i));
         }
-        mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
+        mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, Arrays.asList(titleString)));
         mTabLayout.setupWithViewPager(mViewPager);
     }
 

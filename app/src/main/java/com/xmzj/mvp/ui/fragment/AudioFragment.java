@@ -15,6 +15,7 @@ import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -73,7 +74,7 @@ public class AudioFragment extends BaseFragment {
                 for (int i = 0; i < titleString.length; i++) {
                     fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
             case 1:
@@ -82,7 +83,7 @@ public class AudioFragment extends BaseFragment {
                 for (int i = 0; i < titleString.length; i++) {
                     fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
             case 2:
@@ -91,7 +92,7 @@ public class AudioFragment extends BaseFragment {
                 for (int i = 0; i < titleString.length; i++) {
                     fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
             case 3:
@@ -100,7 +101,7 @@ public class AudioFragment extends BaseFragment {
                 for (int i = 0; i < titleString.length; i++) {
                     fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
             case 4:
@@ -109,7 +110,7 @@ public class AudioFragment extends BaseFragment {
                 for (int i = 0; i < titleString.length; i++) {
                     fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
                 }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
                 break;
         }

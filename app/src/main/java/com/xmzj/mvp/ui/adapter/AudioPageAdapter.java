@@ -4,16 +4,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.xmzj.mvp.ui.fragment.AudioFragment;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class AudioPageAdapter extends FragmentPagerAdapter {
-    private final String[] titles ;
+    private final List<String> titles ;
     private List<Fragment> frag;
 
-    public AudioPageAdapter(FragmentManager fm,List<Fragment> fragmentList, String[] titleString) {
+    public AudioPageAdapter(FragmentManager fm,List<Fragment> fragmentList, List<String> titleString) {
         super(fm);
         frag= fragmentList;
         titles = titleString;
@@ -27,11 +24,11 @@ public class AudioPageAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return titles.length;
+        return titles.size();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles[position];
+        return titles.get(position);
     }
 }

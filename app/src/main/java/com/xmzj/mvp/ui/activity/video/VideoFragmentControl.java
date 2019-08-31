@@ -1,6 +1,8 @@
 package com.xmzj.mvp.ui.activity.video;
 
 
+import com.xmzj.entity.request.VideoListRequest;
+import com.xmzj.entity.response.VideoListResponse;
 import com.xmzj.mvp.presenter.LoadDataView;
 import com.xmzj.mvp.presenter.Presenter;
 
@@ -10,15 +12,15 @@ import com.xmzj.mvp.presenter.Presenter;
 
 public class VideoFragmentControl {
     public interface VideoFragmentView extends LoadDataView {
-//        void getInfoSuccess(HomeFragmentResponse response);
+        void getVideoListSuccess(VideoListResponse response);
 
     }
 
     public interface VideoFragmentPresenter extends Presenter<VideoFragmentView> {
         /**
-         * 请求homeFragment list 数据
+         * 请求视频列表
          */
-//        void onRequestInfo(HomeFragmentRequest homeFragmentRequest);
+        void onRequestVideoList(VideoListRequest videoRequest);
 
     }
 

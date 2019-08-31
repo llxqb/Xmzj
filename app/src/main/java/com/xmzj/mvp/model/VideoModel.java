@@ -1,9 +1,12 @@
 package com.xmzj.mvp.model;
 
 import com.google.gson.Gson;
+import com.xmzj.entity.request.VideoListRequest;
 import com.xmzj.network.networkApi.AudioAndVideoApi;
 
 import javax.inject.Inject;
+
+import io.reactivex.Observable;
 
 /**
  * Created by li.liu on 2017/4/28.
@@ -22,11 +25,20 @@ public class VideoModel {
         mTransform = transform;
     }
 
+    /**
+     * 请求视频分类
+     */
+    public Observable<ResponseData> onRequestVideoClassify() {
+        return mAudioAndVideoApi.onRequestVideoClassify().map(mTransform::transformListType);
+    }
 
-//    //请求我的-首页接口，更新个人信息
-//    public Observable<ResponseData> onRequestHomeUserInfo(TokenRequest request) {
-//        return mAudioAndVideoApi.onRequestHomeUserInfo(mGson.toJson(request)).map(mTransform::transformCommon);
-//    }
+    /**
+     * 请求视频列表
+     */
+    public Observable<ResponseData> onRequestVideoList(VideoListRequest videoRequest) {
+        //videoRequest.orderCol, videoRequest.keyword,
+        return mAudioAndVideoApi.onRequestVideoList(videoRequest.categoryId,  videoRequest.pageNo, videoRequest.pageSize).map(mTransform::transformListType);
+    }
 
 
 }

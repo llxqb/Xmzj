@@ -48,5 +48,9 @@ public class Constant {
     public static final int VerifyCode_REGISTER = 100001;
     public static final int VerifyCode_RETPWD = 100002;
     public static final int VerifyCode_LOGIN = 100003;
+    /**
+     * 分页没页数
+     */
+    public static final int PAGESIZE = 10;
 
 }

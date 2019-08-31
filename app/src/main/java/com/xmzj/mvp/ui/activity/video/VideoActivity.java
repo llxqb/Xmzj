@@ -13,11 +13,14 @@ import com.xmzj.di.components.DaggerVideoComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.VideoModule;
 import com.xmzj.entity.base.BaseActivity;
+import com.xmzj.entity.response.VideoClassifyResponse;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.VideoFragment;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -40,6 +43,9 @@ public class VideoActivity extends BaseActivity implements VideoControl.VideoVie
     TabLayout mTabLayout;
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
+    List<String> titleString = new ArrayList<>();
+    @Inject
+    VideoControl.PresenterVideo mPresenter;
 
     @Override
     protected void initContentView() {
@@ -50,18 +56,12 @@ public class VideoActivity extends BaseActivity implements VideoControl.VideoVie
 
     @Override
     protected void initView() {
-        List<Fragment> fragmentList = new ArrayList<>();
-        String[] titleString = {"元音老人视频", "齐老师视频", "心密师兄"};
-        for (int i = 0; i < titleString.length; i++) {
-            fragmentList.add(VideoFragment.getInstance(i));
-        }
-        mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
-        mTabLayout.setupWithViewPager(mViewPager);
+        //{"元音老人视频", "齐老师视频", "心密师兄"}
     }
 
     @Override
     protected void initData() {
-
+        mPresenter.onRequestVideoClassify();
     }
 
 
@@ -80,10 +80,24 @@ public class VideoActivity extends BaseActivity implements VideoControl.VideoVie
         }
     }
 
+    @Override
+    public void getVideoClassifySuccess(VideoClassifyResponse videoClassifyResponse) {
+        List<Fragment> fragmentList = new ArrayList<>();
+        for (int i=0;i<videoClassifyResponse.getData().size();i++){
+            VideoClassifyResponse.DataBean dataBean = videoClassifyResponse.getData().get(i);
+            titleString.add(dataBean.getName());
+            fragmentList.add(VideoFragment.getInstance(dataBean));
+        }
+        mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
+        mTabLayout.setupWithViewPager(mViewPager);
+    }
+
 
     private void initInjectData() {
         DaggerVideoComponent.builder().appComponent(getAppComponent())
                 .videoModule(new VideoModule(this, this))
                 .activityModule(new ActivityModule(this)).build().inject(this);
     }
+
+
 }

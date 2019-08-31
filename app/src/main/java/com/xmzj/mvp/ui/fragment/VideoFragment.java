@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseFragment;
+import com.xmzj.entity.response.VideoClassifyResponse;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 
 import java.util.ArrayList;
@@ -32,22 +33,15 @@ public class VideoFragment extends BaseFragment {
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
     Unbinder unbinder;
-    private int mType;
+    private List<String> titleString = new ArrayList<>();
 
-    public static VideoFragment getInstance(int type) {
+
+    public static VideoFragment getInstance(VideoClassifyResponse.DataBean dataBean) {
         VideoFragment fragment = new VideoFragment();
         Bundle bd = new Bundle();
-        bd.putInt("type", type);
+        bd.putParcelable("dataBean", dataBean);
         fragment.setArguments(bd);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mType = getArguments().getInt("type");
-        }
     }
 
 
@@ -61,39 +55,20 @@ public class VideoFragment extends BaseFragment {
         return view;
     }
 
-    List<Fragment> fragmentList = new ArrayList<>();
-    String[] titleString;
 
     @Override
     public void initView() {
-        switch (mType) {
-            case 0:
-                fragmentList.clear();
-                titleString = new String[]{"全部", "随缘问答", "各地开示", "讲经", "其它"};
-                for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(VideoFragmentFragment.getInstance(mType, i));
-                }
-                mViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
-                mTabLayout.setupWithViewPager(mViewPager);
-                break;
-            case 1:
-                fragmentList.clear();
-                titleString = new String[]{"全部", "灌顶答疑", "打七答疑", "其它"};
-                for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(VideoFragmentFragment.getInstance(mType, i));
-                }
-                mViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
-                mTabLayout.setupWithViewPager(mViewPager);
-                break;
-            case 2:
-                fragmentList.clear();
-                titleString = new String[]{"全部", "郭鸿雁老师视频", "其它"};
-                for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(VideoFragmentFragment.getInstance(mType, i));
-                }
-                mViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
-                mTabLayout.setupWithViewPager(mViewPager);
-                break;
+        //    private String mType;
+        List<Fragment> fragmentList = new ArrayList<>();
+        if (getArguments() != null) {
+            VideoClassifyResponse.DataBean mDataBean = getArguments().getParcelable("dataBean");
+            if (mDataBean == null) return;
+            for (VideoClassifyResponse.DataBean.ChildsBean childsBean : mDataBean.getChilds()) {
+                titleString.add(childsBean.getName());
+                fragmentList.add(VideoFragmentFragment.getInstance(childsBean.getId()));//传子分类id
+            }
+            mViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+            mTabLayout.setupWithViewPager(mViewPager);
         }
     }
 
