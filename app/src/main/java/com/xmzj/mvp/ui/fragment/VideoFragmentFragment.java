@@ -23,8 +23,7 @@ import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.constants.Constant;
 import com.xmzj.entity.request.VideoListRequest;
 import com.xmzj.entity.response.VideoListResponse;
-import com.xmzj.entity.response.VideoResponse;
-import com.xmzj.mvp.ui.activity.video.VideoDetailActivity;
+import com.xmzj.mvp.ui.activity.video.VideoDetailEpisodeActivity;
 import com.xmzj.mvp.ui.activity.video.VideoFragmentControl;
 import com.xmzj.mvp.ui.adapter.VideoAdapter;
 import com.xmzj.mvp.utils.LogUtils;
@@ -106,18 +105,10 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
         mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                VideoResponse videoResponse = (VideoResponse) adapter.getItem(position);
-                switch (view.getId()) {
-                    case R.id.item_video_layout:
-                        assert videoResponse != null;
-                        VideoDetailActivity.start(getActivity(), videoResponse);
-                        break;
-                    case R.id.upload_iv:
-                        showToast("下载...");
-                        break;
-                    case R.id.share_iv:
-                        showToast("分享...");
-                        break;
+                VideoListResponse.DataBean dataBean = (VideoListResponse.DataBean) adapter.getItem(position);
+                if (view.getId() == R.id.item_video_layout) {
+                    assert dataBean != null;
+                    VideoDetailEpisodeActivity.start(getActivity(), dataBean.getId(), dataBean.getTitle());
                 }
             }
         });
@@ -150,8 +141,10 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
     private void onRequestVideoList() {
         VideoListRequest videoListRequest = new VideoListRequest();
         videoListRequest.categoryId = mType;
+        videoListRequest.orderCol = "";
+        videoListRequest.keyword = "";
         videoListRequest.pageNo = page;
-        videoListRequest.pageSize = 10;
+        videoListRequest.pageSize = Constant.PAGESIZE;
         mPresenter.onRequestVideoList(videoListRequest);
     }
 
@@ -162,7 +155,6 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
     public void getVideoListSuccess(VideoListResponse response) {
         LogUtils.d("response:" + new Gson().toJson(response));
         videoResponseList = response.getData();
-        mVideoAdapter.addData(videoResponseList);
         if (mSwipeLy.isRefreshing()) {
             mSwipeLy.setRefreshing(false);
         }

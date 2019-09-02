@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_50">
+    android:layout_height="@dimen/dp_50"
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/back_iv"
@@ -53,16 +54,16 @@
             android:paddingEnd="@dimen/dp_20"
             android:src="@mipmap/search" />
 
-        <EditText
-            android:id="@+id/search_content_et"
+        <TextView
+            android:id="@+id/search_content_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:textColor="@color/color666"
-            android:textSize="@dimen/sp_16"
             android:layout_marginStart="@dimen/dp_20"
             android:layout_toStartOf="@id/search_iv"
-            android:background="@null" />
+            android:background="@null"
+            android:textColor="@color/color666"
+            android:textSize="@dimen/sp_16" />
 
     </RelativeLayout>
 

@@ -15,12 +15,36 @@
         android:id="@+id/jzvdStd_layout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_below="@id/common_toolbar_layout">
+        android:layout_below="@id/common_toolbar_layout"
+        android:orientation="vertical">
 
         <com.xmzj.mvp.views.MyJzvdStd
             android:id="@+id/myJzvdStd"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_200" />
+            android:layout_height="@dimen/dp_200"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/web_view_rl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <WebView
+                android:id="@+id/video_webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/quanping_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:padding="@dimen/dp_10"
+                android:src="@mipmap/quanpin" />
+        </RelativeLayout>
+
+
     </LinearLayout>
 
     <RelativeLayout

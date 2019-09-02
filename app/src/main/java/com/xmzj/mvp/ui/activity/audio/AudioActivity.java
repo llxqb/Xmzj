@@ -54,6 +54,7 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
             fragmentList.add(AudioFragment.getInstance(i));
         }
         mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, Arrays.asList(titleString)));
+        mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 

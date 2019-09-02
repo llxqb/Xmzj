@@ -4,6 +4,7 @@ import io.reactivex.Observable;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
 import retrofit2.http.Url;
@@ -32,10 +33,14 @@ public interface AudioAndVideoApi {
 
     /**
      * 请求视频列表
-     * @Query("orderCol") String orderCol, @Query("keyword") String keyword,
      */
     @GET("video/list")
-    Observable<String> onRequestVideoList(@Query("categoryId") String categoryId,  @Query("pageNo") int pageNo, @Query("pageSize") int pageSize);
+    Observable<String> onRequestVideoList(@Query("categoryId") String categoryId, @Query("orderCol") String orderCol, @Query("keyword") String keyword, @Query("pageNo") int pageNo, @Query("pageSize") int pageSize);
+    /**
+     * 请求视频详情
+     */
+    @GET("video/{id}")
+    Observable<String> onRequestVideoInfo(@Path("id") String videoId);
 
 
 }

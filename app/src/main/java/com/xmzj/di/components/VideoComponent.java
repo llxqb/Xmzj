@@ -8,6 +8,9 @@ import com.xmzj.di.modules.VideoModule;
 import com.xmzj.di.scopes.PerActivity;
 import com.xmzj.mvp.ui.activity.video.VideoActivity;
 import com.xmzj.mvp.ui.activity.video.VideoControl;
+import com.xmzj.mvp.ui.activity.video.VideoDetailActivity;
+import com.xmzj.mvp.ui.activity.video.VideoDetailEpisodeActivity;
+import com.xmzj.mvp.ui.activity.video.VideoPlayActivity;
 
 import dagger.Component;
 
@@ -21,6 +24,9 @@ import dagger.Component;
 public interface VideoComponent extends ActivityComponent {
     //对LoginActivity进行依赖注入
     void inject(VideoActivity videoActivity);
+    void inject(VideoDetailEpisodeActivity videoDetailEpisodeActivity);
+    void inject(VideoDetailActivity videoDetailActivity);
+    void inject(VideoPlayActivity videoPlayActivity);
 
     AppCompatActivity activity();
 

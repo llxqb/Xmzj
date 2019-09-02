@@ -67,8 +67,11 @@ public class VideoFragment extends BaseFragment {
                 titleString.add(childsBean.getName());
                 fragmentList.add(VideoFragmentFragment.getInstance(childsBean.getId()));//传子分类id
             }
-            mViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
-            mTabLayout.setupWithViewPager(mViewPager);
+            if(!fragmentList.isEmpty()){
+                mViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+                mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
+                mTabLayout.setupWithViewPager(mViewPager);
+            }
         }
     }
 

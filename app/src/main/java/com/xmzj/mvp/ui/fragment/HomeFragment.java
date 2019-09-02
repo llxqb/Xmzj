@@ -69,7 +69,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         initializeInjector();
         unbinder = ButterKnife.bind(this, view);
-        StatusBarUtil.setTranslucentForImageViewInFragment(getActivity(), null);
+        StatusBarUtil.setTransparentForImageView(getActivity(), null);
         initView();
         initData();
         return view;

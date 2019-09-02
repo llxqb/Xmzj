@@ -90,7 +90,7 @@ public class DateUtil {
     public static String getStrTime(long cc_time, String pattern) {
         String re_StrTime = null;
         SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.CHINA);
-        re_StrTime = sdf.format(new Date(cc_time * 1000L));
+        re_StrTime = sdf.format(new Date(cc_time ));
         return re_StrTime;
     }
 

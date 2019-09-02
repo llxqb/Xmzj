@@ -1,23 +1,30 @@
 package com.xmzj.mvp.ui.activity.video;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.xmzj.R;
+import com.xmzj.di.components.DaggerVideoComponent;
+import com.xmzj.di.modules.ActivityModule;
+import com.xmzj.di.modules.VideoModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.CommentResponse;
-import com.xmzj.entity.response.VideoResponse;
+import com.xmzj.entity.response.VideoClassifyResponse;
+import com.xmzj.entity.response.VideoInfoResponse;
 import com.xmzj.listener.DownloadListener;
-import com.xmzj.mvp.ui.adapter.VideoCommentAdapter;
 import com.xmzj.mvp.utils.DownloadUtil;
 import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.views.KbWithWordsCircleProgressBar;
@@ -26,12 +33,14 @@ import com.xmzj.mvp.views.MyJzvdStd;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.OnClick;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 
-public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzStdListener {
+public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzStdListener, VideoControl.VideoView {
     @BindView(R.id.common_back)
     ImageView mCommonBack;
     @BindView(R.id.common_title_tv)
@@ -40,6 +49,12 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
     ImageView mCommonIvRight;
     @BindView(R.id.myJzvdStd)
     MyJzvdStd mMyJzvdStd;
+    @BindView(R.id.web_view_rl)
+    RelativeLayout mWebViewRl;
+    @BindView(R.id.video_webview)
+    WebView mWebView;
+    @BindView(R.id.quanping_iv)
+    ImageView mQuanPingIv;
     @BindView(R.id.collection_tv)
     TextView mCollectionTv;
     @BindView(R.id.download_tv)
@@ -60,53 +75,81 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
      * 下载到本地视频路径
      */
     String mVideoPath;
+    VideoInfoResponse.EpisodeBean mEpisodeBean;
 
-    private VideoResponse videoResponse;
     private List<CommentResponse> commentResponseList = new ArrayList<>();
 
-    public static void start(Context context, VideoResponse videoResponse) {
+    @Inject
+    VideoControl.PresenterVideo mPresenter;
+
+    public static void start(Context context, VideoInfoResponse.EpisodeBean episodeBean) {
         Intent intent = new Intent(context, VideoDetailActivity.class);
-        intent.putExtra("videoResponse", videoResponse);
+        intent.putExtra("episodeBean", episodeBean);
         context.startActivity(intent);
     }
 
     @Override
     protected void initContentView() {
         setContentView(R.layout.activity_video_detail);
+        setStatusBar();
+        initInjectData();
     }
 
     @Override
     protected void initView() {
         mMyJzvdStd.setListener(this);
         if (getIntent() != null) {
-            videoResponse = getIntent().getParcelableExtra("videoResponse");
-            mCommonTitleTv.setText(videoResponse.title);
-            Glide.with(this).load(videoResponse.coverPic).into(mMyJzvdStd.thumbImageView);
-            urlPath = videoResponse.url;
-            String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
-            if (!TextUtils.isEmpty(localFilePath)) {
-                setDownLoadColor();
+            mEpisodeBean = getIntent().getParcelableExtra("episodeBean");
+//            onRequestVideoInfo(mVideoId);
+            mCommonTitleTv.setText(mEpisodeBean.getTitle());
+            Glide.with(this).load(mEpisodeBean.getCover()).into(mMyJzvdStd.thumbImageView);
+            urlPath = mEpisodeBean.getDownloadUrl();
+            LogUtils.e("urlPath:" + urlPath);
+            if (!TextUtils.isEmpty(urlPath)) {
+                if (urlPath.contains(".html")) {
+                    mWebViewRl.setVisibility(View.VISIBLE);
+                    mMyJzvdStd.setVisibility(View.GONE);
+                    initWebView(urlPath);
+                } else if (urlPath.contains(".mp4")) {
+                    mMyJzvdStd.setVisibility(View.VISIBLE);
+                    mWebViewRl.setVisibility(View.GONE);
+                    String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
+                    if (!TextUtils.isEmpty(localFilePath)) {
+                        setDownLoadColor();
+                    }
+                }
+            }else {
+                showToast("播放路径不正确 ");
             }
         }
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        VideoCommentAdapter mVideoCommentAdapter = new VideoCommentAdapter(this, commentResponseList);
-        mRecyclerView.setAdapter(mVideoCommentAdapter);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        VideoCommentAdapter mVideoCommentAdapter = new VideoCommentAdapter(this, commentResponseList);
+//        mRecyclerView.setAdapter(mVideoCommentAdapter);
     }
 
     @Override
     protected void initData() {
-        for (int i = 0; i < 5; i++) {
-            CommentResponse commentResponse = new CommentResponse();
-            commentResponse.username = "小明";
-            commentResponse.commentContent = "学习了，老师辛苦了";
-            commentResponse.commentDate = "2019-08-28";
-            commentResponseList.add(commentResponse);
-        }
+
+
+    }
+
+    @SuppressLint("SetJavaScriptEnabled")
+    private void initWebView(String urlPath) {
+        WebSettings webSettings = mWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);//允许使用js
+        //自适应屏幕
+        webSettings.setUseWideViewPort(true);//设置webview推荐使用的窗口
+        webSettings.setLoadWithOverviewMode(true);//设置webview加载的页面的模式
+        webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);//设置同时加载Https和Http混合模式
+        //支持屏幕缩放
+        webSettings.setSupportZoom(false);
+        //设置出现缩放工具
+        webSettings.setBuiltInZoomControls(false);
+        mWebView.loadUrl(urlPath);//加载url
     }
 
 
-
-    @OnClick({R.id.common_back, R.id.common_iv_right, R.id.collection_tv, R.id.download_tv, R.id.share_tv})
+    @OnClick({R.id.common_back, R.id.common_iv_right, R.id.collection_tv, R.id.download_tv, R.id.share_tv, R.id.quanping_iv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.common_back:
@@ -118,13 +161,22 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
                 setCollectionColor();
                 break;
             case R.id.download_tv:
-                if (TextUtils.isEmpty(DownloadUtil.checkFileIsExist(urlPath))) {
-                    downloadVideo(); //处理具体下载过程
+                if (!TextUtils.isEmpty(urlPath) && urlPath.toLowerCase().contains(".mp4")) {
+                    if (TextUtils.isEmpty(DownloadUtil.checkFileIsExist(urlPath))) {
+                        downloadVideo(); //处理具体下载过程
+                    } else {
+                        showToast("已下载");
+                    }
                 } else {
-                    showToast("已下载");
+                    showToast("此格式不支持下载");
                 }
                 break;
             case R.id.share_tv:
+                break;
+            case R.id.quanping_iv://全屏
+                if (mEpisodeBean != null) {
+                    VideoPlayActivity.start(this, mEpisodeBean);
+                }
                 break;
         }
     }
@@ -150,6 +202,32 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
         mDownloadTv.setCompoundDrawables(null, null, null, drawable);
     }
 
+    @Override
+    public void getVideoClassifySuccess(VideoClassifyResponse videoClassifyResponse) {
+    }
+
+    /**
+     * 获取视频详情
+     */
+    @Override
+    public void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse) {
+        LogUtils.e("videoInfoResponse:" + new Gson().toJson(videoInfoResponse));
+//        VideoInfoResponse.EpisodeBean episodeBean = videoInfoResponse.getEpisode();
+//        mCommonTitleTv.setText(episodeBean.getTitle());
+//        Glide.with(this).load(episodeBean.getCover()).into(mMyJzvdStd.thumbImageView);
+//        urlPath = episodeBean.getDownloadUrl();
+//        if (!TextUtils.isEmpty(urlPath) && urlPath.contains(".html")) {
+//            initWebView(urlPath);
+//        } else if (urlPath.contains(".mp4")) {
+//            mMyJzvdStd.setVisibility(View.VISIBLE);
+//            mWebView.setVisibility(View.GONE);
+//            String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
+//            if (!TextUtils.isEmpty(localFilePath)) {
+//                setDownLoadColor();
+//            }
+//        }
+
+    }
 
     /**
      * 下载视频文件
@@ -160,48 +238,34 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
             @Override
             public void onStart() {
                 LogUtils.e("onStart: ");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast("下载中...");
-                        mCircleProgressLayout.setVisibility(View.VISIBLE);
-                    }
+                runOnUiThread(() -> {
+                    showToast("下载中...");
+                    mCircleProgressLayout.setVisibility(View.VISIBLE);
                 });
             }
 
             @Override
             public void onProgress(final int currentLength) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mCircleProgress.setProgress(currentLength);
-                    }
-                });
+                runOnUiThread(() -> mCircleProgress.setProgress(currentLength));
             }
 
             @Override
             public void onFinish(String localPath) {
                 mVideoPath = localPath;
                 LogUtils.e("onFinish: " + localPath);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast("下载完成");
-                        mCircleProgressLayout.setVisibility(View.GONE);
-                        setDownLoadColor();
-                    }
+                runOnUiThread(() -> {
+                    showToast("下载完成");
+                    mCircleProgressLayout.setVisibility(View.GONE);
+                    setDownLoadColor();
                 });
             }
 
             @Override
             public void onFailure(final String erroInfo) {
                 LogUtils.e("onFailure: " + erroInfo);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mCircleProgressLayout.setVisibility(View.GONE);
-                        showToast(erroInfo);
-                    }
+                runOnUiThread(() -> {
+                    mCircleProgressLayout.setVisibility(View.GONE);
+                    showToast(erroInfo);
                 });
             }
         });
@@ -211,13 +275,13 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
     public void startBtnCLick() {
         String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
         LogUtils.e("localFilePath:" + localFilePath);
-        if (!TextUtils.isEmpty(localFilePath)) {
-            //本地有资源
-            showToast("播放本地视频");
-            mMyJzvdStd.setUp(localFilePath, videoResponse.title, Jzvd.SCREEN_NORMAL);
-        } else {
-            mMyJzvdStd.setUp(urlPath, videoResponse.title);
-        }
+//        if (!TextUtils.isEmpty(localFilePath)) {
+//            //本地有资源
+//            showToast("播放本地视频");
+//            mMyJzvdStd.setUp(localFilePath, videoResponse.title, Jzvd.SCREEN_NORMAL);
+//        } else {
+//            mMyJzvdStd.setUp(urlPath, videoResponse.title);
+//        }
     }
 
 
@@ -233,6 +297,12 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
             return;
         }
         super.onBackPressed();
+    }
+
+    private void initInjectData() {
+        DaggerVideoComponent.builder().appComponent(getAppComponent())
+                .videoModule(new VideoModule(this, this))
+                .activityModule(new ActivityModule(this)).build().inject(this);
     }
 
 

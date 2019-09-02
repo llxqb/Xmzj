@@ -1,5 +1,8 @@
 package com.xmzj.entity.response;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -40,7 +43,7 @@ public class VideoListResponse {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Parcelable {
         /**
          * id : 35
          * title : 美国居士家座谈
@@ -52,6 +55,25 @@ public class VideoListResponse {
         private String title;
         private String info;
         private String cover;
+
+        protected DataBean(Parcel in) {
+            id = in.readString();
+            title = in.readString();
+            info = in.readString();
+            cover = in.readString();
+        }
+
+        public static final Creator<DataBean> CREATOR = new Creator<DataBean>() {
+            @Override
+            public DataBean createFromParcel(Parcel in) {
+                return new DataBean(in);
+            }
+
+            @Override
+            public DataBean[] newArray(int size) {
+                return new DataBean[size];
+            }
+        };
 
         public String getId() {
             return id;
@@ -83,6 +105,19 @@ public class VideoListResponse {
 
         public void setCover(String cover) {
             this.cover = cover;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(id);
+            dest.writeString(title);
+            dest.writeString(info);
+            dest.writeString(cover);
         }
     }
 }

@@ -36,8 +36,13 @@ public class VideoModel {
      * 请求视频列表
      */
     public Observable<ResponseData> onRequestVideoList(VideoListRequest videoRequest) {
-        //videoRequest.orderCol, videoRequest.keyword,
-        return mAudioAndVideoApi.onRequestVideoList(videoRequest.categoryId,  videoRequest.pageNo, videoRequest.pageSize).map(mTransform::transformListType);
+        return mAudioAndVideoApi.onRequestVideoList(videoRequest.categoryId, videoRequest.orderCol, videoRequest.keyword, videoRequest.pageNo, videoRequest.pageSize).map(mTransform::transformListType);
+    }
+    /**
+     * 请求视频详情
+     */
+    public Observable<ResponseData> onRequestVideoInfo(String videoId) {
+        return mAudioAndVideoApi.onRequestVideoInfo(videoId).map(mTransform::transformCommon);
     }
 
 
