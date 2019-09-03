@@ -14,6 +14,7 @@ import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.AudioModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.AudioClassifyResponse;
+import com.xmzj.mvp.ui.activity.search.SearchAudioActivity;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.AudioFragment;
 import com.xmzj.mvp.utils.LogUtils;
@@ -26,7 +27,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class AudioActivity extends BaseActivity implements AudioControl.AudioView{
+public class AudioActivity extends BaseActivity implements AudioControl.AudioView {
 
     @BindView(R.id.back_iv)
     ImageView mBackIv;
@@ -34,8 +35,6 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
     ImageView mUploadHistoryIv;
     @BindView(R.id.play_history_iv)
     ImageView mPlayHistoryIv;
-    @BindView(R.id.search_iv)
-    ImageView mSearchIv;
     @BindView(R.id.search_content_tv)
     TextView mSearchContentTv;
     @BindView(R.id.tab_layout)
@@ -63,7 +62,7 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
     }
 
 
-    @OnClick({R.id.back_iv, R.id.upload_history_iv, R.id.play_history_iv, R.id.search_iv})
+    @OnClick({R.id.back_iv, R.id.upload_history_iv, R.id.play_history_iv, R.id.search_content_rl})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back_iv:
@@ -73,14 +72,15 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
                 break;
             case R.id.play_history_iv:
                 break;
-            case R.id.search_iv:
+            case R.id.search_content_rl:
+                startActivitys(SearchAudioActivity.class);
                 break;
         }
     }
 
     @Override
     public void getAudioClassifySuccess(AudioClassifyResponse audioClassifyResponse) {
-        LogUtils.e("audioClassifyResponse:"+new Gson().toJson(audioClassifyResponse));
+        LogUtils.e("audioClassifyResponse:" + new Gson().toJson(audioClassifyResponse));
         List<Fragment> fragmentList = new ArrayList<>();
         for (int i = 0; i < audioClassifyResponse.getData().size(); i++) {
             AudioClassifyResponse.DataBean dataBean = audioClassifyResponse.getData().get(i);

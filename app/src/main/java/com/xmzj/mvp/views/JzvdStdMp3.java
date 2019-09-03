@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.xmzj.R;
@@ -31,14 +32,13 @@ public class JzvdStdMp3 extends JzvdStd {
     }
 
     private JzStdMp3Listener mJzStdMp3Listener;
-    private int mFirstClick = 1;
 
     public void setListener(JzStdMp3Listener jzStdMp3Listener) {
         mJzStdMp3Listener = jzStdMp3Listener;
     }
 
     public interface JzStdMp3Listener {
-        void startBtnCLick();
+        void downLoadBtnCLick();
     }
 
     @Override
@@ -47,8 +47,9 @@ public class JzvdStdMp3 extends JzvdStd {
     }
 
     public void setThumb1(Context context, int url) {
-
         CircleImageView circleImageView = findViewById(R.id.thumb1);
+        ImageView downloadIv = findViewById(R.id.download_iv);
+        downloadIv.setOnClickListener(this);
         Glide.with(this)
                 .load(url)
                 .into(circleImageView);
@@ -63,22 +64,19 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void onClick(View v) {
-        Log.e("TAG", "state:" + state);
+        Log.e(TAG, "state:" + state);
         if (v.getId() == cn.jzvd.R.id.thumb &&
                 (state == STATE_PLAYING ||
                         state == STATE_PAUSE)) {
             onClickUiToggle();
         } else if (v.getId() == R.id.fullscreen) {
-        } else {
-            if (v.getId() == R.id.start) {
-                Log.i(TAG, "onClick: start button");
-                if (mJzStdMp3Listener != null) {
-                    if (mFirstClick == 1) {
-                        mFirstClick++;
-                        mJzStdMp3Listener.startBtnCLick();
-                    }
-                }
+            Log.i(TAG, "onClick: fullscreen");
+        } else if (v.getId() == R.id.download_iv) {
+            Log.i(TAG, "onClick: download_iv");
+            if (mJzStdMp3Listener != null) {
+                mJzStdMp3Listener.downLoadBtnCLick();
             }
+        } else {
             super.onClick(v);
         }
     }
@@ -96,7 +94,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToPlayingShow() {
-        Log.e("TAG", "changeUiToPlayingShow()");
+        Log.e(TAG, "changeUiToPlayingShow()");
         super.changeUiToPlayingShow();
         thumbImageView.setVisibility(View.VISIBLE);
 
@@ -104,7 +102,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToPlayingClear() {
-        Log.e("TAG", "changeUiToPlayingClear()");
+        Log.e(TAG, "changeUiToPlayingClear()");
         super.changeUiToPlayingClear();
         thumbImageView.setVisibility(View.VISIBLE);
         mAnimator.start();//动画开始
@@ -112,7 +110,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToPauseShow() {
-        Log.e("TAG", "changeUiToPauseShow()");
+        Log.e(TAG, "changeUiToPauseShow()");
         super.changeUiToPauseShow();
         thumbImageView.setVisibility(View.VISIBLE);
         mAnimator.pause();//动画暂停
@@ -120,7 +118,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToPauseClear() {
-        Log.e("TAG", "changeUiToPauseClear()");
+        Log.e(TAG, "changeUiToPauseClear()");
         super.changeUiToPauseClear();
         thumbImageView.setVisibility(View.VISIBLE);
 
@@ -128,7 +126,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToComplete() {
-        Log.e("TAG", "changeUiToComplete()");
+        Log.e(TAG, "changeUiToComplete()");
         super.changeUiToComplete();
         mAnimator.resume();//动画重新开始
     }

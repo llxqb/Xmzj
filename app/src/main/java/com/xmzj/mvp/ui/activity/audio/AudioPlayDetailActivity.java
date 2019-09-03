@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.AudioListResponse;
+import com.xmzj.listener.DownloadListener;
 import com.xmzj.mvp.utils.DownloadUtil;
 import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.views.JzvdStdMp3;
@@ -52,28 +53,44 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
             mCommonTitleTv.setText(mDataBean.getInfo());
             urlPath = mDataBean.getDownloadUrl();
             LogUtils.e("urlPath:" + urlPath);
+            initPlay();
 //            Glide.with(this)
 //                    .load(mDataBean.getCover())
 //                    .into(mJzvdStdMp3.thumbImageView);
-            mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
-            mJzvdStdMp3.setUp(urlPath, mDataBean.getTitle(), Jzvd.SCREEN_NORMAL);
 //            Glide.with(this).load(videoResponse.coverPic).into(mMyJzvdStd.thumbImageView);
         }
     }
 
     @Override
     protected void initData() {
+    }
 
+
+    private void initPlay(){
+        String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
+        if (!TextUtils.isEmpty(localFilePath)) {
+            //本地有资源
+            showToast("视频已下载");
+            mJzvdStdMp3.setUp(localFilePath, mDataBean.getTitle(), Jzvd.SCREEN_NORMAL);
+            mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
+        } else {
+            if (!TextUtils.isEmpty(urlPath)) {
+                mJzvdStdMp3.setUp(urlPath, mDataBean.getTitle(), Jzvd.SCREEN_NORMAL);
+                mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
+            } else {
+                showToast("播放路径不正确 ");
+            }
+        }
     }
 
     @Override
-    public void startBtnCLick() {
+    public void downLoadBtnCLick() {
         String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
-        LogUtils.e("localFilePath:" + localFilePath);
         if (!TextUtils.isEmpty(localFilePath)) {
             //本地有资源
-            showToast("播放本地视频");
-            mJzvdStdMp3.setUp(localFilePath, mDataBean.getTitle(), Jzvd.SCREEN_NORMAL);
+            showToast("已下载");
+        } else {
+            downloadVideo();
         }
     }
 
@@ -101,6 +118,46 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
             return;
         }
         super.onBackPressed();
+    }
+
+    /**
+     * 下载音频文件
+     */
+    private void downloadVideo() {
+        DownloadUtil mDownloadUtil = new DownloadUtil();
+        mDownloadUtil.downloadFile(urlPath, new DownloadListener() {
+            @Override
+            public void onStart() {
+                LogUtils.e("onStart: ");
+                runOnUiThread(() -> {
+                    showToast("下载中...");
+                });
+            }
+
+            @Override
+            public void onProgress(final int currentLength) {
+                runOnUiThread(() -> {
+                });
+            }
+
+            @Override
+            public void onFinish(String localPath) {
+               runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showToast("下载完成");
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(final String erroInfo) {
+                LogUtils.e("onFailure: " + erroInfo);
+                runOnUiThread(() -> {
+                    showToast(erroInfo);
+                });
+            }
+        });
     }
 
 

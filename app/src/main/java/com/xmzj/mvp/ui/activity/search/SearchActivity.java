@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerSearchComponent;
 import com.xmzj.di.modules.ActivityModule;
@@ -20,9 +21,11 @@ import com.xmzj.di.modules.SearchModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.constants.Constant;
 import com.xmzj.entity.request.VideoListRequest;
+import com.xmzj.entity.response.AudioListResponse;
 import com.xmzj.entity.response.VideoListResponse;
 import com.xmzj.mvp.ui.activity.video.VideoDetailEpisodeActivity;
 import com.xmzj.mvp.ui.adapter.VideoAdapter;
+import com.xmzj.mvp.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,7 +76,7 @@ public class SearchActivity extends BaseActivity implements SearchControl.Search
                 switch (view.getId()) {
                     case R.id.item_video_layout:
                         assert dataBean != null;
-                        VideoDetailEpisodeActivity.start(SearchActivity.this, dataBean.getId(),dataBean.getTitle());
+                        VideoDetailEpisodeActivity.start(SearchActivity.this, dataBean.getId(), dataBean.getTitle());
                         break;
                     case R.id.upload_iv:
                         showToast("下载...");
@@ -110,22 +113,26 @@ public class SearchActivity extends BaseActivity implements SearchControl.Search
     }
 
 
+    /**
+     * 搜索视频列表
+     */
     private void onRequestVideoList(String keyword) {
         VideoListRequest videoListRequest = new VideoListRequest();
         videoListRequest.categoryId = "";
         videoListRequest.orderCol = "";
         videoListRequest.keyword = keyword;
         videoListRequest.pageNo = page;
-        videoListRequest.pageSize = 10;
+        videoListRequest.pageSize =  Constant.PAGESIZE;
         mPresenter.onRequestVideoList(videoListRequest);
     }
 
     @Override
     public void getVideoListSuccess(VideoListResponse response) {
+        LogUtils.d("response:" + new Gson().toJson(response));
         videoResponseList = response.getData();
         mVideoAdapter.addData(videoResponseList);
         if (page == 1) {
-            if (videoResponseList.size() > 0) {
+            if (!videoResponseList.isEmpty()) {
                 mVideoAdapter.setNewData(videoResponseList);
                 mVideoAdapter.loadMoreComplete();
             } else {
@@ -137,6 +144,10 @@ public class SearchActivity extends BaseActivity implements SearchControl.Search
             mVideoAdapter.addData(videoResponseList);
             mVideoAdapter.loadMoreComplete();
         }
+    }
+
+    @Override
+    public void getAudioListSuccess(AudioListResponse response) {
     }
 
     @Override

@@ -23,7 +23,9 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".mvp.ui.activity.video.VideoDetailEpisodeActivity"></activity>
+        <activity android:name=".mvp.ui.activity.search.SearchAudioActivity"></activity>
+        <activity android:name=".mvp.ui.activity.audio.AudioDownLoadHistoryActivity" />
+        <activity android:name=".mvp.ui.activity.video.VideoDetailEpisodeActivity" />
         <activity android:name=".mvp.ui.activity.search.SearchActivity" />
         <activity
             android:name=".mvp.ui.activity.video.VideoPlayActivity"
@@ -52,9 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".mvp.ui.activity.login.LoginActivity" >
-
-        </activity>
+        <activity android:name=".mvp.ui.activity.login.LoginActivity" />
         <activity android:name=".mvp.ui.activity.splash.SplashActivity" />
     </application>
 

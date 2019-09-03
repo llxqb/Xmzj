@@ -69,14 +69,11 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
      * 视频url路径
      */
     String urlPath;
-    /**
-     * 下载到本地视频路径
-     */
-    String mVideoPath;
     private int page;
     private View mEmptyView;
-    FrameLayout mCircleProgressLayout;
-    KbWithWordsCircleProgressBar mCircleProgress;
+    //adapter下载音频进度条
+    private FrameLayout mCircleProgressLayout;
+    private KbWithWordsCircleProgressBar mCircleProgress;
     @Inject
     AudioFragmentControl.AudioFragmentPresenter mPresenter;
 
@@ -119,7 +116,6 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
             @Override
             public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 AudioListResponse.DataBean dataBean = (AudioListResponse.DataBean) adapter.getItem(position);
-
                 mCircleProgressLayout = (FrameLayout) adapter.getViewByPosition(mRecyclerView, position, R.id.fl_circle_progress);
                 mCircleProgress = (KbWithWordsCircleProgressBar) adapter.getViewByPosition(mRecyclerView, position, R.id.circle_progress);
 
@@ -190,7 +186,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
 
             @Override
             public void onFinish(String localPath) {
-                mVideoPath = localPath;
+                //下载到本地视频路径 localPath
                 LogUtils.e("onFinish: " + localPath);
                 Objects.requireNonNull(getActivity()).runOnUiThread(new Runnable() {
                     @Override
@@ -220,11 +216,12 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
             mSwipeLy.setRefreshing(false);
         }
         if (page == 1) {
-            if (audioContentResponseList.size() > 0) {
+            if (!audioContentResponseList.isEmpty()) {
                 mAudioAdapter.setNewData(audioContentResponseList);
                 mAudioAdapter.loadMoreComplete();
             } else {
                 //加载Empty布局
+                mAudioAdapter.setNewData(audioContentResponseList);
                 mAudioAdapter.setEmptyView(mEmptyView);
             }
         } else {

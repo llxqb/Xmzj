@@ -70,10 +70,6 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
      * 视频url路径
      */
     String urlPath;
-    /**
-     * 下载到本地视频路径
-     */
-    String mVideoPath;
     VideoInfoResponse.EpisodeBean mEpisodeBean;
 
     private List<CommentResponse> commentResponseList = new ArrayList<>();
@@ -238,7 +234,6 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
 
             @Override
             public void onFinish(String localPath) {
-                mVideoPath = localPath;
                 LogUtils.e("onFinish: " + localPath);
                 runOnUiThread(() -> {
                     showToast("下载完成");

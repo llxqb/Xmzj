@@ -7,6 +7,7 @@ import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.SearchModule;
 import com.xmzj.di.scopes.PerActivity;
 import com.xmzj.mvp.ui.activity.search.SearchActivity;
+import com.xmzj.mvp.ui.activity.search.SearchAudioActivity;
 
 import dagger.Component;
 
@@ -20,6 +21,7 @@ import dagger.Component;
 public interface SearchComponent extends ActivityComponent {
     //对LoginActivity进行依赖注入
     void inject(SearchActivity searchActivity);
+    void inject(SearchAudioActivity searchAudioActivity);
 
     AppCompatActivity activity();
 
