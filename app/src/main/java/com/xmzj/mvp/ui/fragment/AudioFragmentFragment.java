@@ -3,6 +3,7 @@ package com.xmzj.mvp.ui.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,27 +11,34 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
+import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.XmzjApp;
 import com.xmzj.di.components.DaggerAudioFragmentComponent;
 import com.xmzj.di.modules.AudioFragmentModule;
 import com.xmzj.di.modules.AudioModule;
 import com.xmzj.entity.base.BaseFragment;
-import com.xmzj.entity.response.AudioContentResponse;
+import com.xmzj.entity.constants.Constant;
+import com.xmzj.entity.request.VideoListRequest;
+import com.xmzj.entity.response.AudioListResponse;
 import com.xmzj.listener.DownloadListener;
 import com.xmzj.mvp.ui.activity.audio.AudioFragmentControl;
 import com.xmzj.mvp.ui.activity.audio.AudioPlayDetailActivity;
 import com.xmzj.mvp.ui.adapter.AudioAdapter;
 import com.xmzj.mvp.utils.DownloadUtil;
 import com.xmzj.mvp.utils.LogUtils;
+import com.xmzj.mvp.views.KbWithWordsCircleProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,7 +49,7 @@ import butterknife.Unbinder;
  * AudioFragmentFragment
  */
 
-public class AudioFragmentFragment extends BaseFragment implements AudioFragmentControl.AudioFragmentView {
+public class AudioFragmentFragment extends BaseFragment implements AudioFragmentControl.AudioFragmentView, SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
     @BindView(R.id.upload_all_tv)
     TextView mUploadAllTv;
@@ -49,19 +57,14 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
     TextView mHotTv;
     @BindView(R.id.newest_tv)
     TextView mNewestTv;
+    @BindView(R.id.swipe_ly)
+    SwipeRefreshLayout mSwipeLy;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     Unbinder unbinder;
-    private List<AudioContentResponse> audioContentResponseList = new ArrayList<>();
+    private List<AudioListResponse.DataBean> audioContentResponseList = new ArrayList<>();
     private AudioAdapter mAudioAdapter;
-    /**
-     * 音频一级标题筛选
-     */
-    private int mType;
-    /**
-     * 音频二级标题筛选
-     */
-    private int mType2;
+    private String mType;//子分类id
     /**
      * 视频url路径
      */
@@ -70,23 +73,19 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
      * 下载到本地视频路径
      */
     String mVideoPath;
+    private int page;
+    private View mEmptyView;
+    FrameLayout mCircleProgressLayout;
+    KbWithWordsCircleProgressBar mCircleProgress;
+    @Inject
+    AudioFragmentControl.AudioFragmentPresenter mPresenter;
 
-    public static AudioFragmentFragment getInstance(int type, int type2) {
+    public static AudioFragmentFragment getInstance(String type) {
         AudioFragmentFragment fragment = new AudioFragmentFragment();
         Bundle bd = new Bundle();
-        bd.putInt("type", type);
-        bd.putInt("type2", type2);
+        bd.putString("type", type);
         fragment.setArguments(bd);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mType = getArguments().getInt("type");
-            mType2 = getArguments().getInt("type2");
-        }
     }
 
 
@@ -104,6 +103,14 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
 
     @Override
     public void initView() {
+        mEmptyView = LayoutInflater.from(getActivity()).inflate(R.layout.nothing_layout, (ViewGroup) mRecyclerView.getParent(), false);
+        mSwipeLy.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
+        mSwipeLy.setOnRefreshListener(this);
+        page = 1;
+        if (getArguments() != null) {
+            mType = getArguments().getString("type");
+            onRequestAudioList();
+        }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAudioAdapter = new AudioAdapter(getActivity(), audioContentResponseList);
         mRecyclerView.setAdapter(mAudioAdapter);
@@ -111,15 +118,19 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
         mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                AudioContentResponse audioContentResponse = (AudioContentResponse) adapter.getItem(position);
+                AudioListResponse.DataBean dataBean = (AudioListResponse.DataBean) adapter.getItem(position);
+
+                mCircleProgressLayout = (FrameLayout) adapter.getViewByPosition(mRecyclerView, position, R.id.fl_circle_progress);
+                mCircleProgress = (KbWithWordsCircleProgressBar) adapter.getViewByPosition(mRecyclerView, position, R.id.circle_progress);
+
                 switch (view.getId()) {
                     case R.id.audio_item_layout:
-                        assert audioContentResponse != null;
-                        AudioPlayDetailActivity.start(getActivity(), audioContentResponse);
+                        assert dataBean != null;
+                        AudioPlayDetailActivity.start(getActivity(), dataBean);
                         break;
                     case R.id.upload_iv:
-                        assert audioContentResponse != null;
-                        urlPath = audioContentResponse.url;
+                        assert dataBean != null;
+                        urlPath = dataBean.getDownloadUrl();
                         if (!TextUtils.isEmpty(urlPath)) {
                             if (TextUtils.isEmpty(DownloadUtil.checkFileIsExist(urlPath))) {
                                 downloadVideo(); //处理具体下载过程
@@ -140,30 +151,6 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
 
     @Override
     public void initData() {
-        switch (mType) {
-            case 0:
-                if (mType2 == 0) {
-                    for (int i = 0; i < 5; i++) {
-                        AudioContentResponse audioContentResponse = new AudioContentResponse();
-                        audioContentResponse.title = "明心见性";
-                        audioContentResponse.playNum = 500;
-                        audioContentResponse.lookNum = 3000;
-                        audioContentResponse.playDuration = "80分钟";
-                        audioContentResponse.uploadDate = "2019-08-10";
-                        audioContentResponse.url = "https://www.xinmizj.com/res/audio/src/dsbushiczsh.mp3";
-                        audioContentResponseList.add(audioContentResponse);
-                    }
-                }
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-        }
     }
 
 
@@ -188,13 +175,16 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
             @Override
             public void onStart() {
                 LogUtils.e("onStart: ");
-                Objects.requireNonNull(getActivity()).runOnUiThread(() -> showToast("下载中..."));
+                Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+                    showToast("下载中...");
+                    mCircleProgressLayout.setVisibility(View.VISIBLE);
+                });
             }
 
             @Override
             public void onProgress(final int currentLength) {
                 Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
-
+                    mCircleProgress.setProgress(currentLength);
                 });
             }
 
@@ -206,6 +196,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
                     @Override
                     public void run() {
                         showToast("下载完成");
+                        mCircleProgressLayout.setVisibility(View.GONE);
                     }
                 });
             }
@@ -213,9 +204,62 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
             @Override
             public void onFailure(final String erroInfo) {
                 LogUtils.e("onFailure: " + erroInfo);
-                Objects.requireNonNull(getActivity()).runOnUiThread(() -> showToast(erroInfo));
+                Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
+                    showToast(erroInfo);
+                    mCircleProgressLayout.setVisibility(View.GONE);
+                });
             }
         });
+    }
+
+    @Override
+    public void getAudioListSuccess(AudioListResponse audioListResponse) {
+        LogUtils.d("audioListResponse:" + new Gson().toJson(audioListResponse));
+        audioContentResponseList = audioListResponse.getData();
+        if (mSwipeLy.isRefreshing()) {
+            mSwipeLy.setRefreshing(false);
+        }
+        if (page == 1) {
+            if (audioContentResponseList.size() > 0) {
+                mAudioAdapter.setNewData(audioContentResponseList);
+                mAudioAdapter.loadMoreComplete();
+            } else {
+                //加载Empty布局
+                mAudioAdapter.setEmptyView(mEmptyView);
+            }
+        } else {
+            mAudioAdapter.addData(audioContentResponseList);
+            mAudioAdapter.loadMoreComplete();
+        }
+    }
+
+    private void onRequestAudioList() {
+        VideoListRequest videoListRequest = new VideoListRequest();
+        videoListRequest.categoryId = mType;
+        videoListRequest.pageNo = page;
+        videoListRequest.pageSize = Constant.PAGESIZE;
+        mPresenter.onRequestAudioList(videoListRequest);
+    }
+
+
+    @Override
+    public void onRefresh() {
+        page = 1;
+        onRequestAudioList();
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+        if (page == 1 && audioContentResponseList.size() < Constant.PAGESIZE) {
+            mAudioAdapter.loadMoreEnd(true);
+        } else {
+            if (audioContentResponseList.size() < Constant.PAGESIZE) {
+                mAudioAdapter.loadMoreEnd();
+            } else {
+                page++;
+                onRequestAudioList();
+            }
+        }
     }
 
 
@@ -231,5 +275,6 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
                 .audioFragmentModule(new AudioFragmentModule(this))
                 .build().inject(this);
     }
+
 
 }

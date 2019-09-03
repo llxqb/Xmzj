@@ -19,6 +19,8 @@ import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.constants.Constant;
 import com.xmzj.entity.request.LoginRequest;
 import com.xmzj.entity.response.LoginResponse;
+import com.xmzj.entity.user.LoginUser;
+import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.ui.activity.register.ForgetPwdActivity;
 import com.xmzj.mvp.ui.activity.register.RegisterActivity;
 import com.xmzj.mvp.utils.PermissionUtils;
@@ -186,24 +188,22 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
         }
         loginRequest.clientType = Constant.FROM;
         mPresenter.onRequestLogin(loginRequest);
-
-//        LoginUser loginUser = new LoginUser();
-//        if(loginType==0){
-//            loginUser.phone = mLoginPhoneEt.getText().toString();
-//            loginUser.pwd = mLoginVerifyEt.getText().toString();
-//        }else {
-//            loginUser.phone = mLoginUserEt.getText().toString();
-//            loginUser.pwd = mLoginPwdEt.getText().toString();
-//        }
-//        mBuProcessor.setLoginUser(loginUser);
-//        startActivitys(MainActivity.class);
-//        finish();
     }
 
 
     @Override
     public void getLoginSuccess(LoginResponse loginResponse) {
-
+        LoginUser loginUser = new LoginUser();
+        if(loginType==0){
+            loginUser.phone = mLoginPhoneEt.getText().toString();
+            loginUser.pwd = mLoginVerifyEt.getText().toString();
+        }else {
+            loginUser.phone = mLoginUserEt.getText().toString();
+            loginUser.pwd = mLoginPwdEt.getText().toString();
+        }
+        mBuProcessor.setLoginUser(loginUser);
+        startActivitys(MainActivity.class);
+        finish();
     }
 
 

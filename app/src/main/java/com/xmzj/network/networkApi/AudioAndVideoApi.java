@@ -31,12 +31,22 @@ public interface AudioAndVideoApi {
      */
     @GET("video/category")
     Observable<String> onRequestVideoClassify();
+    /**
+     * 请求音频分类
+     */
+    @GET("audio/category")
+    Observable<String> onRequestAudioClassify();
 
     /**
      * 请求视频列表
      */
     @GET("video/list")
     Observable<String> onRequestVideoList(@Query("categoryId") String categoryId, @Query("orderCol") String orderCol, @Query("keyword") String keyword, @Query("pageNo") int pageNo, @Query("pageSize") int pageSize);
+    /**
+     * 请求音频列表
+     */
+    @GET("audio/list")
+    Observable<String> onRequestAudioList(@Query("categoryId") String categoryId, @Query("orderCol") String orderCol, @Query("keyword") String keyword, @Query("pageNo") int pageNo, @Query("pageSize") int pageSize);
 
     /**
      * 请求视频详情

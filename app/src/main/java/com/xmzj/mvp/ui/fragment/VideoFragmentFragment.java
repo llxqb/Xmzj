@@ -45,20 +45,15 @@ import butterknife.Unbinder;
 public class VideoFragmentFragment extends BaseFragment implements VideoFragmentControl.VideoFragmentView, BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
     Unbinder unbinder;
-    //    @BindView(R.id.video_banner)
-//    Banner mVideoBanner;
     @BindView(R.id.swipe_ly)
     SwipeRefreshLayout mSwipeLy;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
     private List<VideoListResponse.DataBean> videoResponseList = new ArrayList<>();
-    /**
-     * banner集合
-     */
-    private List<String> bannerImgList = new ArrayList<>();
     private VideoAdapter mVideoAdapter;
     private String mType;//子分类id
     private int page;
+    private View mEmptyView;
     @Inject
     VideoFragmentControl.VideoFragmentPresenter mPresenter;
 
@@ -90,6 +85,7 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
 
     @Override
     public void initView() {
+        mEmptyView = LayoutInflater.from(getActivity()).inflate(R.layout.nothing_layout, (ViewGroup) mRecyclerView.getParent(), false);
         mSwipeLy.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
         mSwipeLy.setOnRefreshListener(this);
         page = 1;
@@ -112,8 +108,6 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
                 }
             }
         });
-        //初始化banner
-//        initBanner();
     }
 
     @Override
@@ -121,23 +115,6 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
     }
 
 
-    /**
-     * banner
-     */
-//    private void initBanner() {
-//        //设置图片加载器
-//        mVideoBanner.setImageLoader(new GlideImageLoader());
-//        //设置图片集合
-//        String bannerImg1 = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564997869677&di=08d1d748d6cdbdb2e6077cc643cd61fe&imgtype=0&src=http%3A%2F%2Fimg.redocn.com%2Fsheying%2F20141230%2Fshikurulaifozu_3798005.jpg";
-//        String bannerImg2 = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1540334387,2375027868&fm=26&gp=0.jpg";
-//        bannerImgList.add(bannerImg1);
-//        bannerImgList.add(bannerImg2);
-//        mVideoBanner.setImages(bannerImgList);
-//        //设置轮播时间
-//        mVideoBanner.setDelayTime(5000);
-//        //banner设置方法全部调用完毕时最后调用
-//        mVideoBanner.start();
-//    }
     private void onRequestVideoList() {
         VideoListRequest videoListRequest = new VideoListRequest();
         videoListRequest.categoryId = mType;
@@ -163,8 +140,8 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
                 mVideoAdapter.setNewData(videoResponseList);
                 mVideoAdapter.loadMoreComplete();
             } else {
-                //加载Empty布局
-//                mVideoAdapter.setEmptyView(mEmptyView);
+//                加载Empty布局
+                mVideoAdapter.setEmptyView(mEmptyView);
             }
         } else {
             mVideoAdapter.addData(videoResponseList);
@@ -183,7 +160,7 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
      */
     @Override
     public void onLoadMoreRequested() {
-        if (page == 1 && videoResponseList.size() < 10) {
+        if (page == 1 && videoResponseList.size() <  Constant.PAGESIZE) {
             mVideoAdapter.loadMoreEnd(true);
         } else {
             if (videoResponseList.size() < Constant.PAGESIZE) {

@@ -128,8 +128,6 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
 
     @Override
     protected void initData() {
-
-
     }
 
     @SuppressLint("SetJavaScriptEnabled")

@@ -46,14 +46,14 @@
             android:name=".mvp.ui.activity.audio.AudioActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".mvp.ui.activity.main.MainActivity">
-
-        </activity>
-        <activity android:name=".mvp.ui.activity.login.LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".mvp.ui.activity.login.LoginActivity" >
+
         </activity>
         <activity android:name=".mvp.ui.activity.splash.SplashActivity" />
     </application>

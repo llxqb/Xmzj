@@ -17,6 +17,7 @@ import cn.jzvd.JzvdStd;
  * 这个本质上就是播放的时候不隐藏缩略图
  */
 public class JzvdStdMp3 extends JzvdStd {
+    private String TAG = "JzvdStdMp3";
     private ObjectAnimator mAnimator;
 
     public JzvdStdMp3(Context context) {
@@ -62,7 +63,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void onClick(View v) {
-        Log.e("ddd", "state:" + state);
+        Log.e("TAG", "state:" + state);
         if (v.getId() == cn.jzvd.R.id.thumb &&
                 (state == STATE_PLAYING ||
                         state == STATE_PAUSE)) {
@@ -95,7 +96,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToPlayingShow() {
-        Log.e("ddd", "changeUiToPlayingShow()");
+        Log.e("TAG", "changeUiToPlayingShow()");
         super.changeUiToPlayingShow();
         thumbImageView.setVisibility(View.VISIBLE);
 
@@ -103,7 +104,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToPlayingClear() {
-        Log.e("ddd", "changeUiToPlayingClear()");
+        Log.e("TAG", "changeUiToPlayingClear()");
         super.changeUiToPlayingClear();
         thumbImageView.setVisibility(View.VISIBLE);
         mAnimator.start();//动画开始
@@ -111,7 +112,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToPauseShow() {
-        Log.e("ddd", "changeUiToPauseShow()");
+        Log.e("TAG", "changeUiToPauseShow()");
         super.changeUiToPauseShow();
         thumbImageView.setVisibility(View.VISIBLE);
         mAnimator.pause();//动画暂停
@@ -119,7 +120,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToPauseClear() {
-        Log.e("ddd", "changeUiToPauseClear()");
+        Log.e("TAG", "changeUiToPauseClear()");
         super.changeUiToPauseClear();
         thumbImageView.setVisibility(View.VISIBLE);
 
@@ -127,7 +128,7 @@ public class JzvdStdMp3 extends JzvdStd {
 
     @Override
     public void changeUiToComplete() {
-        Log.e("ddd", "changeUiToComplete()");
+        Log.e("TAG", "changeUiToComplete()");
         super.changeUiToComplete();
         mAnimator.resume();//动画重新开始
     }

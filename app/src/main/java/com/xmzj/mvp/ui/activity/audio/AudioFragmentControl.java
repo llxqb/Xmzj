@@ -1,6 +1,8 @@
 package com.xmzj.mvp.ui.activity.audio;
 
 
+import com.xmzj.entity.request.VideoListRequest;
+import com.xmzj.entity.response.AudioListResponse;
 import com.xmzj.mvp.presenter.LoadDataView;
 import com.xmzj.mvp.presenter.Presenter;
 
@@ -10,16 +12,14 @@ import com.xmzj.mvp.presenter.Presenter;
 
 public class AudioFragmentControl {
     public interface AudioFragmentView extends LoadDataView {
-//        void getInfoSuccess(HomeFragmentResponse response);
-
+        void getAudioListSuccess(AudioListResponse audioListResponse);
     }
 
     public interface AudioFragmentPresenter extends Presenter<AudioFragmentView> {
         /**
-         * 请求homeFragment list 数据
+         * 请求音频列表
          */
-//        void onRequestInfo(HomeFragmentRequest homeFragmentRequest);
-
+        void onRequestAudioList(VideoListRequest videoRequest);
     }
 
 

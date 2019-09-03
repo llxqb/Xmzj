@@ -1,5 +1,8 @@
 package com.xmzj.entity.request;
 
+/**
+ * 音频/视频 列表请求request
+ */
 public class VideoListRequest {
     /**
      * 分类id

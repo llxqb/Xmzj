@@ -38,12 +38,14 @@ public class VideoModel {
     public Observable<ResponseData> onRequestVideoList(VideoListRequest videoRequest) {
         return mAudioAndVideoApi.onRequestVideoList(videoRequest.categoryId, videoRequest.orderCol, videoRequest.keyword, videoRequest.pageNo, videoRequest.pageSize).map(mTransform::transformListType);
     }
+
     /**
      * 请求视频详情
      */
     public Observable<ResponseData> onRequestVideoInfo(String videoId) {
         return mAudioAndVideoApi.onRequestVideoInfo(videoId).map(mTransform::transformCommon);
     }
+
     /**
      * 请求视频收藏
      */
@@ -51,5 +53,17 @@ public class VideoModel {
         return mAudioAndVideoApi.onRequestVideoCollection(episodeId).map(mTransform::transformCommon);
     }
 
+    /**
+     * 请求音频分类
+     */
+    public Observable<ResponseData> onRequestAudioClassify() {
+        return mAudioAndVideoApi.onRequestAudioClassify().map(mTransform::transformListType);
+    }
 
+    /**
+     * 请求音频列表
+     */
+    public Observable<ResponseData> onRequestAudioList(VideoListRequest videoRequest) {
+        return mAudioAndVideoApi.onRequestAudioList(videoRequest.categoryId, videoRequest.orderCol, videoRequest.keyword, videoRequest.pageNo, videoRequest.pageSize).map(mTransform::transformListType);
+    }
 }

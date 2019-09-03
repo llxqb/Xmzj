@@ -4,20 +4,24 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerAudioComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.AudioModule;
 import com.xmzj.entity.base.BaseActivity;
+import com.xmzj.entity.response.AudioClassifyResponse;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.AudioFragment;
+import com.xmzj.mvp.utils.LogUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,12 +36,15 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
     ImageView mPlayHistoryIv;
     @BindView(R.id.search_iv)
     ImageView mSearchIv;
-    @BindView(R.id.search_content_et)
-    EditText mSearchContentEt;
+    @BindView(R.id.search_content_tv)
+    TextView mSearchContentTv;
     @BindView(R.id.tab_layout)
     TabLayout mTabLayout;
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
+    List<String> titleString = new ArrayList<>();
+    @Inject
+    AudioControl.PresenterAudio mPresenter;
 
     @Override
     protected void initContentView() {
@@ -48,18 +55,11 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
 
     @Override
     protected void initView() {
-        List<Fragment> fragmentList = new ArrayList<>();
-        String[] titleString = {"佛教常识", "佛经", "心中心", "宗趣归宿","其它"};
-        for (int i = 0; i < titleString.length; i++) {
-            fragmentList.add(AudioFragment.getInstance(i));
-        }
-        mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, Arrays.asList(titleString)));
-        mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
-        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
     protected void initData() {
+        mPresenter.onRequestAudioClassify();
     }
 
 
@@ -78,9 +78,27 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
         }
     }
 
+    @Override
+    public void getAudioClassifySuccess(AudioClassifyResponse audioClassifyResponse) {
+        LogUtils.e("audioClassifyResponse:"+new Gson().toJson(audioClassifyResponse));
+        List<Fragment> fragmentList = new ArrayList<>();
+        for (int i = 0; i < audioClassifyResponse.getData().size(); i++) {
+            AudioClassifyResponse.DataBean dataBean = audioClassifyResponse.getData().get(i);
+            titleString.add(dataBean.getName());
+            fragmentList.add(AudioFragment.getInstance(dataBean));
+        }
+        if (!fragmentList.isEmpty()) {
+            mViewPager.setOffscreenPageLimit(fragmentList.size() - 1);
+            mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
+            mTabLayout.setupWithViewPager(mViewPager);
+        }
+    }
+
     private void initInjectData() {
         DaggerAudioComponent.builder().appComponent(getAppComponent())
                 .audioModule(new AudioModule(this, this))
                 .activityModule(new ActivityModule(this)).build().inject(this);
     }
+
+
 }

@@ -114,13 +114,10 @@ public class RetrofitUtil {
                 long endTime = System.currentTimeMillis();
 //                Log.e("LogInterceptor", "response:" + new Gson().toJson(response));
 //                String content = response.body().string();
-                Log.e("LogInterceptor","响应头："+ response.headers().toString());
                 if (method.equals("GET")) {
-                    Log.i("LogInterceptor", "\nURL:" + request.url() + "（耗时" + (endTime - startTime) + "ms)"
-                    );
+                    Log.i("LogInterceptor", "\nURL:" + request.url() + "（耗时" + (endTime - startTime) + "ms)");
                 } else {
-                    Log.i("LogInterceptor", "\nURL:" + request.url() + "（耗时" + (endTime - startTime) + "ms)" + " \nREQEUST BODY:" + bodyToString(request)
-                    );
+                    Log.i("LogInterceptor", "\nURL:" + request.url() + "（耗时" + (endTime - startTime) + "ms)" + " \nREQEUST BODY:" + bodyToString(request));
                 }
                 return response;
             }

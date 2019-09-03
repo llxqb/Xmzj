@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseFragment;
+import com.xmzj.entity.response.AudioClassifyResponse;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -33,22 +33,22 @@ public class AudioFragment extends BaseFragment {
     @BindView(R.id.fragment_tab_layout)
     TabLayout mFragmentTabLayout;
     Unbinder unbinder;
-    private int mType;
+    private List<String> titleString = new ArrayList<>();
 
-    public static AudioFragment getInstance(int type) {
+    public static AudioFragment getInstance(AudioClassifyResponse.DataBean dataBean) {
         AudioFragment fragment = new AudioFragment();
         Bundle bd = new Bundle();
-        bd.putInt("type", type);
+        bd.putParcelable("dataBean", dataBean);
         fragment.setArguments(bd);
         return fragment;
     }
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mType = getArguments().getInt("type");
-        }
+
     }
 
 
@@ -62,57 +62,21 @@ public class AudioFragment extends BaseFragment {
         return view;
     }
 
-    List<Fragment> fragmentList = new ArrayList<>();
-    String[] titleString;
-
     @Override
     public void initView() {
-        switch (mType) {
-            case 0:
-                fragmentList.clear();
-                titleString = new String[]{"全部", "因果", "出离", "觉悟"};
-                for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
-                }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
+        List<Fragment> fragmentList = new ArrayList<>();
+        if (getArguments() != null) {
+            AudioClassifyResponse.DataBean mDataBean = getArguments().getParcelable("dataBean");
+            if (mDataBean == null) return;
+            for (AudioClassifyResponse.DataBean.ChildsBean childsBean : mDataBean.getChilds()) {
+                titleString.add(childsBean.getName());
+                fragmentList.add(AudioFragmentFragment.getInstance(childsBean.getId()));//传子分类id
+            }
+            if(!fragmentList.isEmpty()){
+                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+                mFragmentViewPager.setOffscreenPageLimit(fragmentList.size()-1);
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
-                break;
-            case 1:
-                fragmentList.clear();
-                titleString = new String[]{"全部", "基本教理", "心经", "金刚经", "楞严经", "佛心经", "其它"};
-                for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
-                }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
-                mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
-                break;
-            case 2:
-                fragmentList.clear();
-                titleString = new String[]{"全部", "认识心密", "百坐", "千坐", "打七打九", "方便与其它", "六字大明咒"};
-                for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
-                }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
-                mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
-                break;
-            case 3:
-                fragmentList.clear();
-                titleString = new String[]{"全部", "明心见性", "除习与妙用", "以禅为体", "关于净土"};
-                for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
-                }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
-                mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
-                break;
-            case 4:
-                fragmentList.clear();
-                titleString = new String[]{"其它"};
-                for (int i = 0; i < titleString.length; i++) {
-                    fragmentList.add(AudioFragmentFragment.getInstance(mType,i));
-                }
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, Arrays.asList(titleString)));
-                mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
-                break;
+            }
         }
     }
 

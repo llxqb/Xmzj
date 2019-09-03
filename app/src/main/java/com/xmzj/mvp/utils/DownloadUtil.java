@@ -28,7 +28,8 @@ import retrofit2.Response;
 
 public class DownloadUtil {
     private static final String TAG = "DownloadUtil";
-    private static final String PATH_CHALLENGE_VIDEO = Environment.getExternalStorageDirectory() + "/DownloadFile";
+    private static final String fileName = "/DownloadFile";
+    private static final String PATH_CHALLENGE_VIDEO = Environment.getExternalStorageDirectory() + "/xmzj";
     //视频下载相关
     protected AudioAndVideoApi mApi;
     private Call<ResponseBody> mCall;
@@ -51,7 +52,7 @@ public class DownloadUtil {
             int i = name.lastIndexOf('/');//一定是找最后一个'/'出现的位置
             if (i != -1) {
                 name = name.substring(i);
-                mVideoPath = PATH_CHALLENGE_VIDEO +
+                mVideoPath = PATH_CHALLENGE_VIDEO + fileName +
                         name;
             }
         }
@@ -95,7 +96,7 @@ public class DownloadUtil {
     /**
      * 检查本地是否有目标文件
      */
-    public static String  checkFileIsExist(String url) {
+    public static String checkFileIsExist(String url) {
         //通过Url得到保存到本地的文件名
         String name = url;
         String localFilePath = "";
@@ -103,14 +104,14 @@ public class DownloadUtil {
             int i = name.lastIndexOf('/');//一定是找最后一个'/'出现的位置
             if (i != -1) {
                 name = name.substring(i);
-                localFilePath = PATH_CHALLENGE_VIDEO + name;
+                localFilePath = PATH_CHALLENGE_VIDEO + fileName + name;
             }
         }
-       File mFile = new File(localFilePath);
+        File mFile = new File(localFilePath);
         if (FileUtils.isFileExists(mFile)) {
             return localFilePath;
         }
-      return "";
+        return "";
     }
 
     private void writeFile2Disk(Response<ResponseBody> response, File file, DownloadListener downloadListener) {

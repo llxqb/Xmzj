@@ -4,7 +4,6 @@ package com.xmzj.di.modules;
 import com.xmzj.di.scopes.PerActivity;
 import com.xmzj.mvp.presenter.LoadDataView;
 import com.xmzj.mvp.ui.activity.audio.AudioFragmentControl;
-import com.xmzj.mvp.ui.activity.main.HomeFragmentControl;
 
 import dagger.Module;
 import dagger.Provides;
@@ -18,7 +17,7 @@ public class AudioFragmentModule {
     private AudioFragmentControl.AudioFragmentView mAudioFragmentView;
 
     public AudioFragmentModule(LoadDataView view) {
-        if (view instanceof HomeFragmentControl.HomeView) {
+        if (view instanceof AudioFragmentControl.AudioFragmentView) {
             mAudioFragmentView = (AudioFragmentControl.AudioFragmentView) view;
         }
     }
