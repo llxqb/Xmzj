@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.xmzj.R;
 import com.xmzj.entity.request.LoginRequest;
-import com.xmzj.entity.response.LoginResponse;
 import com.xmzj.help.RetryWithDelay;
 import com.xmzj.mvp.model.LoginModel;
 import com.xmzj.mvp.model.ResponseData;
@@ -47,11 +46,13 @@ public class LoginPresenterImpl implements LoginControl.PresenterLogin {
 
     private void requestLoginSuccess(ResponseData responseData) {
         if (responseData.resultCode == 0) {
-            responseData.parseData(LoginResponse.class);
-            if (responseData.parsedData != null) {
-                LoginResponse response = (LoginResponse) responseData.parsedData;
-                mLoginView.getLoginSuccess(response);
-            }
+            mLoginView.showToast("登录成功");
+//            mLoginView.getLoginSuccess(response);
+//            responseData.parseData(LoginResponse.class);
+//            if (responseData.parsedData != null) {
+//                LoginResponse response = (LoginResponse) responseData.parsedData;
+//                mLoginView.getLoginSuccess(response);
+//            }
         } else {
             mLoginView.showToast(responseData.errorMsg);
         }

@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,9 +16,9 @@ import com.xmzj.di.components.DaggerLoginComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.LoginModule;
 import com.xmzj.entity.base.BaseActivity;
+import com.xmzj.entity.constants.Constant;
+import com.xmzj.entity.request.LoginRequest;
 import com.xmzj.entity.response.LoginResponse;
-import com.xmzj.entity.user.LoginUser;
-import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.ui.activity.register.ForgetPwdActivity;
 import com.xmzj.mvp.ui.activity.register.RegisterActivity;
 import com.xmzj.mvp.utils.PermissionUtils;
@@ -33,8 +32,6 @@ import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity implements LoginControl.LoginView {
 
-    @BindView(R.id.common_back)
-    ImageView mCommonBack;
     @BindView(R.id.common_title_tv)
     TextView mCommonTitleTv;
     @BindView(R.id.login_user_et)
@@ -77,13 +74,11 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     @Override
     protected void initContentView() {
         setContentView(R.layout.activity_login);
-        setStatusBar();
+        setStatusBarGray();
         initInjectData();
     }
-
     @Override
     protected void initView() {
-        mCommonBack.setVisibility(View.GONE);
         mCommonTitleTv.setText("登录");
 //        mLoginPhoneEt.addTextChangedListener(search_text_OnChange);
     }
@@ -181,28 +176,28 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
      * 请求登录
      */
     private void onRequestLogin() {
-//        LoginRequest loginRequest = new LoginRequest();
-//        if (loginType == 0) {
-//            loginRequest.account = mLoginPhoneEt.getText().toString();
-//            loginRequest.code = mLoginVerifyEt.getText().toString();
-//        } else if (loginType == 1) {
-//            loginRequest.account = mLoginUserEt.getText().toString();
-//            loginRequest.code = mLoginPwdEt.getText().toString();
-//        }
-//        loginRequest.clientType = Constant.FROM;
-//        mPresenter.onRequestLogin(loginRequest);
-
-        LoginUser loginUser = new LoginUser();
-        if(loginType==0){
-            loginUser.phone = mLoginPhoneEt.getText().toString();
-            loginUser.pwd = mLoginVerifyEt.getText().toString();
-        }else {
-            loginUser.phone = mLoginUserEt.getText().toString();
-            loginUser.pwd = mLoginPwdEt.getText().toString();
+        LoginRequest loginRequest = new LoginRequest();
+        if (loginType == 0) {
+            loginRequest.account = mLoginPhoneEt.getText().toString();
+            loginRequest.code = mLoginVerifyEt.getText().toString();
+        } else if (loginType == 1) {
+            loginRequest.account = mLoginUserEt.getText().toString();
+            loginRequest.pwd = mLoginPwdEt.getText().toString();
         }
-        mBuProcessor.setLoginUser(loginUser);
-        startActivitys(MainActivity.class);
-        finish();
+        loginRequest.clientType = Constant.FROM;
+        mPresenter.onRequestLogin(loginRequest);
+
+//        LoginUser loginUser = new LoginUser();
+//        if(loginType==0){
+//            loginUser.phone = mLoginPhoneEt.getText().toString();
+//            loginUser.pwd = mLoginVerifyEt.getText().toString();
+//        }else {
+//            loginUser.phone = mLoginUserEt.getText().toString();
+//            loginUser.pwd = mLoginPwdEt.getText().toString();
+//        }
+//        mBuProcessor.setLoginUser(loginUser);
+//        startActivitys(MainActivity.class);
+//        finish();
     }
 
 

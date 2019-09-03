@@ -47,8 +47,8 @@ public interface AudioAndVideoApi {
     /**
      * 请求视频收藏
      */
-    @POST("video/episode/collect/{episodeId}")
-    Observable<String> onRequestVideoCollection(@Path("episodeId") String episodeId);
+    @POST("video/episode/collect")
+    Observable<String> onRequestVideoCollection(@Query("episodeId") String episodeId);
 
 
 }

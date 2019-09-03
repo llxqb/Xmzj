@@ -117,7 +117,7 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
                         setDownLoadColor();
                     }
                 }
-            }else {
+            } else {
                 showToast("播放路径不正确 ");
             }
         }
@@ -158,6 +158,7 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
                 break;
             case R.id.collection_tv:
                 setCollectionColor();
+                onRequestCollection();
                 break;
             case R.id.download_tv:
                 if (!TextUtils.isEmpty(urlPath) && urlPath.toLowerCase().contains(".mp4")) {
@@ -178,6 +179,10 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
                 }
                 break;
         }
+    }
+
+    private void onRequestCollection() {
+        mPresenter.onRequestVideoCollection(mEpisodeBean.getId());
     }
 
     private void setCollectionColor() {

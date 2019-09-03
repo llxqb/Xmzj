@@ -81,6 +81,18 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         }
     }
+    /**
+     * 设置灰底黑字状态栏
+     */
+    public void setStatusBarGray() {
+        StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.color999_60));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            View content = ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
+            if (content != null && !isUseFullScreenMode()) {
+                content.setFitsSystemWindows(true);
+            }
+        }
+    }
 
     protected abstract void initContentView();
 

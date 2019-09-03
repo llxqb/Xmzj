@@ -11,6 +11,7 @@ public class ResponseData {
     public Integer resultCode;
     public String errorMsg;
     public String result;
+    public String verifyCode;
     public Object parsedData;
     public JSONObject mJsonObject;
 
@@ -23,6 +24,7 @@ public class ResponseData {
         resultCode = jsonObject.optInt("code");
         errorMsg = jsonObject.optString("desc");
         result = jsonObject.optString("data");
+        verifyCode = jsonObject.optString("verifyCode");
     }
 
     //list

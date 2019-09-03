@@ -13,8 +13,11 @@ import com.xmzj.di.components.DaggerRegisterComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.RegisterModule;
 import com.xmzj.entity.base.BaseActivity;
+import com.xmzj.entity.constants.Constant;
+import com.xmzj.entity.request.RegisterRequest;
 import com.xmzj.entity.response.ForgetPwdResponse;
 import com.xmzj.entity.response.RegisterResponse;
+import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.utils.ValueUtil;
 import com.xmzj.mvp.views.TimeButton;
 
@@ -77,8 +80,7 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
                         return;
                     }
                     mCodeBt.setRun(true);
-//                    onRequestVerifyCode(mRegisterPhoneEt.getText().toString(), Constant.VerifyCode_REGISTER);
-                    mRegisterVerifyEt.setText(ValueUtil.randomSixNum());
+                    onRequestVerifyCode(mRegisterPhoneEt.getText().toString(), Constant.VerifyCode_REGISTER);
                     mCodeBt.setAfterBg(R.drawable.verify_text_background);
                 }
                 break;
@@ -112,14 +114,14 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
      * 注册
      */
     private void onRequestRegister() {
-//        RegisterRequest registerRequest = new RegisterRequest();
-//        registerRequest.account = mRegisterUserEt.getText().toString();
-//        registerRequest.pwd = mRegisterPwdEt.getText().toString();
-//        registerRequest.code = mRegisterVerifyEt.getText().toString();
-//        registerRequest.clientType = Constant.FROM;
-//        mPresenter.onRequestRegister(registerRequest);
-        showLoading("注册成功");
-        finish();
+        RegisterRequest registerRequest = new RegisterRequest();
+        registerRequest.account = mRegisterUserEt.getText().toString();
+        registerRequest.pwd = mRegisterPwdEt.getText().toString();
+        registerRequest.code = mRegisterVerifyEt.getText().toString();
+        registerRequest.clientType = Constant.FROM;
+        mPresenter.onRequestRegister(registerRequest);
+//        showLoading("注册成功");
+//        finish();
     }
 
     /**
@@ -158,8 +160,11 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
      */
     @Override
     public void getVerifyCodeSuccess(String code) {
+        LogUtils.e("code:" + code);
         if (ValueUtil.isValidityEmail(mRegisterPhoneEt.getText().toString())) {
             showToast("获取验证码成功，请去邮箱查看");
+        } else {
+            mRegisterVerifyEt.setText(code);
         }
     }
 

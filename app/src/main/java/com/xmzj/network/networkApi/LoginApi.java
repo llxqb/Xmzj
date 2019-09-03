@@ -15,19 +15,21 @@ public interface LoginApi {
     /**
      * 登录
      */
-    @GET("auth/login")
-    Observable<String> onRequestLoginInfo(@Body String request);
+    @POST("auth/login")
+    Observable<String> onRequestLoginInfo(@Query("account") String account, @Query("pwd") String pwd, @Query("code") String code, @Query("clientType") int clientType);
 
     /**
      * 注册
      */
-    @POST("auth/login")
-    Observable<String> onRequestRegister(@Body String request);
+    @POST("auth/reg")
+    Observable<String> onRequestRegister(@Query("account") String account, @Query("pwd") String pwd, @Query("code") String code, @Query("clientType") int clientType);
+
     /**
      * 忘记密码
      */
     @POST("auth/login")
     Observable<String> onRequestForgetPwd(@Body String request);
+
     /**
      * 获取验证码
      */
