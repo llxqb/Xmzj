@@ -59,7 +59,7 @@ public class VideoPresenterImpl implements VideoControl.PresenterVideo {
      */
     @Override
     public void onRequestVideoInfo(String videoId) {
-//        mVideoView.showLoading(mContext.getResources().getString(R.string.loading));
+        mVideoView.showLoading(mContext.getResources().getString(R.string.loading));
         Disposable disposable = mVideoModel.onRequestVideoInfo(videoId).compose(mVideoView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
                 .subscribe(this::requestVideoInfoSuccess, throwable -> mVideoView.showErrMessage(throwable),
                         () -> mVideoView.dismissLoading());
@@ -67,6 +67,29 @@ public class VideoPresenterImpl implements VideoControl.PresenterVideo {
     }
 
     private void requestVideoInfoSuccess(ResponseData responseData) {
+        if (responseData.resultCode == 0) {
+            responseData.parseData(VideoInfoResponse.class);
+            if (responseData.parsedData != null) {
+                VideoInfoResponse response = (VideoInfoResponse) responseData.parsedData;
+                mVideoView.getVideoInfoSuccess(response);
+            }
+        } else {
+            mVideoView.showToast(responseData.errorMsg);
+        }
+    }
+    /**
+     * 视频详情
+     */
+    @Override
+    public void onRequestVideoCollection(String episodeId) {
+//        mVideoView.showLoading(mContext.getResources().getString(R.string.loading));
+        Disposable disposable = mVideoModel.onRequestVideoCollection(episodeId).compose(mVideoView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
+                .subscribe(this::requestVideoCollectionSuccess, throwable -> mVideoView.showErrMessage(throwable),
+                        () -> mVideoView.dismissLoading());
+        mVideoView.addSubscription(disposable);
+    }
+
+    private void requestVideoCollectionSuccess(ResponseData responseData) {
         if (responseData.resultCode == 0) {
             responseData.parseData(VideoInfoResponse.class);
             if (responseData.parsedData != null) {

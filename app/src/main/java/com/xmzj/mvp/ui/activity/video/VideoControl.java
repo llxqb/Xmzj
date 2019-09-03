@@ -29,6 +29,12 @@ public class VideoControl {
          * 视频详情
          */
         void onRequestVideoInfo(String videoId);
+
+        /**
+         * 视频收藏
+         * episodeId: 视频id
+         */
+        void onRequestVideoCollection(String episodeId);
     }
 
 }

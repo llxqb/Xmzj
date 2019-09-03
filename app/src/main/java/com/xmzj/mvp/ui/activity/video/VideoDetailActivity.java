@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerVideoComponent;
 import com.xmzj.di.modules.ActivityModule;
@@ -211,21 +210,6 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
      */
     @Override
     public void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse) {
-        LogUtils.e("videoInfoResponse:" + new Gson().toJson(videoInfoResponse));
-//        VideoInfoResponse.EpisodeBean episodeBean = videoInfoResponse.getEpisode();
-//        mCommonTitleTv.setText(episodeBean.getTitle());
-//        Glide.with(this).load(episodeBean.getCover()).into(mMyJzvdStd.thumbImageView);
-//        urlPath = episodeBean.getDownloadUrl();
-//        if (!TextUtils.isEmpty(urlPath) && urlPath.contains(".html")) {
-//            initWebView(urlPath);
-//        } else if (urlPath.contains(".mp4")) {
-//            mMyJzvdStd.setVisibility(View.VISIBLE);
-//            mWebView.setVisibility(View.GONE);
-//            String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
-//            if (!TextUtils.isEmpty(localFilePath)) {
-//                setDownLoadColor();
-//            }
-//        }
 
     }
 

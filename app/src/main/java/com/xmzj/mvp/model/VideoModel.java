@@ -44,6 +44,12 @@ public class VideoModel {
     public Observable<ResponseData> onRequestVideoInfo(String videoId) {
         return mAudioAndVideoApi.onRequestVideoInfo(videoId).map(mTransform::transformCommon);
     }
+    /**
+     * 请求视频收藏
+     */
+    public Observable<ResponseData> onRequestVideoCollection(String episodeId) {
+        return mAudioAndVideoApi.onRequestVideoCollection(episodeId).map(mTransform::transformCommon);
+    }
 
 
 }
