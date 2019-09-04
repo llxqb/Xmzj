@@ -9,8 +9,6 @@
 
     <include layout="@layout/common_toolbar" />
 
-    <View style="@style/line_height_1" />
-
     <EditText
         android:id="@+id/forget_pwd_phone_et"
         android:layout_width="match_parent"

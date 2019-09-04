@@ -1,7 +1,5 @@
 package com.xmzj.mvp.ui.activity.splash;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.WindowManager;
 
 import com.xmzj.R;
@@ -24,18 +22,12 @@ public class SplashActivity extends BaseActivity {
     protected BuProcessor mBuProcessor;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void initContentView() {
         //全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_splash);
         ((XmzjApp) getApplication()).getAppComponent().inject(this);
-    }
-
-    @Override
-    protected void initContentView() {
-        setContentView(R.layout.activity_splash);
     }
 
     @Override
@@ -62,7 +54,7 @@ public class SplashActivity extends BaseActivity {
                 startActivitys(MainActivity.class);
                 finish();
             }
-        }, 500, TimeUnit.MILLISECONDS);
+        }, 600, TimeUnit.MILLISECONDS);
     }
 
     @Override

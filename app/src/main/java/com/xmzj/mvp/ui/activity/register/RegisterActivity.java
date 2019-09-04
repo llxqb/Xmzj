@@ -61,7 +61,7 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
 
     @Override
     protected void initData() {
-        mRegisterPhoneEt.setText("960555267@qq.com");
+//        mRegisterPhoneEt.setText("960555267@qq.com");
     }
 
 
