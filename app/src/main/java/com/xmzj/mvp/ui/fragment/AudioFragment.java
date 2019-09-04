@@ -43,15 +43,6 @@ public class AudioFragment extends BaseFragment {
         return fragment;
     }
 
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -74,7 +65,7 @@ public class AudioFragment extends BaseFragment {
             }
             if(!fragmentList.isEmpty()){
                 mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
-                mFragmentViewPager.setOffscreenPageLimit(fragmentList.size()-1);
+//                mFragmentViewPager.setOffscreenPageLimit(fragmentList.size()-1);
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
             }
         }

@@ -19,6 +19,7 @@
         android:layout_marginEnd="@dimen/dp_20"
         android:theme="@style/Theme.AppCompat"
         app:tabGravity="fill"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabIndicatorColor="@color/app_color"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/color666"

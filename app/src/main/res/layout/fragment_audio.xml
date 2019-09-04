@@ -13,6 +13,7 @@
         android:layout_marginEnd="@dimen/dp_20"
         android:theme="@style/Theme.AppCompat"
         app:tabIndicatorColor="@color/app_color"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabSelectedTextColor="@color/app_color"
         app:tabMode="scrollable"
         app:tabTextColor="@color/color666">

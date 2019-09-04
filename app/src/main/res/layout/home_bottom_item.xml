@@ -19,5 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/first_text_color"
-        android:textSize="@dimen/sp_18" />
+        android:singleLine="true"
+        android:textSize="@dimen/sp_16" />
 </LinearLayout>

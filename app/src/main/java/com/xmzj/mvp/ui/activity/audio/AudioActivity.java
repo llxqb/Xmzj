@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerAudioComponent;
 import com.xmzj.di.modules.ActivityModule;
@@ -17,7 +16,6 @@ import com.xmzj.entity.response.AudioClassifyResponse;
 import com.xmzj.mvp.ui.activity.search.SearchAudioActivity;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.AudioFragment;
-import com.xmzj.mvp.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +78,6 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
 
     @Override
     public void getAudioClassifySuccess(AudioClassifyResponse audioClassifyResponse) {
-        LogUtils.e("audioClassifyResponse:" + new Gson().toJson(audioClassifyResponse));
         List<Fragment> fragmentList = new ArrayList<>();
         for (int i = 0; i < audioClassifyResponse.getData().size(); i++) {
             AudioClassifyResponse.DataBean dataBean = audioClassifyResponse.getData().get(i);
@@ -88,7 +85,7 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
             fragmentList.add(AudioFragment.getInstance(dataBean));
         }
         if (!fragmentList.isEmpty()) {
-            mViewPager.setOffscreenPageLimit(fragmentList.size() - 1);
+            mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
             mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
             mTabLayout.setupWithViewPager(mViewPager);
         }

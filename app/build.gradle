@@ -114,7 +114,8 @@ dependencies {
     //banner
     implementation 'com.youth.banner:banner:1.4.10'  //最新版本
     //视频加载库
-    implementation 'cn.jzvd:jiaozivideoplayer:7.0.4'
+//    implementation 'cn.jzvd:jiaozivideoplayer:7.0.4'
+    implementation project(':jiaozivideoplayer')
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
 }

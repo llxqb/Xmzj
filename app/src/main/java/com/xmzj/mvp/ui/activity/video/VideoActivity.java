@@ -96,7 +96,7 @@ public class VideoActivity extends BaseActivity implements VideoControl.VideoVie
             fragmentList.add(VideoFragment.getInstance(dataBean));
         }
         if (!fragmentList.isEmpty()) {
-            mViewPager.setOffscreenPageLimit(fragmentList.size() - 1);
+            mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
             mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
             mTabLayout.setupWithViewPager(mViewPager);
         }

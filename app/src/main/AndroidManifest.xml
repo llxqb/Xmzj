@@ -29,7 +29,8 @@
         <activity android:name=".mvp.ui.activity.search.SearchActivity" />
         <activity
             android:name=".mvp.ui.activity.video.VideoPlayActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" />
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:screenOrientation="landscape"/>
         <activity android:name=".mvp.ui.activity.register.ForgetPwdActivity" />
         <activity android:name=".mvp.ui.activity.register.RegisterActivity" />
         <activity

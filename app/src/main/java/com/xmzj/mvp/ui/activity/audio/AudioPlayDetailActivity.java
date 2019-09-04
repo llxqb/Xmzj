@@ -32,6 +32,10 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
     JzvdStdMp3 mJzvdStdMp3;
     private String urlPath;
     private AudioListResponse.DataBean mDataBean;
+    /**
+     * 是否正在下载
+     */
+    private boolean isDownLoading;
 
     public static void start(Context context, AudioListResponse.DataBean dataBean) {
         Intent intent = new Intent(context, AudioPlayDetailActivity.class);
@@ -66,7 +70,7 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
     }
 
 
-    private void initPlay(){
+    private void initPlay() {
         String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
         if (!TextUtils.isEmpty(localFilePath)) {
             //本地有资源
@@ -88,10 +92,24 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
         String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
         if (!TextUtils.isEmpty(localFilePath)) {
             //本地有资源
-            showToast("已下载");
+            if (isDownLoading) {
+                showToast("下载中");
+            } else {
+                showToast("已下载");
+            }
         } else {
             downloadVideo();
         }
+    }
+
+    @Override
+    public void startPreIvClick() {
+        showToast("上一曲");
+    }
+
+    @Override
+    public void startNextIvClick() {
+        showToast("下一曲");
     }
 
     @OnClick(R.id.common_back)
@@ -99,12 +117,6 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
         finish();
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        JzvdStd.setVideoImageDisplayType(Jzvd.VIDEO_IMAGE_DISPLAY_TYPE_FILL_SCROP);//播放填充满背景，不带黑色背景
-    }
 
     @Override
     protected void onPause() {
@@ -129,6 +141,7 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
             @Override
             public void onStart() {
                 LogUtils.e("onStart: ");
+                isDownLoading = true;
                 runOnUiThread(() -> {
                     showToast("下载中...");
                 });
@@ -142,7 +155,8 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
 
             @Override
             public void onFinish(String localPath) {
-               runOnUiThread(new Runnable() {
+                isDownLoading = false;
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         showToast("下载完成");
@@ -153,6 +167,7 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
             @Override
             public void onFailure(final String erroInfo) {
                 LogUtils.e("onFailure: " + erroInfo);
+                isDownLoading = false;
                 runOnUiThread(() -> {
                     showToast(erroInfo);
                 });

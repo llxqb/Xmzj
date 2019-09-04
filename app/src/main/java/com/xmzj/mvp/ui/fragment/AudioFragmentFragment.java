@@ -16,7 +16,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.XmzjApp;
 import com.xmzj.di.components.DaggerAudioFragmentComponent;
@@ -74,6 +73,11 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
     //adapter下载音频进度条
     private FrameLayout mCircleProgressLayout;
     private KbWithWordsCircleProgressBar mCircleProgress;
+    private String orderCol;//1：热门，2：最新
+    /**
+     * 是否正在下载
+     */
+    private boolean isDownLoading;
     @Inject
     AudioFragmentControl.AudioFragmentPresenter mPresenter;
 
@@ -118,7 +122,6 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
                 AudioListResponse.DataBean dataBean = (AudioListResponse.DataBean) adapter.getItem(position);
                 mCircleProgressLayout = (FrameLayout) adapter.getViewByPosition(mRecyclerView, position, R.id.fl_circle_progress);
                 mCircleProgress = (KbWithWordsCircleProgressBar) adapter.getViewByPosition(mRecyclerView, position, R.id.circle_progress);
-
                 switch (view.getId()) {
                     case R.id.audio_item_layout:
                         assert dataBean != null;
@@ -131,7 +134,11 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
                             if (TextUtils.isEmpty(DownloadUtil.checkFileIsExist(urlPath))) {
                                 downloadVideo(); //处理具体下载过程
                             } else {
-                                showToast("已下载");
+                                if (isDownLoading) {
+                                    showToast("下载中");
+                                } else {
+                                    showToast("已下载");
+                                }
                             }
                         } else {
                             showToast("资源不存在");
@@ -155,9 +162,15 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
         switch (view.getId()) {
             case R.id.upload_all_tv:
                 break;
-            case R.id.hot_tv:
+            case R.id.hot_tv://热门
+                page = 1;
+                orderCol = "2";
+                onRequestAudioList();
                 break;
             case R.id.newest_tv:
+                page = 1;
+                orderCol = "1";
+                onRequestAudioList();
                 break;
         }
     }
@@ -173,6 +186,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
                 LogUtils.e("onStart: ");
                 Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
                     showToast("下载中...");
+                    isDownLoading = true;
                     mCircleProgressLayout.setVisibility(View.VISIBLE);
                 });
             }
@@ -192,6 +206,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
                     @Override
                     public void run() {
                         showToast("下载完成");
+                        isDownLoading = false;
                         mCircleProgressLayout.setVisibility(View.GONE);
                     }
                 });
@@ -202,6 +217,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
                 LogUtils.e("onFailure: " + erroInfo);
                 Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
                     showToast(erroInfo);
+                    isDownLoading = false;
                     mCircleProgressLayout.setVisibility(View.GONE);
                 });
             }
@@ -210,7 +226,6 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
 
     @Override
     public void getAudioListSuccess(AudioListResponse audioListResponse) {
-        LogUtils.d("audioListResponse:" + new Gson().toJson(audioListResponse));
         audioContentResponseList = audioListResponse.getData();
         if (mSwipeLy.isRefreshing()) {
             mSwipeLy.setRefreshing(false);
@@ -233,6 +248,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
     private void onRequestAudioList() {
         VideoListRequest videoListRequest = new VideoListRequest();
         videoListRequest.categoryId = mType;
+        videoListRequest.orderCol = orderCol;
         videoListRequest.pageNo = page;
         videoListRequest.pageSize = Constant.PAGESIZE;
         mPresenter.onRequestAudioList(videoListRequest);

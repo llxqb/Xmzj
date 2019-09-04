@@ -69,7 +69,7 @@ public class VideoFragment extends BaseFragment {
             }
             if(!fragmentList.isEmpty()){
                 mViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
-                mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
+//                mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
                 mTabLayout.setupWithViewPager(mViewPager);
             }
         }

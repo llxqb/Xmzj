@@ -19,6 +19,7 @@
         android:theme="@style/Theme.AppCompat"
         app:tabIndicatorColor="@color/app_color"
         app:tabSelectedTextColor="@color/color666"
+        app:tabTextAppearance="@style/TabLayoutTextStyle"
         app:tabMode="scrollable"
         app:tabTextColor="@color/color666">
 

@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:padding="@dimen/dp_4"
+            android:padding="@dimen/dp_6"
             android:src="@mipmap/share" />
 
         <ImageView
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_5"
             android:layout_toStartOf="@id/share_iv"
-            android:padding="@dimen/dp_4"
+            android:padding="@dimen/dp_6"
             android:src="@mipmap/detail_download" />
 
         <TextView

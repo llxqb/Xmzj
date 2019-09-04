@@ -39,6 +39,10 @@ public class JzvdStdMp3 extends JzvdStd {
 
     public interface JzStdMp3Listener {
         void downLoadBtnCLick();
+
+        void startPreIvClick();
+
+        void startNextIvClick();
     }
 
     @Override
@@ -48,8 +52,11 @@ public class JzvdStdMp3 extends JzvdStd {
 
     public void setThumb1(Context context, int url) {
         CircleImageView circleImageView = findViewById(R.id.thumb1);
+        findViewById(R.id.layout_bottom).setVisibility(VISIBLE);
         ImageView downloadIv = findViewById(R.id.download_iv);
         downloadIv.setOnClickListener(this);
+        findViewById(R.id.pre_iv).setOnClickListener(this);
+        findViewById(R.id.next_iv).setOnClickListener(this);
         Glide.with(this)
                 .load(url)
                 .into(circleImageView);
@@ -71,6 +78,16 @@ public class JzvdStdMp3 extends JzvdStd {
             onClickUiToggle();
         } else if (v.getId() == R.id.fullscreen) {
             Log.i(TAG, "onClick: fullscreen");
+        } else if (v.getId() == R.id.pre_iv) {
+            //上一曲
+            if (mJzStdMp3Listener != null) {
+                mJzStdMp3Listener.startPreIvClick();
+            }
+        } else if (v.getId() == R.id.next_iv) {
+            //下一曲
+            if (mJzStdMp3Listener != null) {
+                mJzStdMp3Listener.startNextIvClick();
+            }
         } else if (v.getId() == R.id.download_iv) {
             Log.i(TAG, "onClick: download_iv");
             if (mJzStdMp3Listener != null) {
