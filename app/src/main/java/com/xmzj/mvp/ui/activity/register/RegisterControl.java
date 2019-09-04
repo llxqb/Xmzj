@@ -3,8 +3,6 @@ package com.xmzj.mvp.ui.activity.register;
 
 import com.xmzj.entity.request.ForgetPwdRequest;
 import com.xmzj.entity.request.RegisterRequest;
-import com.xmzj.entity.response.ForgetPwdResponse;
-import com.xmzj.entity.response.RegisterResponse;
 import com.xmzj.mvp.presenter.LoadDataView;
 import com.xmzj.mvp.presenter.Presenter;
 
@@ -14,9 +12,8 @@ import com.xmzj.mvp.presenter.Presenter;
 
 public class RegisterControl {
     public interface RegisterView extends LoadDataView {
-
-        void getRegisterSuccess(RegisterResponse registerResponse);
-        void getForgetPwdSuccess(ForgetPwdResponse forgetPwdResponse);
+        void getRegisterSuccess();
+        void getForgetPwdSuccess();
         void getVerifyCodeSuccess(String code);
     }
 

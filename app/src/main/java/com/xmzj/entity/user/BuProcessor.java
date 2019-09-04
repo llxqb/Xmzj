@@ -25,7 +25,7 @@ public class BuProcessor {
 
     public boolean isValidLogin() {
         loginUser = (LoginUser) mSharePreferenceUtil.readObjData("user");
-        return loginUser != null && !TextUtils.isEmpty(loginUser.phone);
+        return loginUser != null && !TextUtils.isEmpty(loginUser.token);
     }
 
 
@@ -49,7 +49,7 @@ public class BuProcessor {
      */
     public boolean isFinishFirstWrite() {
         loginUser = (LoginUser) mSharePreferenceUtil.readObjData("user");
-        return loginUser != null && !TextUtils.isEmpty(loginUser.cover);
+        return loginUser != null && !TextUtils.isEmpty(loginUser.token);
     }
 
 

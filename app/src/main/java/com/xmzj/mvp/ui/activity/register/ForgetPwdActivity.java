@@ -13,8 +13,9 @@ import com.xmzj.di.components.DaggerRegisterComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.RegisterModule;
 import com.xmzj.entity.base.BaseActivity;
-import com.xmzj.entity.response.ForgetPwdResponse;
-import com.xmzj.entity.response.RegisterResponse;
+import com.xmzj.entity.constants.Constant;
+import com.xmzj.entity.request.ForgetPwdRequest;
+import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.utils.ValueUtil;
 import com.xmzj.mvp.views.TimeButton;
 
@@ -73,11 +74,9 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
                     showToast("手机号/邮箱不能为空");
                     return;
                 }
-                if (verification()) {
-                    mCodeBt.setRun(true);
-                }
-                mForgetPwdVerifyEt.setText(ValueUtil.randomSixNum());
+                mCodeBt.setRun(true);
                 mCodeBt.setAfterBg(R.drawable.verify_text_background);
+                onRequestVerifyCode(mForgetPwdPhoneEt.getText().toString(), Constant.VerifyCode_RETPWD);
                 break;
             case R.id.forget_pwd_btn:
                 if (TextUtils.isEmpty(mForgetPwdPhoneEt.getText().toString())) {
@@ -106,30 +105,14 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
         return true;
     }
 
-
     /**
-     * 请求 -忘记密码
+     * 获取验证码
+     *
+     * @param account 手机号码/邮箱
+     * @param type    验证类型(注册：100001，重置密码：100002,登录：100003)
      */
-    private void onRequestForgetPwd() {
-//        ForgetPwdRequest forgetPwdRequest = new ForgetPwdRequest();
-//        mPresenter.onRequestForgetPwd(forgetPwdRequest);
-        showToast("修改密码成功");
-        finish();
-    }
-
-    /**
-     * 注册成功
-     */
-    @Override
-    public void getRegisterSuccess(RegisterResponse registerResponse) {
-    }
-
-    /**
-     * 忘记密码修改成功
-     */
-    @Override
-    public void getForgetPwdSuccess(ForgetPwdResponse forgetPwdResponse) {
-
+    private void onRequestVerifyCode(String account, int type) {
+        mPresenter.onRequestVerifyCode(account, type);
     }
 
     /**
@@ -137,8 +120,46 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
      */
     @Override
     public void getVerifyCodeSuccess(String code) {
-
+        LogUtils.e("code:" + code);
+        if (!TextUtils.isEmpty(code)) {
+            if (ValueUtil.isValidityEmail(mForgetPwdPhoneEt.getText().toString())) {
+                showToast("获取验证码成功，请去邮箱查看");
+            } else {
+                mForgetPwdVerifyEt.setText(code);
+            }
+        }else {
+            showToast("操作过于频繁，请稍后再试");
+        }
     }
+
+    /**
+     * 请求 -忘记密码
+     */
+    private void onRequestForgetPwd() {
+        ForgetPwdRequest forgetPwdRequest = new ForgetPwdRequest();
+        forgetPwdRequest.account = mForgetPwdPhoneEt.getText().toString();
+        forgetPwdRequest.code = mForgetPwdVerifyEt.getText().toString();
+        forgetPwdRequest.pwd = mForgetPwdEt.getText().toString();
+        forgetPwdRequest.clientType = Constant.FROM;
+        mPresenter.onRequestForgetPwd(forgetPwdRequest);
+    }
+
+    /**
+     * 注册成功
+     */
+    @Override
+    public void getRegisterSuccess() {
+    }
+
+    /**
+     * 忘记密码修改成功
+     */
+    @Override
+    public void getForgetPwdSuccess() {
+        showToast("修改成功");
+        finish();
+    }
+
 
     public TextWatcher search_text_OnChange = new TextWatcher() {
 

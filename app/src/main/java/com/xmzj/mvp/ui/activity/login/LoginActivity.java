@@ -18,11 +18,11 @@ import com.xmzj.di.modules.LoginModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.constants.Constant;
 import com.xmzj.entity.request.LoginRequest;
-import com.xmzj.entity.response.LoginResponse;
 import com.xmzj.entity.user.LoginUser;
 import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.ui.activity.register.ForgetPwdActivity;
 import com.xmzj.mvp.ui.activity.register.RegisterActivity;
+import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.utils.PermissionUtils;
 import com.xmzj.mvp.utils.ValueUtil;
 import com.xmzj.mvp.views.TimeButton;
@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     @BindView(R.id.pwd_Login_layout)
     LinearLayout mPwdLoginLayout;
     /**
-     * 0 : 验证码登录
+     * 0 :  验证码登录
      * 1 ： 密码登录
      */
     private int loginType;
@@ -79,6 +79,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
         setStatusBarGray();
         initInjectData();
     }
+
     @Override
     protected void initView() {
         mCommonTitleTv.setText("登录");
@@ -115,8 +116,8 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
                     return;
                 }
                 mCodeBt.setRun(true);
-                mLoginVerifyEt.setText(ValueUtil.randomSixNum());
                 mCodeBt.setAfterBg(R.drawable.verify_text_background);
+                onRequestVerifyCode(mLoginPhoneEt.getText().toString(), Constant.VerifyCode_LOGIN);
                 break;
             case R.id.login_btn:
                 if (verification()) {
@@ -175,6 +176,35 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     }
 
     /**
+     * 获取验证码
+     *
+     * @param account 手机号码/邮箱
+     * @param type    验证类型(注册：100001，重置密码：100002,登录：100003)
+     */
+    private void onRequestVerifyCode(String account, int type) {
+        mPresenter.onRequestVerifyCode(account, type);
+    }
+
+    /**
+     * 获取验证码成功
+     */
+    @Override
+    public void getVerifyCodeSuccess(String code) {
+        LogUtils.e("code:" + code);
+        if(!TextUtils.isEmpty(code)){
+            if (ValueUtil.isValidityEmail(mLoginPhoneEt.getText().toString())) {
+                showToast("获取验证码成功，请去邮箱查看");
+            } else {
+                mLoginVerifyEt.setText(code);
+            }
+        }else {
+            showToast("操作过于频繁，请稍后再试");
+        }
+
+    }
+
+
+    /**
      * 请求登录
      */
     private void onRequestLogin() {
@@ -192,13 +222,13 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
 
 
     @Override
-    public void getLoginSuccess(LoginResponse loginResponse) {
+    public void getLoginSuccess(String token) {
         LoginUser loginUser = new LoginUser();
-        if(loginType==0){
-            loginUser.phone = mLoginPhoneEt.getText().toString();
-            loginUser.pwd = mLoginVerifyEt.getText().toString();
-        }else {
-            loginUser.phone = mLoginUserEt.getText().toString();
+        loginUser.token = token;
+        if (loginType == 0) {
+            loginUser.phoneOrMail = mLoginPhoneEt.getText().toString();
+        } else {
+            loginUser.username = mLoginUserEt.getText().toString();
             loginUser.pwd = mLoginPwdEt.getText().toString();
         }
         mBuProcessor.setLoginUser(loginUser);

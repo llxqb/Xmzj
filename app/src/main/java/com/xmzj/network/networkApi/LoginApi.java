@@ -1,7 +1,6 @@
 package com.xmzj.network.networkApi;
 
 import io.reactivex.Observable;
-import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -27,8 +26,8 @@ public interface LoginApi {
     /**
      * 忘记密码
      */
-    @POST("auth/login")
-    Observable<String> onRequestForgetPwd(@Body String request);
+    @POST("auth/resetPwd")
+    Observable<String> onRequestForgetPwd(@Query("account") String account, @Query("pwd") String pwd, @Query("code") String code, @Query("clientType") int clientType);
 
     /**
      * 获取验证码

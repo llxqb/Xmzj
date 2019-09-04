@@ -56,7 +56,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         HomeFragment homeFragment = HomeFragment.newInstance();
         MineFragment mimeFragment = MineFragment.newInstance();
         MoreFragment moreFragment = MoreFragment.newInstance();
-
         fragments.add(homeFragment);
         fragments.add(mimeFragment);
         fragments.add(moreFragment);

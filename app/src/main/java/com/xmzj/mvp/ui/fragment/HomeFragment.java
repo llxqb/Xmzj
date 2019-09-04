@@ -85,7 +85,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
         mHomeTopAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             HomeFunctionResponse homeFunctionResponse = (HomeFunctionResponse) adapter.getItem(position);
             assert homeFunctionResponse != null;
-            showToast(homeFunctionResponse.text);
             if (view.getId() == R.id.home_top_item_ll) {
                 if (position == 2) {
                     startActivitys(AudioActivity.class);

@@ -46,7 +46,7 @@ public class LoginModel {
      * 忘记密码
      */
     public Observable<ResponseData> onRequestForgetPwd(ForgetPwdRequest request) {
-        return mLoginApi.onRequestForgetPwd(mGson.toJson(request)).map(mTransform::transformCommon);
+        return mLoginApi.onRequestForgetPwd(request.account, request.pwd, request.code, request.clientType).map(mTransform::transformCommon);
     }
 
     /**

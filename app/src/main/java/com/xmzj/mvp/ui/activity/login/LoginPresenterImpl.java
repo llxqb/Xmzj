@@ -47,7 +47,7 @@ public class LoginPresenterImpl implements LoginControl.PresenterLogin {
     private void requestLoginSuccess(ResponseData responseData) {
         if (responseData.resultCode == 0) {
             mLoginView.showToast("登录成功");
-            mLoginView.getLoginSuccess(null);
+            mLoginView.getLoginSuccess(responseData.result);
 //            responseData.parseData(LoginResponse.class);
 //            if (responseData.parsedData != null) {
 //                LoginResponse response = (LoginResponse) responseData.parsedData;
@@ -58,6 +58,33 @@ public class LoginPresenterImpl implements LoginControl.PresenterLogin {
         }
     }
 
+    /**
+     * 获取验证码
+     */
+    @Override
+    public void onRequestVerifyCode(String account, int type) {
+        mLoginView.showLoading(mContext.getResources().getString(R.string.loading));
+        Disposable disposable = mLoginModel.onRequestVerifyCode(account, type).compose(mLoginView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
+                .subscribe(this::requestVerifyCodeSuccess, throwable -> mLoginView.showErrMessage(throwable),
+                        () -> mLoginView.dismissLoading());
+        mLoginView.addSubscription(disposable);
+    }
+
+
+    private void requestVerifyCodeSuccess(ResponseData responseData) {
+        if (responseData.resultCode == 0) {
+            mLoginView.getVerifyCodeSuccess(responseData.verifyCode);
+//            responseData.parseData(ForgetPwdResponse.class);
+//            if (responseData.parsedData != null) {
+//                ForgetPwdResponse response = (ForgetPwdResponse) responseData.parsedData;
+//                mLoginView.getForgetPwdSuccess(response);
+//            }
+        } else {
+            mLoginView.showToast(responseData.errorMsg);
+        }
+    }
+    
+    
     @Override
     public void onCreate() {
     }

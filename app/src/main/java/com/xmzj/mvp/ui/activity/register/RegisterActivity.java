@@ -15,8 +15,6 @@ import com.xmzj.di.modules.RegisterModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.constants.Constant;
 import com.xmzj.entity.request.RegisterRequest;
-import com.xmzj.entity.response.ForgetPwdResponse;
-import com.xmzj.entity.response.RegisterResponse;
 import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.utils.ValueUtil;
 import com.xmzj.mvp.views.TimeButton;
@@ -80,8 +78,8 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
                         return;
                     }
                     mCodeBt.setRun(true);
-                    onRequestVerifyCode(mRegisterPhoneEt.getText().toString(), Constant.VerifyCode_REGISTER);
                     mCodeBt.setAfterBg(R.drawable.verify_text_background);
+                    onRequestVerifyCode(mRegisterPhoneEt.getText().toString(), Constant.VerifyCode_REGISTER);
                 }
                 break;
             case R.id.register_btn:
@@ -108,6 +106,23 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
      */
     private void onRequestVerifyCode(String account, int type) {
         mPresenter.onRequestVerifyCode(account, type);
+    }
+
+    /**
+     * 获取验证码成功
+     */
+    @Override
+    public void getVerifyCodeSuccess(String code) {
+        LogUtils.e("code:" + code);
+        if (!TextUtils.isEmpty(code)) {
+            if (ValueUtil.isValidityEmail(mRegisterPhoneEt.getText().toString())) {
+                showToast("获取验证码成功，请去邮箱查看");
+            } else {
+                mRegisterVerifyEt.setText(code);
+            }
+        } else {
+            showToast("操作过于频繁，请稍后再试");
+        }
     }
 
     /**
@@ -143,29 +158,16 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
      * 注册成功
      */
     @Override
-    public void getRegisterSuccess(RegisterResponse registerResponse) {
-
+    public void getRegisterSuccess() {
+        showToast("注册成功");
+        finish();
     }
 
     /**
      * 忘记密码修改成功
      */
     @Override
-    public void getForgetPwdSuccess(ForgetPwdResponse forgetPwdResponse) {
-
-    }
-
-    /**
-     * 获取验证码成功
-     */
-    @Override
-    public void getVerifyCodeSuccess(String code) {
-        LogUtils.e("code:" + code);
-        if (ValueUtil.isValidityEmail(mRegisterPhoneEt.getText().toString())) {
-            showToast("获取验证码成功，请去邮箱查看");
-        } else {
-            mRegisterVerifyEt.setText(code);
-        }
+    public void getForgetPwdSuccess() {
     }
 
 

@@ -5,8 +5,6 @@ import android.content.Context;
 import com.xmzj.R;
 import com.xmzj.entity.request.ForgetPwdRequest;
 import com.xmzj.entity.request.RegisterRequest;
-import com.xmzj.entity.response.ForgetPwdResponse;
-import com.xmzj.entity.response.RegisterResponse;
 import com.xmzj.help.RetryWithDelay;
 import com.xmzj.mvp.model.LoginModel;
 import com.xmzj.mvp.model.ResponseData;
@@ -46,14 +44,17 @@ public class RegisterPresenterImpl implements RegisterControl.PresenterRegister 
         mRegisterView.addSubscription(disposable);
     }
 
-
+    /**
+     * 注册成功
+     */
     private void requestRegisterSuccess(ResponseData responseData) {
         if (responseData.resultCode == 0) {
-            responseData.parseData(RegisterResponse.class);
-            if (responseData.parsedData != null) {
-                RegisterResponse response = (RegisterResponse) responseData.parsedData;
-                mRegisterView.getRegisterSuccess(response);
-            }
+            mRegisterView.getRegisterSuccess();
+//            responseData.parseData(RegisterResponse.class);
+//            if (responseData.parsedData != null) {
+//                RegisterResponse response = (RegisterResponse) responseData.parsedData;
+//                mRegisterView.getRegisterSuccess(response);
+//            }
         } else {
             mRegisterView.showToast(responseData.errorMsg);
         }
@@ -74,11 +75,12 @@ public class RegisterPresenterImpl implements RegisterControl.PresenterRegister 
 
     private void requestForgetPwdSuccess(ResponseData responseData) {
         if (responseData.resultCode == 0) {
-            responseData.parseData(ForgetPwdResponse.class);
-            if (responseData.parsedData != null) {
-                ForgetPwdResponse response = (ForgetPwdResponse) responseData.parsedData;
-                mRegisterView.getForgetPwdSuccess(response);
-            }
+            mRegisterView.getForgetPwdSuccess();
+//            responseData.parseData(ForgetPwdResponse.class);
+//            if (responseData.parsedData != null) {
+//                ForgetPwdResponse response = (ForgetPwdResponse) responseData.parsedData;
+//                mRegisterView.getForgetPwdSuccess(response);
+//            }
         } else {
             mRegisterView.showToast(responseData.errorMsg);
         }

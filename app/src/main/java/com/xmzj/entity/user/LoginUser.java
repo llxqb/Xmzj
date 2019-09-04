@@ -10,9 +10,21 @@ import java.io.Serializable;
 
 public class LoginUser implements Serializable {
     public String token;
-    public String nick;
-    public String phone;
+    /**
+     * 账号
+     */
+    public String username;
+    /**
+     * 手机号/邮箱
+     */
+    public String phoneOrMail;
+    /**
+     * 密码
+     */
     public String pwd;
-    public String cover;
+    /**
+     * 头像
+     */
+    public String avatar;
 
 }
