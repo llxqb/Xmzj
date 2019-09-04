@@ -46,6 +46,7 @@ public class VideoActivity extends BaseActivity implements VideoControl.VideoVie
     @BindView(R.id.view_pager)
     ViewPager mViewPager;
     List<String> titleString = new ArrayList<>();
+    private String mToken;
     @Inject
     VideoControl.PresenterVideo mPresenter;
 
@@ -54,6 +55,7 @@ public class VideoActivity extends BaseActivity implements VideoControl.VideoVie
         setContentView(R.layout.activity_video);
         setStatusBar();
         initInjectData();
+        mToken = mBuProcessor.getToken();
     }
 
     @Override
@@ -102,6 +104,11 @@ public class VideoActivity extends BaseActivity implements VideoControl.VideoVie
 
     @Override
     public void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse) {
+
+    }
+
+    @Override
+    public void getVideoCollectionSuccess() {
 
     }
 

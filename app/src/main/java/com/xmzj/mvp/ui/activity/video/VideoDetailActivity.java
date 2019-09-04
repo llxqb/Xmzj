@@ -39,7 +39,7 @@ import butterknife.OnClick;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 
-public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzStdListener, VideoControl.VideoView {
+public class VideoDetailActivity extends BaseActivity implements VideoControl.VideoView {
     @BindView(R.id.common_back)
     ImageView mCommonBack;
     @BindView(R.id.common_title_tv)
@@ -70,7 +70,7 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
      * 视频url路径
      */
     String urlPath;
-    VideoInfoResponse.EpisodeBean mEpisodeBean;
+    private VideoInfoResponse.EpisodeBean mEpisodeBean;
 
     private List<CommentResponse> commentResponseList = new ArrayList<>();
 
@@ -92,7 +92,6 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
 
     @Override
     protected void initView() {
-        mMyJzvdStd.setListener(this);
         if (getIntent() != null) {
             mEpisodeBean = getIntent().getParcelableExtra("episodeBean");
 //            onRequestVideoInfo(mVideoId);
@@ -111,6 +110,7 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
                     String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
                     if (!TextUtils.isEmpty(localFilePath)) {
                         setDownLoadColor();
+                        initPlay();
                     }
                 }
             } else {
@@ -120,6 +120,21 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
 //        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        VideoCommentAdapter mVideoCommentAdapter = new VideoCommentAdapter(this, commentResponseList);
 //        mRecyclerView.setAdapter(mVideoCommentAdapter);
+    }
+
+    private void initPlay(){
+        String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
+        if (!TextUtils.isEmpty(localFilePath)) {
+            //本地有资源
+            showToast("视频已下载");
+            mMyJzvdStd.setUp(localFilePath, mEpisodeBean.getTitle(), Jzvd.SCREEN_NORMAL);
+        } else {
+            if (!TextUtils.isEmpty(urlPath)) {
+                mMyJzvdStd.setUp(urlPath, mEpisodeBean.getTitle());
+            } else {
+                showToast("播放路径不正确 ");
+            }
+        }
     }
 
     @Override
@@ -212,6 +227,11 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
 
     }
 
+    @Override
+    public void getVideoCollectionSuccess() {
+        showToast("收藏成功");
+    }
+
     /**
      * 下载视频文件
      */
@@ -251,19 +271,6 @@ public class VideoDetailActivity extends BaseActivity implements MyJzvdStd.MyJzS
                 });
             }
         });
-    }
-
-    @Override
-    public void startBtnCLick() {
-        String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
-        LogUtils.e("localFilePath:" + localFilePath);
-//        if (!TextUtils.isEmpty(localFilePath)) {
-//            //本地有资源
-//            showToast("播放本地视频");
-//            mMyJzvdStd.setUp(localFilePath, videoResponse.title, Jzvd.SCREEN_NORMAL);
-//        } else {
-//            mMyJzvdStd.setUp(urlPath, videoResponse.title);
-//        }
     }
 
 

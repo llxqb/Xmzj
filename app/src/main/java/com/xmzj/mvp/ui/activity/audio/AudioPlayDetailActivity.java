@@ -70,7 +70,7 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
         String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
         if (!TextUtils.isEmpty(localFilePath)) {
             //本地有资源
-            showToast("视频已下载");
+            showToast("资源已下载");
             mJzvdStdMp3.setUp(localFilePath, mDataBean.getTitle(), Jzvd.SCREEN_NORMAL);
             mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
         } else {

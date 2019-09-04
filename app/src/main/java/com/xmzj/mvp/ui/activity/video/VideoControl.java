@@ -16,6 +16,8 @@ public class VideoControl {
         void getVideoClassifySuccess(VideoClassifyResponse videoClassifyResponse);
 
         void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse);
+
+        void getVideoCollectionSuccess();
     }
 
     public interface PresenterVideo extends Presenter<VideoView> {

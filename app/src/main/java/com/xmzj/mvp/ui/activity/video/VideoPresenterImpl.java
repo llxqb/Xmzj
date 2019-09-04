@@ -91,11 +91,12 @@ public class VideoPresenterImpl implements VideoControl.PresenterVideo {
 
     private void requestVideoCollectionSuccess(ResponseData responseData) {
         if (responseData.resultCode == 0) {
-            responseData.parseData(VideoInfoResponse.class);
-            if (responseData.parsedData != null) {
-                VideoInfoResponse response = (VideoInfoResponse) responseData.parsedData;
-                mVideoView.getVideoInfoSuccess(response);
-            }
+            mVideoView.getVideoCollectionSuccess();
+//            responseData.parseData(VideoInfoResponse.class);
+//            if (responseData.parsedData != null) {
+//                VideoInfoResponse response = (VideoInfoResponse) responseData.parsedData;
+//                mVideoView.getVideoCollectionSuccess(response);
+//            }
         } else {
             mVideoView.showToast(responseData.errorMsg);
         }

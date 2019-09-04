@@ -1,6 +1,7 @@
 package com.xmzj.network;
 
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -25,6 +26,14 @@ import okio.BufferedSource;
  */
 
 public class LogInterceptor implements Interceptor {
+    private Context mContext;
+    private String mToken;
+
+    public LogInterceptor(Context context ,String token) {
+        mContext =context;
+        mToken = token;
+    }
+
     @NonNull
     @Override
     public Response intercept(@NonNull Chain chain) throws IOException {
@@ -32,6 +41,8 @@ public class LogInterceptor implements Interceptor {
         // 打印请求报文
         Request request = chain.request();
         RequestBody requestBody = request.body();
+        //有验证header 添加这一句 下面 request也替换成 newRequest
+        Request newRequest = request.newBuilder().addHeader("m-token", mToken).build();
         String reqBody = null;
         if (requestBody != null) {
             Buffer buffer = new Buffer();
@@ -44,14 +55,16 @@ public class LogInterceptor implements Interceptor {
             }
             reqBody = buffer.readString(charset);
         }
-        String TAG = "LogInterceptor2";
+
+        String TAG = "LogInterceptor";
         Log.d(TAG, String.format("发送请求\nmethod：%s\nurl：%s\nheaders: %s\nbody：%s",
-                request.method(), request.url(), request.headers(), reqBody));
+                mContext+ " "+newRequest.method(), newRequest.url(), newRequest.headers(), reqBody));
+
 
         // 打印返回报文
         // 先执行请求，才能够获取报文
         long startTime = System.currentTimeMillis();
-        Response response = chain.proceed(request);
+        Response response = chain.proceed(newRequest);
         long endTime = System.currentTimeMillis();
         ResponseBody responseBody = response.body();
         String respBody = null;
@@ -75,7 +88,7 @@ public class LogInterceptor implements Interceptor {
 //        Log.d(TAG, String.format("收到响应\n%s %s\n请求url：%s\n请求body：%s\n响应body：%s",
 //                response.code(), response.message(), response.request().url(), reqBody, respBody));
         Log.d(TAG, String.format("收到响应 %s %s\n耗时： %s\n响应body：%s",
-                response.code(), response.message(), (endTime - startTime)+" ms", respBody));
+                response.code(), response.message(), (endTime - startTime) + " ms", respBody));
         return response;
 
     }

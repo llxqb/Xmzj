@@ -232,6 +232,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
             loginUser.pwd = mLoginPwdEt.getText().toString();
         }
         mBuProcessor.setLoginUser(loginUser);
+        mSharePreferenceUtil.setData("token",token);
         startActivitys(MainActivity.class);
         finish();
     }

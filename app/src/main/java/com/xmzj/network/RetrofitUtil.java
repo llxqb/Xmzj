@@ -1,10 +1,12 @@
 package com.xmzj.network;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import com.xmzj.mvp.utils.LogUtils;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -34,6 +36,7 @@ public class RetrofitUtil {
     private String keyName;
     private String keyPwd;
     private String keyType;
+    private String token;
     private Retrofit retrofit;
 
     public RetrofitUtil(Builder builder) {
@@ -44,6 +47,7 @@ public class RetrofitUtil {
         this.keyName = builder.keyName;
         this.keyPwd = builder.keyPwd;
         this.keyType = builder.keyType;
+        this.token = builder.token;
         this.retrofit = initRetrofit();
     }
 
@@ -67,8 +71,11 @@ public class RetrofitUtil {
                         .connectTimeout(60, TimeUnit.SECONDS)
                         .readTimeout(60, TimeUnit.SECONDS)
                         .writeTimeout(60 * 1000, TimeUnit.SECONDS);
+        //获取token 值
+        SharedPreferences pref = context.getSharedPreferences("kencanme_cache", 0);
+        String token = pref.getString("token","");
 
-        okHttpClientBuilder.addInterceptor(new LogInterceptor());
+        okHttpClientBuilder.addInterceptor(new LogInterceptor(context,token));
 //        okHttpClientBuilder.addInterceptor(new Interceptor() {
 //            @Override
 //            public Response intercept(Chain chain) throws IOException {
@@ -157,6 +164,7 @@ public class RetrofitUtil {
         private String keyName;
         private String keyPwd;
         private String keyType;
+        private String token;
 
         public Builder() {
             this.context = null;
@@ -166,6 +174,7 @@ public class RetrofitUtil {
             this.keyName = "";
             this.keyPwd = "";
             this.keyType = "PKCS12";
+            this.token="";
         }
 
         public Builder context(Context context) {
@@ -196,6 +205,10 @@ public class RetrofitUtil {
 
         public Builder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
+            return this;
+        }
+        public Builder setToken(String token) {
+            this.token = token;
             return this;
         }
 

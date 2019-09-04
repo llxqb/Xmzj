@@ -43,6 +43,7 @@ public class VideoDetailEpisodeActivity extends BaseActivity implements VideoCon
     RecyclerView mEpisodeRecyclerView;
     private List<VideoInfoResponse.EpisodesBean> episodesBeanList = new ArrayList<>();
     private VideoDetailAdapter mVideoAdapter;
+    private String mToken;
     @Inject
     VideoControl.PresenterVideo mPresenter;
 
@@ -58,6 +59,7 @@ public class VideoDetailEpisodeActivity extends BaseActivity implements VideoCon
         setContentView(R.layout.activity_video_detail_episode);
         setStatusBar();
         initInjectData();
+        mToken = mBuProcessor.getToken();
     }
 
     @Override
@@ -133,6 +135,11 @@ public class VideoDetailEpisodeActivity extends BaseActivity implements VideoCon
             VideoDetailActivity.start(VideoDetailEpisodeActivity.this, episodeBean);
             finish();
         }
+
+    }
+
+    @Override
+    public void getVideoCollectionSuccess() {
 
     }
 
