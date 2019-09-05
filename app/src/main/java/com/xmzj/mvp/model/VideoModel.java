@@ -66,4 +66,16 @@ public class VideoModel {
     public Observable<ResponseData> onRequestAudioList(VideoListRequest videoRequest) {
         return mAudioAndVideoApi.onRequestAudioList(videoRequest.categoryId, videoRequest.orderCol, videoRequest.keyword, videoRequest.pageNo, videoRequest.pageSize).map(mTransform::transformListType);
     }
+    /**
+     * 请求音频详情
+     */
+    public Observable<ResponseData> onRequestAudioDetailInfo(String id) {
+        return mAudioAndVideoApi.onRequestAudioDetailInfo(id).map(mTransform::transformCommon);
+    }
+    /**
+     * 请求音频收藏
+     */
+    public Observable<ResponseData> onRequestAudioConnection(String audioId) {
+        return mAudioAndVideoApi.onRequestAudioConnection(audioId).map(mTransform::transformCommon);
+    }
 }

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.xmzj.mvp.utils.LogUtils;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -72,7 +71,7 @@ public class RetrofitUtil {
                         .readTimeout(60, TimeUnit.SECONDS)
                         .writeTimeout(60 * 1000, TimeUnit.SECONDS);
         //获取token 值
-        SharedPreferences pref = context.getSharedPreferences("kencanme_cache", 0);
+        SharedPreferences pref = context.getSharedPreferences("xmzj_cache", 0);
         String token = pref.getString("token","");
 
         okHttpClientBuilder.addInterceptor(new LogInterceptor(context,token));

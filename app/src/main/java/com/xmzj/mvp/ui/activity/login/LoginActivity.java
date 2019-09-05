@@ -191,13 +191,13 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     @Override
     public void getVerifyCodeSuccess(String code) {
         LogUtils.e("code:" + code);
-        if(!TextUtils.isEmpty(code)){
+        if (!TextUtils.isEmpty(code)) {
             if (ValueUtil.isValidityEmail(mLoginPhoneEt.getText().toString())) {
                 showToast("获取验证码成功，请去邮箱查看");
             } else {
                 mLoginVerifyEt.setText(code);
             }
-        }else {
+        } else {
             showToast("操作过于频繁，请稍后再试");
         }
 
@@ -232,7 +232,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
             loginUser.pwd = mLoginPwdEt.getText().toString();
         }
         mBuProcessor.setLoginUser(loginUser);
-        mSharePreferenceUtil.setData("token",token);
+        mSharePreferenceUtil.setData("token", token);
         startActivitys(MainActivity.class);
         finish();
     }

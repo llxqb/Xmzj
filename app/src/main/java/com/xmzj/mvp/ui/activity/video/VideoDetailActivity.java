@@ -267,7 +267,7 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
                 LogUtils.e("onFailure: " + erroInfo);
                 runOnUiThread(() -> {
                     mCircleProgressLayout.setVisibility(View.GONE);
-                    showToast(erroInfo);
+                    showToast("下载失败");
                 });
             }
         });

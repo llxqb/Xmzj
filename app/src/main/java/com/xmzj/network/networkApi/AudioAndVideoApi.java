@@ -47,6 +47,11 @@ public interface AudioAndVideoApi {
      */
     @GET("audio/list")
     Observable<String> onRequestAudioList(@Query("categoryId") String categoryId, @Query("orderCol") String orderCol, @Query("keyword") String keyword, @Query("pageNo") int pageNo, @Query("pageSize") int pageSize);
+    /**
+     * 请求音频详情
+     */
+    @GET("audio/detail")
+    Observable<String> onRequestAudioDetailInfo(@Query("id") String id);
 
     /**
      * 请求视频详情
@@ -59,6 +64,11 @@ public interface AudioAndVideoApi {
      */
     @POST("video/episode/collect")
     Observable<String> onRequestVideoCollection(@Query("episodeId") String episodeId);
+    /**
+     * 请求音频收藏
+     */
+    @POST("audio/collect")
+    Observable<String> onRequestAudioConnection(@Query("audioId") String audioId);
 
 
 }

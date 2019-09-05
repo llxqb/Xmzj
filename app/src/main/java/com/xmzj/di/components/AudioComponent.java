@@ -8,6 +8,7 @@ import com.xmzj.di.modules.AudioModule;
 import com.xmzj.di.scopes.PerActivity;
 import com.xmzj.mvp.ui.activity.audio.AudioActivity;
 import com.xmzj.mvp.ui.activity.audio.AudioControl;
+import com.xmzj.mvp.ui.activity.audio.AudioPlayDetailActivity;
 
 import dagger.Component;
 
@@ -21,6 +22,7 @@ import dagger.Component;
 public interface AudioComponent extends ActivityComponent {
     //对LoginActivity进行依赖注入
     void inject(AudioActivity activity);
+    void inject(AudioPlayDetailActivity activity);
 
     AppCompatActivity activity();
 

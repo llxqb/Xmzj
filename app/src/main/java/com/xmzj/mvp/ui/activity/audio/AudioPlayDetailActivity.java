@@ -6,13 +6,21 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xmzj.R;
+import com.xmzj.di.components.DaggerAudioComponent;
+import com.xmzj.di.modules.ActivityModule;
+import com.xmzj.di.modules.AudioModule;
 import com.xmzj.entity.base.BaseActivity;
+import com.xmzj.entity.response.AudioClassifyResponse;
+import com.xmzj.entity.response.AudioDetailInfoResponse;
 import com.xmzj.entity.response.AudioListResponse;
 import com.xmzj.listener.DownloadListener;
 import com.xmzj.mvp.utils.DownloadUtil;
 import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.views.JzvdStdMp3;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -22,7 +30,7 @@ import cn.jzvd.JzvdStd;
 /**
  * 视频播放界面
  */
-public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.JzStdMp3Listener {
+public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.JzStdMp3Listener, AudioControl.AudioView {
 
     @BindView(R.id.common_back)
     ImageView mCommonBack;
@@ -31,11 +39,14 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
     @BindView(R.id.jzvdStdMp3)
     JzvdStdMp3 mJzvdStdMp3;
     private String urlPath;
-    private AudioListResponse.DataBean mDataBean;
     /**
      * 是否正在下载
      */
     private boolean isDownLoading;
+
+    AudioDetailInfoResponse mAudioDetailInfoResponse;
+    @Inject
+    AudioControl.PresenterAudio mPresenter;
 
     public static void start(Context context, AudioListResponse.DataBean dataBean) {
         Intent intent = new Intent(context, AudioPlayDetailActivity.class);
@@ -47,17 +58,15 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
     protected void initContentView() {
         setContentView(R.layout.activity_audio_play_detail);
         setStatusBar();
+        initInjectData();
     }
 
     @Override
     protected void initView() {
         mJzvdStdMp3.setListener(this);
         if (getIntent() != null) {
-            mDataBean = getIntent().getParcelableExtra("dataBean");
-            mCommonTitleTv.setText(mDataBean.getInfo());
-            urlPath = mDataBean.getDownloadUrl();
-            LogUtils.e("urlPath:" + urlPath);
-            initPlay();
+            AudioListResponse.DataBean mDataBean = getIntent().getParcelableExtra("dataBean");
+            onRequestAudioDetailInfo(mDataBean.getId());
 //            Glide.with(this)
 //                    .load(mDataBean.getCover())
 //                    .into(mJzvdStdMp3.thumbImageView);
@@ -69,17 +78,25 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
     protected void initData() {
     }
 
+    /**
+     * 请求音频详情
+     *
+     * @param id
+     */
+    private void onRequestAudioDetailInfo(String id) {
+        mPresenter.onRequestAudioDetailInfo(id);
+    }
 
     private void initPlay() {
         String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
         if (!TextUtils.isEmpty(localFilePath)) {
             //本地有资源
             showToast("资源已下载");
-            mJzvdStdMp3.setUp(localFilePath, mDataBean.getTitle(), Jzvd.SCREEN_NORMAL);
+            mJzvdStdMp3.setUp(localFilePath, mAudioDetailInfoResponse.getTitle(), Jzvd.SCREEN_NORMAL);
             mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
         } else {
             if (!TextUtils.isEmpty(urlPath)) {
-                mJzvdStdMp3.setUp(urlPath, mDataBean.getTitle(), Jzvd.SCREEN_NORMAL);
+                mJzvdStdMp3.setUp(urlPath, mAudioDetailInfoResponse.getTitle(), Jzvd.SCREEN_NORMAL);
                 mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
             } else {
                 showToast("播放路径不正确 ");
@@ -102,14 +119,22 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
         }
     }
 
+    /**
+     * 收藏
+     */
+    @Override
+    public void connectionBtnCLick() {
+        mPresenter.onRequestAudioConnection(mAudioDetailInfoResponse.getId());
+    }
+
     @Override
     public void startPreIvClick() {
-        showToast("上一曲");
+        onRequestAudioDetailInfo(mAudioDetailInfoResponse.getPrev().getId());
     }
 
     @Override
     public void startNextIvClick() {
-        showToast("下一曲");
+        onRequestAudioDetailInfo(mAudioDetailInfoResponse.getNext().getId());
     }
 
     @OnClick(R.id.common_back)
@@ -117,6 +142,33 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
         finish();
     }
 
+
+    @Override
+    public void getAudioClassifySuccess(AudioClassifyResponse audioClassifyResponse) {
+    }
+
+    @Override
+    public void getAudioDetailInfoSuccess(AudioDetailInfoResponse audioDetailInfoResponse) {
+        LogUtils.e("audioDetailInfoResponse:" + new Gson().toJson(audioDetailInfoResponse));
+        if (audioDetailInfoResponse.isIsCollect()) {
+            mJzvdStdMp3.setConnectBg(R.mipmap.connectioned_audio);
+        } else {
+            mJzvdStdMp3.setConnectBg(R.mipmap.connection_audio);
+        }
+        mAudioDetailInfoResponse = audioDetailInfoResponse;
+        mCommonTitleTv.setText(audioDetailInfoResponse.getInfo());
+        if (!TextUtils.isEmpty(audioDetailInfoResponse.getDownloadUrl()) && !audioDetailInfoResponse.getDownloadUrl().contains("/")) {
+            urlPath = "https://www.xinmizj.com/res/audio/src/" + audioDetailInfoResponse.getDownloadUrl();
+        } else {
+            urlPath = audioDetailInfoResponse.getDownloadUrl();
+        }
+        initPlay();
+    }
+
+    @Override
+    public void getAudioConnectionSuccess() {
+        showToast("收藏成功");
+    }
 
     @Override
     protected void onPause() {
@@ -140,7 +192,6 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
         mDownloadUtil.downloadFile(urlPath, new DownloadListener() {
             @Override
             public void onStart() {
-                LogUtils.e("onStart: ");
                 isDownLoading = true;
                 runOnUiThread(() -> {
                     showToast("下载中...");
@@ -156,12 +207,7 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
             @Override
             public void onFinish(String localPath) {
                 isDownLoading = false;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        showToast("下载完成");
-                    }
-                });
+                runOnUiThread(() -> showToast("下载完成"));
             }
 
             @Override
@@ -169,11 +215,16 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
                 LogUtils.e("onFailure: " + erroInfo);
                 isDownLoading = false;
                 runOnUiThread(() -> {
-                    showToast(erroInfo);
+                    showToast("下载失败");
                 });
             }
         });
     }
 
 
+    private void initInjectData() {
+        DaggerAudioComponent.builder().appComponent(getAppComponent())
+                .audioModule(new AudioModule(this, this))
+                .activityModule(new ActivityModule(this)).build().inject(this);
+    }
 }

@@ -13,6 +13,7 @@ import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.AudioModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.AudioClassifyResponse;
+import com.xmzj.entity.response.AudioDetailInfoResponse;
 import com.xmzj.mvp.ui.activity.search.SearchAudioActivity;
 import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
 import com.xmzj.mvp.ui.fragment.AudioFragment;
@@ -89,6 +90,14 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
             mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
             mTabLayout.setupWithViewPager(mViewPager);
         }
+    }
+
+    @Override
+    public void getAudioDetailInfoSuccess(AudioDetailInfoResponse audioDetailInfoResponse) {
+    }
+
+    @Override
+    public void getAudioConnectionSuccess() {
     }
 
     private void initInjectData() {

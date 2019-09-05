@@ -216,7 +216,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
             public void onFailure(final String erroInfo) {
                 LogUtils.e("onFailure: " + erroInfo);
                 Objects.requireNonNull(getActivity()).runOnUiThread(() -> {
-                    showToast(erroInfo);
+                    showToast("下载失败");
                     isDownLoading = false;
                     mCircleProgressLayout.setVisibility(View.GONE);
                 });

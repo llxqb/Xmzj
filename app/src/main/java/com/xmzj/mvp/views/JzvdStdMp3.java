@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.xmzj.R;
@@ -20,6 +21,8 @@ import cn.jzvd.JzvdStd;
 public class JzvdStdMp3 extends JzvdStd {
     private String TAG = "JzvdStdMp3";
     private ObjectAnimator mAnimator;
+    private Context mContext;
+    private int mConnectBg;
 
     public JzvdStdMp3(Context context) {
         super(context);
@@ -29,6 +32,7 @@ public class JzvdStdMp3 extends JzvdStd {
         super(context, attrs);
         //默认显示 底部时间
         bottomContainer.setVisibility(VISIBLE);
+        mContext = context;
     }
 
     private JzStdMp3Listener mJzStdMp3Listener;
@@ -37,8 +41,14 @@ public class JzvdStdMp3 extends JzvdStd {
         mJzStdMp3Listener = jzStdMp3Listener;
     }
 
+    public void setConnectBg(int connectBg) {
+        mConnectBg = connectBg;
+    }
+
     public interface JzStdMp3Listener {
         void downLoadBtnCLick();
+
+        void connectionBtnCLick();
 
         void startPreIvClick();
 
@@ -50,11 +60,18 @@ public class JzvdStdMp3 extends JzvdStd {
         return R.layout.jz_layout_standard_mp3;
     }
 
+    ImageView connectionIv;
+
     public void setThumb1(Context context, int url) {
         CircleImageView circleImageView = findViewById(R.id.thumb1);
         findViewById(R.id.layout_bottom).setVisibility(VISIBLE);
         ImageView downloadIv = findViewById(R.id.download_iv);
         downloadIv.setOnClickListener(this);
+        connectionIv = findViewById(R.id.collection_iv);
+        connectionIv.setOnClickListener(this);
+        if (mConnectBg != 0) {
+            connectionIv.setImageResource(mConnectBg);
+        }
         findViewById(R.id.pre_iv).setOnClickListener(this);
         findViewById(R.id.next_iv).setOnClickListener(this);
         Glide.with(this)
@@ -66,16 +83,17 @@ public class JzvdStdMp3 extends JzvdStd {
         mAnimator.setRepeatCount(Animation.INFINITE);//设定无限循环
         mAnimator.setRepeatMode(ObjectAnimator.RESTART);// 循环模式
         mAnimator.setInterpolator(new LinearInterpolator());// 匀速
-
     }
 
     @Override
     public void onClick(View v) {
         Log.e(TAG, "state:" + state);
-        if (v.getId() == cn.jzvd.R.id.thumb &&
-                (state == STATE_PLAYING ||
-                        state == STATE_PAUSE)) {
-            onClickUiToggle();
+        if (v.getId() == cn.jzvd.R.id.thumb) {
+            if ((state == STATE_PLAYING || state == STATE_PAUSE)) {
+                onClickUiToggle();
+            } else if (state == STATE_PREPARING) {
+                Toast.makeText(mContext, "加载中...请稍后", Toast.LENGTH_SHORT).show();
+            }
         } else if (v.getId() == R.id.fullscreen) {
             Log.i(TAG, "onClick: fullscreen");
         } else if (v.getId() == R.id.pre_iv) {
@@ -92,6 +110,10 @@ public class JzvdStdMp3 extends JzvdStd {
             Log.i(TAG, "onClick: download_iv");
             if (mJzStdMp3Listener != null) {
                 mJzStdMp3Listener.downLoadBtnCLick();
+            }
+        } else if (v.getId() == R.id.collection_iv) {
+            if (mJzStdMp3Listener != null) {
+                mJzStdMp3Listener.connectionBtnCLick();
             }
         } else {
             super.onClick(v);

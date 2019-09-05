@@ -218,7 +218,7 @@ public class SearchAudioActivity extends BaseActivity implements SearchControl.S
             @Override
             public void onFailure(final String erroInfo) {
                 runOnUiThread(() -> {
-                    showToast(erroInfo);
+                    showToast("下载失败");
                     mCircleProgressLayout.setVisibility(View.GONE);
                 });
             }

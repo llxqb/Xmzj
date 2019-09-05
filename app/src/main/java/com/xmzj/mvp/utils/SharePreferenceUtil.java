@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * editor.apply();//commit();
  */
 public class SharePreferenceUtil {
-    private static final String projectKey = "kencanme_cache";
+    private static final String projectKey = "xmzj_cache";
     private Sharedprefence mSharedprefence;
 
     @Inject

@@ -7,10 +7,7 @@
     android:orientation="vertical"
     tools:context=".mvp.ui.activity.audio.AudioPlayDetailActivity">
 
-
     <include layout="@layout/common_toolbar" />
-
-    <View style="@style/line_height_1" />
 
     <com.xmzj.mvp.views.JzvdStdMp3
         android:id="@+id/jzvdStdMp3"
