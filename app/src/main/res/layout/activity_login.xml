@@ -161,7 +161,7 @@
             android:padding="@dimen/dp_10"
             android:text="注册"
             android:textColor="@color/color333"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_15" />
 
         <TextView
             android:id="@+id/forget_pwd_tv"
@@ -171,7 +171,7 @@
             android:padding="@dimen/dp_10"
             android:text="忘记密码"
             android:textColor="@color/color333"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_15" />
 
     </RelativeLayout>
 

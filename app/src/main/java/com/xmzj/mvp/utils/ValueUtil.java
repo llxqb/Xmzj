@@ -152,6 +152,15 @@ public class ValueUtil {
         return p.matcher(str).matches();
     }
 
+    /**
+     * 检查密码
+     * 密码必须是8-16数字和字符组成（不能是纯数字）
+     */
+    public static boolean pwdCheckSpecialString(String str) {
+        String regEx = "^[a-zA-Z][a-zA-Z0-9_]{7,15}$";
+        Pattern pattern = Pattern.compile(regEx);
+        return pattern.matcher(str).matches();
+    }
     public static boolean checkSpecialString(String str) {
         String regEx = "^[a-zA-Z][a-zA-Z0-9_]{3,19}$";
         Pattern pattern = Pattern.compile(regEx);

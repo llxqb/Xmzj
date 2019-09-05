@@ -151,6 +151,10 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
             showToast("密码不能为空");
             return false;
         }
+        if (!ValueUtil.pwdCheckSpecialString(mRegisterPwdEt.getText().toString())) {
+            showToast("密码格式不正确");
+            return false;
+        }
         return true;
     }
 
