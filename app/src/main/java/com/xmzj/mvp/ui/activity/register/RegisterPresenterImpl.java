@@ -3,8 +3,8 @@ package com.xmzj.mvp.ui.activity.register;
 import android.content.Context;
 
 import com.xmzj.R;
-import com.xmzj.entity.request.ForgetPwdRequest;
 import com.xmzj.entity.request.RegisterRequest;
+import com.xmzj.entity.request.VerifyCodeRequest;
 import com.xmzj.help.RetryWithDelay;
 import com.xmzj.mvp.model.LoginModel;
 import com.xmzj.mvp.model.ResponseData;
@@ -64,7 +64,7 @@ public class RegisterPresenterImpl implements RegisterControl.PresenterRegister 
      * 忘记密码
      */
     @Override
-    public void onRequestForgetPwd(ForgetPwdRequest forgetPwdRequest) {
+    public void onRequestForgetPwd(RegisterRequest forgetPwdRequest) {
         mRegisterView.showLoading(mContext.getResources().getString(R.string.loading));
         Disposable disposable = mLoginModel.onRequestForgetPwd(forgetPwdRequest).compose(mRegisterView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
                 .subscribe(this::requestForgetPwdSuccess, throwable -> mRegisterView.showErrMessage(throwable),
@@ -90,9 +90,9 @@ public class RegisterPresenterImpl implements RegisterControl.PresenterRegister 
      * 获取验证码
      */
     @Override
-    public void onRequestVerifyCode(String account, int type) {
+    public void onRequestVerifyCode(VerifyCodeRequest verifyCodeRequest) {
         mRegisterView.showLoading(mContext.getResources().getString(R.string.loading));
-        Disposable disposable = mLoginModel.onRequestVerifyCode(account, type).compose(mRegisterView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
+        Disposable disposable = mLoginModel.onRequestVerifyCode(verifyCodeRequest).compose(mRegisterView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
                 .subscribe(this::requestVerifyCodeSuccess, throwable -> mRegisterView.showErrMessage(throwable),
                         () -> mRegisterView.dismissLoading());
         mRegisterView.addSubscription(disposable);

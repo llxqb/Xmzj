@@ -17,7 +17,8 @@ import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.LoginModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.constants.Constant;
-import com.xmzj.entity.request.LoginRequest;
+import com.xmzj.entity.request.RegisterRequest;
+import com.xmzj.entity.request.VerifyCodeRequest;
 import com.xmzj.entity.user.LoginUser;
 import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.ui.activity.register.ForgetPwdActivity;
@@ -109,13 +110,18 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
                 mPwdLoginLayout.setVisibility(View.VISIBLE);
                 break;
             case R.id.code_bt:
+                String mLoginPhoneEtValue = mLoginPhoneEt.getText().toString();
                 if (TextUtils.isEmpty(mLoginPhoneEt.getText().toString())) {
                     showToast("手机号/邮箱不能为空");
                     return;
                 }
+                if (!ValueUtil.isValidityEmail(mLoginPhoneEtValue) && !ValueUtil.isChinaPhoneLegal(mLoginPhoneEtValue)) {
+                    showToast("手机号/邮箱格式不正确");
+                    return;
+                }
                 mCodeBt.setRun(true);
                 mCodeBt.setAfterBg(R.drawable.verify_text_background);
-                onRequestVerifyCode(mLoginPhoneEt.getText().toString(), Constant.VerifyCode_LOGIN);
+                onRequestVerifyCode(mLoginPhoneEtValue);
                 break;
             case R.id.login_btn:
                 if (verification()) {
@@ -176,11 +182,18 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     /**
      * 获取验证码
      *
-     * @param account 手机号码/邮箱
-     * @param type    验证类型(注册：100001，重置密码：100002,登录：100003)
+     * @param phoneNum 手机号码/邮箱
+     *  type    验证类型(注册：100001，重置密码：100002,登录：100003)
      */
-    private void onRequestVerifyCode(String account, int type) {
-        mPresenter.onRequestVerifyCode(account, type);
+    private void onRequestVerifyCode(String phoneNum) {
+        VerifyCodeRequest verifyCodeRequest = new VerifyCodeRequest();
+        if (ValueUtil.isValidityEmail(phoneNum)) {
+            verifyCodeRequest.email = phoneNum;
+        } else if (ValueUtil.isChinaPhoneLegal(phoneNum)) {
+            verifyCodeRequest.phoneNum = phoneNum;
+        }
+        verifyCodeRequest.type = Constant.VerifyCode_LOGIN;
+        mPresenter.onRequestVerifyCode(verifyCodeRequest);
     }
 
     /**
@@ -206,7 +219,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
      * 请求登录
      */
     private void onRequestLogin() {
-        LoginRequest loginRequest = new LoginRequest();
+        RegisterRequest loginRequest = new RegisterRequest();
         if (loginType == 0) {
             loginRequest.account = mLoginPhoneEt.getText().toString();
             loginRequest.code = mLoginVerifyEt.getText().toString();

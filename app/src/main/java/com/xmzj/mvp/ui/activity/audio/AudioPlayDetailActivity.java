@@ -168,6 +168,7 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
     @Override
     public void getAudioConnectionSuccess() {
         showToast("收藏成功");
+        mJzvdStdMp3.setConnectBg(R.mipmap.connectioned_audio);
     }
 
     @Override

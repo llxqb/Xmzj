@@ -3,7 +3,8 @@ package com.xmzj.mvp.ui.activity.login;
 import android.content.Context;
 
 import com.xmzj.R;
-import com.xmzj.entity.request.LoginRequest;
+import com.xmzj.entity.request.RegisterRequest;
+import com.xmzj.entity.request.VerifyCodeRequest;
 import com.xmzj.help.RetryWithDelay;
 import com.xmzj.mvp.model.LoginModel;
 import com.xmzj.mvp.model.ResponseData;
@@ -35,7 +36,7 @@ public class LoginPresenterImpl implements LoginControl.PresenterLogin {
      * 登录
      */
     @Override
-    public void onRequestLogin(LoginRequest loginRequest) {
+    public void onRequestLogin(RegisterRequest loginRequest) {
         mLoginView.showLoading(mContext.getResources().getString(R.string.loading));
         Disposable disposable = mLoginModel.onRequestLoginInfo(loginRequest).compose(mLoginView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
                 .subscribe(this::requestLoginSuccess, throwable -> mLoginView.showErrMessage(throwable),
@@ -62,9 +63,9 @@ public class LoginPresenterImpl implements LoginControl.PresenterLogin {
      * 获取验证码
      */
     @Override
-    public void onRequestVerifyCode(String account, int type) {
+    public void onRequestVerifyCode(VerifyCodeRequest verifyCodeRequest) {
         mLoginView.showLoading(mContext.getResources().getString(R.string.loading));
-        Disposable disposable = mLoginModel.onRequestVerifyCode(account, type).compose(mLoginView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
+        Disposable disposable = mLoginModel.onRequestVerifyCode(verifyCodeRequest).compose(mLoginView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
                 .subscribe(this::requestVerifyCodeSuccess, throwable -> mLoginView.showErrMessage(throwable),
                         () -> mLoginView.dismissLoading());
         mLoginView.addSubscription(disposable);

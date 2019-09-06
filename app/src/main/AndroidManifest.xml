@@ -23,6 +23,16 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
+
+        <activity android:name=".mvp.ui.activity.splash.SplashActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity android:name=".mvp.ui.activity.search.SearchAudioActivity"></activity>
         <activity android:name=".mvp.ui.activity.audio.AudioDownLoadHistoryActivity" />
         <activity android:name=".mvp.ui.activity.video.VideoDetailEpisodeActivity" />
@@ -50,13 +60,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".mvp.ui.activity.main.MainActivity"></activity>
         <activity android:name=".mvp.ui.activity.login.LoginActivity" />
-        <activity android:name=".mvp.ui.activity.splash.SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

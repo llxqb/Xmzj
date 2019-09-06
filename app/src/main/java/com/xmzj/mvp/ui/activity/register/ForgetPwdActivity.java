@@ -14,7 +14,8 @@ import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.RegisterModule;
 import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.constants.Constant;
-import com.xmzj.entity.request.ForgetPwdRequest;
+import com.xmzj.entity.request.RegisterRequest;
+import com.xmzj.entity.request.VerifyCodeRequest;
 import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.utils.ValueUtil;
 import com.xmzj.mvp.views.TimeButton;
@@ -70,13 +71,18 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
                 finish();
                 break;
             case R.id.code_bt:
+                String mForgetPwdPhoneEtValue = mForgetPwdPhoneEt.getText().toString();
                 if (TextUtils.isEmpty(mForgetPwdPhoneEt.getText().toString())) {
                     showToast("手机号/邮箱不能为空");
                     return;
                 }
+                if (!ValueUtil.isValidityEmail(mForgetPwdPhoneEtValue) && !ValueUtil.isChinaPhoneLegal(mForgetPwdPhoneEtValue)) {
+                    showToast("手机号/邮箱格式不正确");
+                    return;
+                }
                 mCodeBt.setRun(true);
                 mCodeBt.setAfterBg(R.drawable.verify_text_background);
-                onRequestVerifyCode(mForgetPwdPhoneEt.getText().toString(), Constant.VerifyCode_RETPWD);
+                onRequestVerifyCode(mForgetPwdPhoneEtValue);
                 break;
             case R.id.forget_pwd_btn:
                 if (TextUtils.isEmpty(mForgetPwdPhoneEt.getText().toString())) {
@@ -108,11 +114,18 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
     /**
      * 获取验证码
      *
-     * @param account 手机号码/邮箱
-     * @param type    验证类型(注册：100001，重置密码：100002,登录：100003)
+     * @param phoneNum 手机号码/邮箱
+     *                 type    验证类型(注册：100001，重置密码：100002,登录：100003)
      */
-    private void onRequestVerifyCode(String account, int type) {
-        mPresenter.onRequestVerifyCode(account, type);
+    private void onRequestVerifyCode(String phoneNum) {
+        VerifyCodeRequest verifyCodeRequest = new VerifyCodeRequest();
+        if (ValueUtil.isValidityEmail(phoneNum)) {
+            verifyCodeRequest.email = phoneNum;
+        } else if (ValueUtil.isChinaPhoneLegal(phoneNum)) {
+            verifyCodeRequest.phoneNum = phoneNum;
+        }
+        verifyCodeRequest.type = Constant.VerifyCode_RETPWD;
+        mPresenter.onRequestVerifyCode(verifyCodeRequest);
     }
 
     /**
@@ -127,7 +140,7 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
             } else {
                 mForgetPwdVerifyEt.setText(code);
             }
-        }else {
+        } else {
             showToast("操作过于频繁，请稍后再试");
         }
     }
@@ -136,7 +149,7 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
      * 请求 -忘记密码
      */
     private void onRequestForgetPwd() {
-        ForgetPwdRequest forgetPwdRequest = new ForgetPwdRequest();
+        RegisterRequest forgetPwdRequest = new RegisterRequest();
         forgetPwdRequest.account = mForgetPwdPhoneEt.getText().toString();
         forgetPwdRequest.code = mForgetPwdVerifyEt.getText().toString();
         forgetPwdRequest.pwd = mForgetPwdEt.getText().toString();

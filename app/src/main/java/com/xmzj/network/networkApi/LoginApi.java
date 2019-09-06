@@ -21,7 +21,7 @@ public interface LoginApi {
      * 注册
      */
     @POST("auth/reg")
-    Observable<String> onRequestRegister(@Query("account") String account, @Query("pwd") String pwd, @Query("code") String code, @Query("clientType") int clientType);
+    Observable<String> onRequestRegister(@Query("account") String account,@Query("phoneNum") String phoneNum,@Query("email") String email, @Query("pwd") String pwd, @Query("code") String code, @Query("clientType") int clientType);
 
     /**
      * 忘记密码
@@ -33,7 +33,7 @@ public interface LoginApi {
      * 获取验证码
      */
     @GET("verifyCode/sendCode")
-    Observable<String> onRequestVerifyCode(@Query("account") String account, @Query("type") int type);
+    Observable<String> onRequestVerifyCode(@Query("phoneNum") String phoneNum,@Query("email") String email, @Query("type") int type);
 
 
 }

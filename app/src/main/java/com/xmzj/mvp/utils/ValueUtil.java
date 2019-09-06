@@ -23,6 +23,7 @@ import java.text.DecimalFormat;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static java.lang.Double.parseDouble;
 
@@ -110,6 +111,26 @@ public class ValueUtil {
         }
     }
 
+    /**
+     * 验证最新手机号 格式
+     * 1、手机号开头集合
+     * 166，
+     * 176，177，178
+     * 180，181，182，183，184，185，186，187，188，189
+     * 145，147
+     * 130，131，132，133，134，135，136，137，138，139
+     * 150，151，152，153，155，156，157，158，159
+     * 198，199
+     */
+    public static boolean isChinaPhoneLegal(String str)
+            throws PatternSyntaxException {
+        String regExp = "^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}$";
+        Pattern p = Pattern.compile(regExp);
+        Matcher m = p.matcher(str);
+        return m.matches();
+    }
+
+
     //是否是有效的身份证
     public static boolean isValidityIdentityCard(String idCardStr) {
         if (TextUtils.isEmpty(idCardStr)) {
@@ -161,6 +182,8 @@ public class ValueUtil {
         Pattern pattern = Pattern.compile(regEx);
         return pattern.matcher(str).matches();
     }
+
+
     public static boolean checkSpecialString(String str) {
         String regEx = "^[a-zA-Z][a-zA-Z0-9_]{3,19}$";
         Pattern pattern = Pattern.compile(regEx);

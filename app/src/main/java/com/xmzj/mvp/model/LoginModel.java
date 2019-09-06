@@ -2,9 +2,8 @@ package com.xmzj.mvp.model;
 
 
 import com.google.gson.Gson;
-import com.xmzj.entity.request.ForgetPwdRequest;
-import com.xmzj.entity.request.LoginRequest;
 import com.xmzj.entity.request.RegisterRequest;
+import com.xmzj.entity.request.VerifyCodeRequest;
 import com.xmzj.network.networkApi.LoginApi;
 
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ public class LoginModel {
     /**
      * 登录
      */
-    public Observable<ResponseData> onRequestLoginInfo(LoginRequest request) {
+    public Observable<ResponseData> onRequestLoginInfo(RegisterRequest request) {
         return mLoginApi.onRequestLoginInfo(request.account, request.pwd, request.code, request.clientType).map(mTransform::transformCommon);
     }
 
@@ -39,20 +38,20 @@ public class LoginModel {
      * 注册
      */
     public Observable<ResponseData> onRequestRegister(RegisterRequest request) {
-        return mLoginApi.onRequestRegister(request.account, request.pwd, request.code, request.clientType).map(mTransform::transformCommon);
+        return mLoginApi.onRequestRegister(request.account,request.phoneNum,request.email, request.pwd, request.code, request.clientType).map(mTransform::transformCommon);
     }
 
     /**
      * 忘记密码
      */
-    public Observable<ResponseData> onRequestForgetPwd(ForgetPwdRequest request) {
+    public Observable<ResponseData> onRequestForgetPwd(RegisterRequest request) {
         return mLoginApi.onRequestForgetPwd(request.account, request.pwd, request.code, request.clientType).map(mTransform::transformCommon);
     }
 
     /**
      * 获取验证码
      */
-    public Observable<ResponseData> onRequestVerifyCode(String account, int type) {
-        return mLoginApi.onRequestVerifyCode(account, type).map(mTransform::transformCommon);
+    public Observable<ResponseData> onRequestVerifyCode(VerifyCodeRequest verifyCodeRequest) {
+        return mLoginApi.onRequestVerifyCode(verifyCodeRequest.phoneNum, verifyCodeRequest.email, verifyCodeRequest.type).map(mTransform::transformCommon);
     }
 }
