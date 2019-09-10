@@ -183,7 +183,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
      * 获取验证码
      *
      * @param phoneNum 手机号码/邮箱
-     *  type    验证类型(注册：100001，重置密码：100002,登录：100003)
+     *                 type    验证类型(注册：100001，重置密码：100002,登录：100003)
      */
     private void onRequestVerifyCode(String phoneNum) {
         VerifyCodeRequest verifyCodeRequest = new VerifyCodeRequest();
@@ -221,7 +221,12 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     private void onRequestLogin() {
         RegisterRequest loginRequest = new RegisterRequest();
         if (loginType == 0) {
-            loginRequest.account = mLoginPhoneEt.getText().toString();
+            String mLoginPhoneEtValue = mLoginPhoneEt.getText().toString();
+            if (ValueUtil.isChinaPhoneLegal(mLoginPhoneEtValue)) {
+                loginRequest.phoneNum = mLoginPhoneEtValue;
+            } else if (ValueUtil.isValidityEmail(mLoginPhoneEtValue)) {
+                loginRequest.email = mLoginPhoneEtValue;
+            }
             loginRequest.code = mLoginVerifyEt.getText().toString();
         } else if (loginType == 1) {
             loginRequest.account = mLoginUserEt.getText().toString();

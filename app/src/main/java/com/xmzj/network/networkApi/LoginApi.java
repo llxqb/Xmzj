@@ -12,11 +12,15 @@ import retrofit2.http.Query;
 
 public interface LoginApi {
     /**
-     * 登录
+     * 账号密码登录
      */
     @POST("auth/login")
-    Observable<String> onRequestLoginInfo(@Query("account") String account, @Query("pwd") String pwd, @Query("code") String code, @Query("clientType") int clientType);
-
+    Observable<String> onRequestLoginInfo(@Query("account") String account, @Query("pwd") String pwd,@Query("clientType") int clientType);
+    /**
+     * 验证码登录
+     */
+    @POST("auth/codeLogin")
+    Observable<String> onRequestLoginByCode(@Query("phoneNum") String phoneNum, @Query("email") String email, @Query("code") String code, @Query("clientType") int clientType);
     /**
      * 注册
      */

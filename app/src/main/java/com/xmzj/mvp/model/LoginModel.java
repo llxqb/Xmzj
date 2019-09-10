@@ -1,6 +1,8 @@
 package com.xmzj.mvp.model;
 
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.xmzj.entity.request.RegisterRequest;
 import com.xmzj.entity.request.VerifyCodeRequest;
@@ -31,14 +33,20 @@ public class LoginModel {
      * 登录
      */
     public Observable<ResponseData> onRequestLoginInfo(RegisterRequest request) {
-        return mLoginApi.onRequestLoginInfo(request.account, request.pwd, request.code, request.clientType).map(mTransform::transformCommon);
+        if (!TextUtils.isEmpty(request.phoneNum) || !TextUtils.isEmpty(request.email)) {
+            //验证码登录
+            return mLoginApi.onRequestLoginByCode(request.phoneNum, request.email, request.code, request.clientType).map(mTransform::transformCommon);
+        } else {
+            //账号密码登录
+            return mLoginApi.onRequestLoginInfo(request.account, request.pwd, request.clientType).map(mTransform::transformCommon);
+        }
     }
 
     /**
      * 注册
      */
     public Observable<ResponseData> onRequestRegister(RegisterRequest request) {
-        return mLoginApi.onRequestRegister(request.account,request.phoneNum,request.email, request.pwd, request.code, request.clientType).map(mTransform::transformCommon);
+        return mLoginApi.onRequestRegister(request.account, request.phoneNum, request.email, request.pwd, request.code, request.clientType).map(mTransform::transformCommon);
     }
 
     /**

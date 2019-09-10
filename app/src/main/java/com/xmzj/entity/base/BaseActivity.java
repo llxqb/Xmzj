@@ -13,18 +13,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import com.bumptech.glide.load.HttpException;
-import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.R;
 import com.xmzj.XmzjApp;
 import com.xmzj.di.components.AppComponent;
 import com.xmzj.entity.user.BuProcessor;
 import com.xmzj.help.DialogFactory;
 import com.xmzj.help.ImageLoaderHelper;
+import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.utils.SharePreferenceUtil;
 import com.xmzj.mvp.utils.StatusBarUtil;
+import com.xmzj.mvp.utils.SystemUtils;
 import com.xmzj.mvp.utils.ToastUtil;
 
 import java.net.ConnectException;
@@ -76,11 +76,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.white));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View content = ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
-            if (content != null && !isUseFullScreenMode()) {
+            if (content != null && !SystemUtils.isUseFullScreenMode(this)) {
                 content.setFitsSystemWindows(true);
             }
         }
     }
+
     /**
      * 设置灰底黑字状态栏
      */
@@ -88,7 +89,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         StatusBarUtil.setColorNoTranslucent(this, getResources().getColor(R.color.color999_60));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             View content = ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
-            if (content != null && !isUseFullScreenMode()) {
+            if (content != null && !SystemUtils.isUseFullScreenMode(this)) {
                 content.setFitsSystemWindows(true);
             }
         }
@@ -106,14 +107,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             showToast("登入过期,请重新登入");
 //            clearSwitchToLogin();
         }
-    }
-
-    /**
-     * 判断界面是否全屏
-     */
-    private boolean isUseFullScreenMode() {
-        return (getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                == WindowManager.LayoutParams.FLAG_FULLSCREEN;
     }
 
 
