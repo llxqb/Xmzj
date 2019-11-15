@@ -103,11 +103,12 @@ public class VideoInfoResponse {
         private String videoId;
         private int num;
         private int srcType;
+        private boolean isCollect;
 
         public EpisodeBean() {
         }
 
-        public EpisodeBean(Parcel in) {
+        protected EpisodeBean(Parcel in) {
             id = in.readString();
             createTime = in.readLong();
             title = in.readString();
@@ -118,6 +119,27 @@ public class VideoInfoResponse {
             videoId = in.readString();
             num = in.readInt();
             srcType = in.readInt();
+            isCollect = in.readByte() != 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(id);
+            dest.writeLong(createTime);
+            dest.writeString(title);
+            dest.writeString(info);
+            dest.writeString(cover);
+            dest.writeString(src);
+            dest.writeString(downloadUrl);
+            dest.writeString(videoId);
+            dest.writeInt(num);
+            dest.writeInt(srcType);
+            dest.writeByte((byte) (isCollect ? 1 : 0));
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
         }
 
         public static final Creator<EpisodeBean> CREATOR = new Creator<EpisodeBean>() {
@@ -138,6 +160,14 @@ public class VideoInfoResponse {
 
         public void setId(String id) {
             this.id = id;
+        }
+
+        public boolean isCollect() {
+            return isCollect;
+        }
+
+        public void setCollect(boolean collect) {
+            isCollect = collect;
         }
 
         public long getCreateTime() {
@@ -212,24 +242,6 @@ public class VideoInfoResponse {
             this.srcType = srcType;
         }
 
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(id);
-            dest.writeLong(createTime);
-            dest.writeString(title);
-            dest.writeString(info);
-            dest.writeString(cover);
-            dest.writeString(src);
-            dest.writeString(downloadUrl);
-            dest.writeString(videoId);
-            dest.writeInt(num);
-            dest.writeInt(srcType);
-        }
     }
 
     public static class EpisodesBean {

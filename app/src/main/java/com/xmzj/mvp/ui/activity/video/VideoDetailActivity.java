@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerVideoComponent;
 import com.xmzj.di.modules.ActivityModule;
@@ -98,7 +99,7 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
             mCommonTitleTv.setText(mEpisodeBean.getTitle());
             Glide.with(this).load(mEpisodeBean.getCover()).into(mMyJzvdStd.thumbImageView);
             urlPath = mEpisodeBean.getDownloadUrl();
-            LogUtils.e("urlPath:" + urlPath);
+            LogUtils.e("mEpisodeBean:" + new Gson().toJson(mEpisodeBean));
             if (!TextUtils.isEmpty(urlPath)) {
                 if (urlPath.contains(".html")) {
                     mWebViewRl.setVisibility(View.VISIBLE);
@@ -116,13 +117,16 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
             } else {
                 showToast("播放路径不正确 ");
             }
+            if (mEpisodeBean.isCollect()) {
+                setCollectionColor();
+            }
         }
 //        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        VideoCommentAdapter mVideoCommentAdapter = new VideoCommentAdapter(this, commentResponseList);
 //        mRecyclerView.setAdapter(mVideoCommentAdapter);
     }
 
-    private void initPlay(){
+    private void initPlay() {
         String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
         if (!TextUtils.isEmpty(localFilePath)) {
             //本地有资源
@@ -166,7 +170,6 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
             case R.id.common_iv_right:
                 break;
             case R.id.collection_tv:
-                setCollectionColor();
                 onRequestCollection();
                 break;
             case R.id.download_tv:
@@ -230,6 +233,7 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
     @Override
     public void getVideoCollectionSuccess() {
         showToast("收藏成功");
+        setCollectionColor();
     }
 
     /**

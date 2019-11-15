@@ -33,7 +33,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".mvp.ui.activity.search.SearchAudioActivity"></activity>
+        <activity android:name=".mvp.ui.activity.search.SearchAudioActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".mvp.ui.activity.audio.AudioDownLoadHistoryActivity" />
         <activity android:name=".mvp.ui.activity.video.VideoDetailEpisodeActivity" />
         <activity android:name=".mvp.ui.activity.search.SearchActivity" />
@@ -58,7 +59,7 @@
         <activity
             android:name=".mvp.ui.activity.audio.AudioActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".mvp.ui.activity.main.MainActivity"></activity>
+        <activity android:name=".mvp.ui.activity.main.MainActivity"/>
         <activity android:name=".mvp.ui.activity.login.LoginActivity" />
 
     </application>

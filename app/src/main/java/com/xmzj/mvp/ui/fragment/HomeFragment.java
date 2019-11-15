@@ -49,8 +49,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     @BindView(R.id.home_bottom_recycler_view)
     RecyclerView mHomeBottomRecyclerView;
     Unbinder unbinder;
-    private String[] FunctionTextString = {"心密书库", "心密视频", "心密音频"};//, "心密互动", "心密论坛", "打座计时", "商城", "活动报名"
-    private int[] FunctionImageeString = {R.mipmap.books, R.mipmap.videos, R.mipmap.music};//, R.mipmap.hudong, R.mipmap.luntan, R.mipmap.clock, R.mipmap.mall, R.mipmap.baoming
+    private String[] FunctionTextString = {"心密视频", "心密音频"};//"心密书库",, "心密互动", "心密论坛", "打座计时", "商城", "活动报名"
+    private int[] FunctionImageeString = {R.mipmap.videos, R.mipmap.music};//R.mipmap.books, , R.mipmap.hudong, R.mipmap.luntan, R.mipmap.clock, R.mipmap.mall, R.mipmap.baoming
     private String[] BottomFunctionText = {"视频", "音乐", "书籍"};
     private int[] BottomFunctionImg = {R.mipmap.books, R.mipmap.videos, R.mipmap.music};
     private List<String> bannerImgList = new ArrayList<>();
@@ -77,7 +77,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
 
     @Override
     public void initView() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 4);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
         mHomeTopRecyclerView.setLayoutManager(gridLayoutManager);
         HomeTopAdapter mHomeTopAdapter = new HomeTopAdapter(getActivity(), functionResponseList, mImageLoaderHelper);
         mHomeTopRecyclerView.setAdapter(mHomeTopAdapter);
@@ -86,10 +86,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
             assert homeFunctionResponse != null;
             if (view.getId() == R.id.home_top_item_ll) {
                 if (position == 0) {
-                    showToast("心密书籍");
-                } else if (position == 1) {
                     startActivitys(VideoActivity.class);
-                } else if (position == 2) {
+                } else if (position == 1) {
                     startActivitys(AudioActivity.class);
                 }
             }

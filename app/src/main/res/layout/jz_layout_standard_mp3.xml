@@ -30,6 +30,9 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginBottom="-2dp"
         android:scaleType="fitCenter" />
 
     <LinearLayout
@@ -149,9 +152,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_10"
                 android:padding="@dimen/dp_10"
                 android:scaleType="centerInside"
-                android:src="@mipmap/download_audio" />
+                android:src="@mipmap/audio_download" />
 
             <ImageView
                 android:id="@+id/collection_iv"
@@ -164,7 +168,8 @@
                 android:paddingEnd="@dimen/dp_5"
                 android:paddingBottom="@dimen/dp_10"
                 android:scaleType="centerInside"
-                android:src="@mipmap/connection_audio" />
+                android:src="@mipmap/connection_audio"
+                android:visibility="gone" />
         </RelativeLayout>
     </LinearLayout>
 

@@ -161,6 +161,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.upload_all_tv:
+
                 break;
             case R.id.hot_tv://热门
                 page = 1;

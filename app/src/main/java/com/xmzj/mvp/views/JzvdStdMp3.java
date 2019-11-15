@@ -89,7 +89,7 @@ public class JzvdStdMp3 extends JzvdStd {
     public void onClick(View v) {
         Log.e(TAG, "state:" + state);
         if (v.getId() == cn.jzvd.R.id.thumb) {
-            if ((state == STATE_PLAYING || state == STATE_PAUSE)) {
+            if ((state == STATE_PLAYING || state == STATE_PAUSE || state == STATE_AUTO_COMPLETE)) {
                 onClickUiToggle();
             } else if (state == STATE_PREPARING) {
                 Toast.makeText(mContext, "加载中...请稍后", Toast.LENGTH_SHORT).show();
@@ -167,7 +167,9 @@ public class JzvdStdMp3 extends JzvdStd {
     public void changeUiToComplete() {
         Log.e(TAG, "changeUiToComplete()");
         super.changeUiToComplete();
-        mAnimator.resume();//动画重新开始
+//        mAnimator.resume();//动画重新开始
+        mAnimator.pause();
+        onClickUiToggle();
     }
 
     @Override
