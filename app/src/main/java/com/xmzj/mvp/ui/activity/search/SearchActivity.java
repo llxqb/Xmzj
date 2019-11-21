@@ -22,7 +22,9 @@ import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.constants.Constant;
 import com.xmzj.entity.request.VideoListRequest;
 import com.xmzj.entity.response.AudioListResponse;
+import com.xmzj.entity.response.VideoInfoResponse;
 import com.xmzj.entity.response.VideoListResponse;
+import com.xmzj.mvp.ui.activity.video.VideoDetailActivity;
 import com.xmzj.mvp.ui.activity.video.VideoDetailEpisodeActivity;
 import com.xmzj.mvp.ui.adapter.VideoAdapter;
 import com.xmzj.mvp.utils.LogUtils;
@@ -51,6 +53,7 @@ public class SearchActivity extends BaseActivity implements SearchControl.Search
     private List<VideoListResponse.DataBean> videoResponseList = new ArrayList<>();
     private VideoAdapter mVideoAdapter;
     private View mEmptyView;
+    VideoListResponse.DataBean dataBean;
     @Inject
     SearchControl.PresenterSearch mPresenter;
 
@@ -72,11 +75,11 @@ public class SearchActivity extends BaseActivity implements SearchControl.Search
         mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                VideoListResponse.DataBean dataBean = (VideoListResponse.DataBean) adapter.getItem(position);
+                dataBean = (VideoListResponse.DataBean) adapter.getItem(position);
                 switch (view.getId()) {
                     case R.id.item_video_layout:
                         assert dataBean != null;
-                        VideoDetailEpisodeActivity.start(SearchActivity.this, dataBean.getId(), dataBean.getTitle());
+                        mPresenter.onRequestVideoInfo(dataBean.getId());
                         break;
                     case R.id.upload_iv:
                         showToast("下载...");
@@ -122,7 +125,7 @@ public class SearchActivity extends BaseActivity implements SearchControl.Search
         videoListRequest.orderCol = "";
         videoListRequest.keyword = keyword;
         videoListRequest.pageNo = page;
-        videoListRequest.pageSize =  Constant.PAGESIZE;
+        videoListRequest.pageSize = Constant.PAGESIZE;
         mPresenter.onRequestVideoList(videoListRequest);
     }
 
@@ -143,6 +146,17 @@ public class SearchActivity extends BaseActivity implements SearchControl.Search
         } else {
             mVideoAdapter.addData(videoResponseList);
             mVideoAdapter.loadMoreComplete();
+        }
+    }
+
+    @Override
+    public void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse) {
+//        LogUtils.e("videoInfoResponse:" + new Gson().toJson(videoInfoResponse));
+        VideoInfoResponse.EpisodeBean episodeBean = videoInfoResponse.getEpisode();
+        if (!videoInfoResponse.getEpisodes().isEmpty()) {
+            VideoDetailEpisodeActivity.start(this, (ArrayList<VideoInfoResponse.EpisodesBean>) videoInfoResponse.getEpisodes(), dataBean.getTitle());
+        } else {
+            VideoDetailActivity.start(this, episodeBean.getVideoId(),null);
         }
     }
 

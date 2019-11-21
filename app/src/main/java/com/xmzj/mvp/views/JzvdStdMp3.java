@@ -10,7 +10,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.xmzj.R;
 
 import cn.jzvd.JzvdStd;
@@ -74,9 +73,9 @@ public class JzvdStdMp3 extends JzvdStd {
         }
         findViewById(R.id.pre_iv).setOnClickListener(this);
         findViewById(R.id.next_iv).setOnClickListener(this);
-        Glide.with(this)
-                .load(url)
-                .into(circleImageView);
+//        Glide.with(this)
+//                .load(url)
+//                .into(circleImageView);
 
         mAnimator = ObjectAnimator.ofFloat(circleImageView, "rotation", 0.0f, 360.0f);
         mAnimator.setDuration(8000);//设定转一圈的时间

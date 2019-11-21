@@ -2,8 +2,8 @@ package com.xmzj.mvp.ui.activity.main;
 
 import android.content.Context;
 
-import com.google.gson.Gson;
 import com.xmzj.R;
+import com.xmzj.entity.response.HomeRecommendAudioResponse;
 import com.xmzj.help.RetryWithDelay;
 import com.xmzj.mvp.model.MainModel;
 import com.xmzj.mvp.model.ResponseData;
@@ -29,8 +29,29 @@ public class HomeFragmentPresenterImpl implements HomeFragmentControl.homeFragme
         mHomeFragmentModel = model;
         mHomeView = homeView;
     }
+    
+    
+    @Override
+    public void onRequestRecommendAudio() {
+        mHomeView.showLoading(mContext.getResources().getString(R.string.loading));
+        Disposable disposable = mHomeFragmentModel.onRequestRecommendAudio().compose(mHomeView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
+                .subscribe(this::requestRecommendAudioSuccess, throwable -> mHomeView.showErrMessage(throwable),
+                        () -> mHomeView.dismissLoading());
+        mHomeView.addSubscription(disposable);
+    }
 
 
+    private void requestRecommendAudioSuccess(ResponseData responseData){
+        if (responseData.resultCode == 0) {
+            responseData.parseData(HomeRecommendAudioResponse.class);
+            if (responseData.parsedData != null) {
+                HomeRecommendAudioResponse response = (HomeRecommendAudioResponse) responseData.parsedData;
+                mHomeView.getRecommendAudio(response);
+            }
+        } else {
+            mHomeView.showToast(responseData.errorMsg);
+        }
+    }
     @Override
     public void onCreate() {
 
@@ -42,4 +63,5 @@ public class HomeFragmentPresenterImpl implements HomeFragmentControl.homeFragme
     }
 
 
+    
 }

@@ -47,7 +47,7 @@ public class LoginPresenterImpl implements LoginControl.PresenterLogin {
 
     private void requestLoginSuccess(ResponseData responseData) {
         if (responseData.resultCode == 0) {
-            mLoginView.showToast("登录成功");
+//            mLoginView.showToast("登录成功");
             mLoginView.getLoginSuccess(responseData.result);
 //            responseData.parseData(LoginResponse.class);
 //            if (responseData.parsedData != null) {

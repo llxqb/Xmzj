@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerVideoComponent;
 import com.xmzj.di.modules.ActivityModule;
@@ -19,7 +18,6 @@ import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.VideoClassifyResponse;
 import com.xmzj.entity.response.VideoInfoResponse;
 import com.xmzj.mvp.ui.adapter.VideoDetailAdapter;
-import com.xmzj.mvp.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +33,8 @@ import butterknife.OnClick;
 
 public class VideoDetailEpisodeActivity extends BaseActivity implements VideoControl.VideoView {
 
+    @Inject
+    VideoControl.PresenterVideo mPresenter;
     @BindView(R.id.common_back)
     ImageView mCommonBack;
     @BindView(R.id.common_title_tv)
@@ -44,13 +44,12 @@ public class VideoDetailEpisodeActivity extends BaseActivity implements VideoCon
     private List<VideoInfoResponse.EpisodesBean> episodesBeanList = new ArrayList<>();
     private VideoDetailAdapter mVideoAdapter;
     private String mToken;
-    @Inject
-    VideoControl.PresenterVideo mPresenter;
 
-    public static void start(Context context, String videoId, String videoTitle) {
+
+    public static void start(Context context, ArrayList<VideoInfoResponse.EpisodesBean> episodesBeanList, String title) {
         Intent intent = new Intent(context, VideoDetailEpisodeActivity.class);
-        intent.putExtra("videoId", videoId);
-        intent.putExtra("videoTitle", videoTitle);
+        intent.putParcelableArrayListExtra("videoInfoResponse", episodesBeanList);
+        intent.putExtra("title", title);
         context.startActivity(intent);
     }
 
@@ -65,10 +64,10 @@ public class VideoDetailEpisodeActivity extends BaseActivity implements VideoCon
     @Override
     protected void initView() {
         if (getIntent() != null) {
-            String mVideoId = getIntent().getStringExtra("videoId");
-            String mVideoTitle = getIntent().getStringExtra("videoTitle");
-            mCommonTitleTv.setText(mVideoTitle);
-            onRequestVideoInfo(mVideoId);
+            episodesBeanList = getIntent().getParcelableArrayListExtra("videoInfoResponse");
+            String title = getIntent().getStringExtra("title");
+            mCommonTitleTv.setText(title);
+//            LogUtils.e("episodesBeanList:"+mVideoInfoResponse.getEpisodes().size());
         }
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mEpisodeRecyclerView.setLayoutManager(linearLayoutManager);
@@ -81,7 +80,7 @@ public class VideoDetailEpisodeActivity extends BaseActivity implements VideoCon
                 VideoInfoResponse.EpisodesBean episodesBean = (VideoInfoResponse.EpisodesBean) adapter.getItem(position);
                 if (view.getId() == R.id.item_video_detail_layout) {
                     assert episodesBean != null;
-                    VideoDetailActivity.start(VideoDetailEpisodeActivity.this, episodesBean2EpisodeBean(episodesBean));
+                    VideoDetailActivity.start(VideoDetailEpisodeActivity.this, episodesBean.getVideoId(),episodesBean.getId());
                 }
             }
         });
@@ -102,6 +101,7 @@ public class VideoDetailEpisodeActivity extends BaseActivity implements VideoCon
         episodeBean.setSrcType(episodesBean.getSrcType());
         episodeBean.setTitle(episodesBean.getTitle());
         episodeBean.setVideoId(episodesBean.getVideoId());
+        episodeBean.setIsCollect(episodesBean.isIsCollect());
         return episodeBean;
     }
 
@@ -126,15 +126,15 @@ public class VideoDetailEpisodeActivity extends BaseActivity implements VideoCon
 
     @Override
     public void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse) {
-        LogUtils.e("videoInfoResponse:" + new Gson().toJson(videoInfoResponse));
-        VideoInfoResponse.EpisodeBean episodeBean = videoInfoResponse.getEpisode();
-        episodesBeanList = videoInfoResponse.getEpisodes();//
-        if (!episodesBeanList.isEmpty()) {
-            mVideoAdapter.setNewData(episodesBeanList);
-        } else {
-            VideoDetailActivity.start(VideoDetailEpisodeActivity.this, episodeBean);
-            finish();
-        }
+//        LogUtils.e("videoInfoResponse:" + new Gson().toJson(videoInfoResponse));
+//        VideoInfoResponse.EpisodeBean episodeBean = videoInfoResponse.getEpisode();
+//        episodesBeanList = videoInfoResponse.getEpisodes();//
+//        if (!episodesBeanList.isEmpty()) {
+//            mVideoAdapter.setNewData(episodesBeanList);
+//        } else {
+//            VideoDetailActivity.start(VideoDetailEpisodeActivity.this, episodeBean);
+//            finish();
+//        }
 
     }
 

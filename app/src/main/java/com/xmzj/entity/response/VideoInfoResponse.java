@@ -8,13 +8,14 @@ import java.util.List;
 /**
  * 视频详情Response
  */
-public class VideoInfoResponse {
+public class VideoInfoResponse implements Parcelable{
+
     /**
      * isMana : null
-     * param : {"id":"40"}
+     * param : {"id":"23"}
      * needWatchPwd : false
-     * episode : {"id":"249","createTime":1528594764000,"title":"入楞伽心探玄第一集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=o0384ubibhx&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=o0384ubibhx&tiny=0&auto=0","videoId":"40","num":1,"srcType":2}
-     * episodes : [{"id":"249","createTime":1528594764000,"title":"入楞伽心探玄第一集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=o0384ubibhx&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=o0384ubibhx&tiny=0&auto=0","videoId":"40","num":1,"srcType":2},{"id":"250","createTime":1528594764000,"title":"入楞伽心探玄第二集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=v0384ul6vxf&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=v0384ul6vxf&tiny=0&auto=0","videoId":"40","num":2,"srcType":2},{"id":"251","createTime":1528594764000,"title":"入楞伽心探玄第三集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=b0384abrk9t&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=b0384abrk9t&tiny=0&auto=0","videoId":"40","num":3,"srcType":2},{"id":"252","createTime":1528594764000,"title":"入楞伽心探玄第四集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=f0384725f2j&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=f0384725f2j&tiny=0&auto=0","videoId":"40","num":4,"srcType":2},{"id":"253","createTime":1528594764000,"title":"入楞伽心探玄第五集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=f0384725f2j&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=f0384725f2j&tiny=0&auto=0","videoId":"40","num":5,"srcType":2},{"id":"254","createTime":1528594764000,"title":"入楞伽心探玄第六集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=o0384tehm4j&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=o0384tehm4j&tiny=0&auto=0","videoId":"40","num":6,"srcType":2},{"id":"255","createTime":1528594764000,"title":"入楞伽心探玄第七集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=o0384y0yhr6&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=o0384y0yhr6&tiny=0&auto=0","videoId":"40","num":7,"srcType":2},{"id":"256","createTime":1528594764000,"title":"入楞伽心探玄第八集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=x038422vi20&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=x038422vi20&tiny=0&auto=0","videoId":"40","num":8,"srcType":2},{"id":"257","createTime":1528594764000,"title":"入楞伽心探玄第九集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=q0384jq41q5&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=q0384jq41q5&tiny=0&auto=0","videoId":"40","num":9,"srcType":2},{"id":"258","createTime":1528594764000,"title":"入楞伽心探玄第十集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=q0384midevs&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=q0384midevs&tiny=0&auto=0","videoId":"40","num":10,"srcType":2},{"id":"259","createTime":1528594764000,"title":"入楞伽心探玄第十一集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=q0384f5owxx&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=q0384f5owxx&tiny=0&auto=0","videoId":"40","num":11,"srcType":2},{"id":"260","createTime":1528594764000,"title":"入楞伽心探玄第十二集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=q0384i89vtt&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=q0384i89vtt&tiny=0&auto=0","videoId":"40","num":12,"srcType":2},{"id":"261","createTime":1528594764000,"title":"入楞伽心探玄第十三集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=l0384o4aldi&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=l0384o4aldi&tiny=0&auto=0","videoId":"40","num":13,"srcType":2},{"id":"262","createTime":1528594764000,"title":"入楞伽心探玄第十四集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=p0384oz1t3r&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=p0384oz1t3r&tiny=0&auto=0","videoId":"40","num":14,"srcType":2},{"id":"263","createTime":1528594764000,"title":"入楞伽心探玄第十五集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=a0384fg8cx2&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=a0384fg8cx2&tiny=0&auto=0","videoId":"40","num":15,"srcType":2},{"id":"264","createTime":1528594764000,"title":"入楞伽心探玄第十六集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=t03840ute6k&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=t03840ute6k&tiny=0&auto=0","videoId":"40","num":16,"srcType":2},{"id":"265","createTime":1528594764000,"title":"入楞伽心探玄第十七集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=w0384my0gt9&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=w0384my0gt9&tiny=0&auto=0","videoId":"40","num":17,"srcType":2},{"id":"266","createTime":1528594764000,"title":"入楞伽心探玄第十八集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=k0384kc33ok&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=k0384kc33ok&tiny=0&auto=0","videoId":"40","num":18,"srcType":2},{"id":"267","createTime":1528594764000,"title":"入楞伽心探玄第十九集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=e03845zk45s&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=e03845zk45s&tiny=0&auto=0","videoId":"40","num":19,"srcType":2},{"id":"268","createTime":1528594764000,"title":"入楞伽心探玄第二十集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=w0384fgbbqf&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=w0384fgbbqf&tiny=0&auto=0","videoId":"40","num":20,"srcType":2},{"id":"269","createTime":1528594764000,"title":"入楞伽心探玄第二十一集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=g0384efmnwd&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=g0384efmnwd&tiny=0&auto=0","videoId":"40","num":21,"srcType":2},{"id":"270","createTime":1528594764000,"title":"入楞伽心探玄第二十二集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=e0384lpf0ch&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=e0384lpf0ch&tiny=0&auto=0","videoId":"40","num":22,"srcType":2},{"id":"271","createTime":1528594764000,"title":"入楞伽心探玄第二十三集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=e0384lpf0ch&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=e0384lpf0ch&tiny=0&auto=0","videoId":"40","num":23,"srcType":2},{"id":"272","createTime":1528594764000,"title":"入楞伽心探玄第二十四集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=e0385fgnr8s&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=e0385fgnr8s&tiny=0&auto=0","videoId":"40","num":24,"srcType":2},{"id":"273","createTime":1528594764000,"title":"入楞伽心探玄第二十五集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=e0385ima3ib&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=e0385ima3ib&tiny=0&auto=0","videoId":"40","num":25,"srcType":2},{"id":"274","createTime":1528594764000,"title":"入楞伽心探玄第二十六集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=y03853adagp&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=y03853adagp&tiny=0&auto=0","videoId":"40","num":26,"srcType":2},{"id":"275","createTime":1528594764000,"title":"入楞伽心探玄第二十七集","info":"齐老师讲解","cover":"https://www.xinmizj.com/res/video/episodecover/null","src":"https://v.qq.com/iframe/player.html?vid=m03854wmpjg&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=m03854wmpjg&tiny=0&auto=0","videoId":"40","num":27,"srcType":2}]
+     * episode : {"id":"223","createTime":1528594764000,"title":"解脱歌第一集","info":"元音老人讲解","cover":"https://www.xinmizj.com/res/video/cover/yylr-jtgqs.jpg","src":"https://v.qq.com/iframe/player.html?vid=t0670xv8e05&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=t0670xv8e05&tiny=0&auto=0","isCollect":false,"videoId":"23","num":1,"srcType":2}
+     * episodes : [{"id":"223","createTime":1528594764000,"title":"解脱歌第一集","info":"元音老人讲解","cover":"https://www.xinmizj.com/res/video/cover/yylr-jtgqs.jpg","src":"https://v.qq.com/iframe/player.html?vid=t0670xv8e05&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=t0670xv8e05&tiny=0&auto=0","isCollect":false,"videoId":"23","num":1,"srcType":2},{"id":"224","createTime":1528594764000,"title":"解脱歌第二集","info":"元音老人讲解","cover":"https://www.xinmizj.com/res/video/cover/yylr-jtgqs.jpg","src":"https://v.qq.com/iframe/player.html?vid=k0670rr7nks&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=k0670rr7nks&tiny=0&auto=0","videoId":"23","num":2,"srcType":2},{"id":"225","createTime":1528594764000,"title":"解脱歌第三集","info":"元音老人讲解","cover":"https://www.xinmizj.com/res/video/cover/yylr-jtgqs.jpg","src":"https://v.qq.com/iframe/player.html?vid=d0670b3gjjm&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=d0670b3gjjm&tiny=0&auto=0","videoId":"23","num":3,"srcType":2},{"id":"226","createTime":1528594764000,"title":"解脱歌第四集","info":"元音老人讲解","cover":"https://www.xinmizj.com/res/video/cover/yylr-jtgqs.jpg","src":"https://v.qq.com/iframe/player.html?vid=m0670p8feru&tiny=0&auto=0","downloadUrl":"https://v.qq.com/iframe/player.html?vid=m0670p8feru&tiny=0&auto=0","videoId":"23","num":4,"srcType":2}]
      */
 
     private Object isMana;
@@ -22,6 +23,22 @@ public class VideoInfoResponse {
     private boolean needWatchPwd;
     private EpisodeBean episode;
     private List<EpisodesBean> episodes;
+
+    protected VideoInfoResponse(Parcel in) {
+        needWatchPwd = in.readByte() != 0;
+    }
+
+    public static final Creator<VideoInfoResponse> CREATOR = new Creator<VideoInfoResponse>() {
+        @Override
+        public VideoInfoResponse createFromParcel(Parcel in) {
+            return new VideoInfoResponse(in);
+        }
+
+        @Override
+        public VideoInfoResponse[] newArray(int size) {
+            return new VideoInfoResponse[size];
+        }
+    };
 
     public Object getIsMana() {
         return isMana;
@@ -63,9 +80,19 @@ public class VideoInfoResponse {
         this.episodes = episodes;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) (needWatchPwd ? 1 : 0));
+    }
+
     public static class ParamBean {
         /**
-         * id : 40
+         * id : 23
          */
 
         private String id;
@@ -79,16 +106,20 @@ public class VideoInfoResponse {
         }
     }
 
-    public static class EpisodeBean implements Parcelable {
+    public static class EpisodeBean implements Parcelable{
+        public EpisodeBean() {
+        }
+
         /**
-         * id : 249
+         * id : 223
          * createTime : 1528594764000
-         * title : 入楞伽心探玄第一集
-         * info : 齐老师讲解
-         * cover : https://www.xinmizj.com/res/video/episodecover/null
-         * src : https://v.qq.com/iframe/player.html?vid=o0384ubibhx&tiny=0&auto=0
-         * downloadUrl : https://v.qq.com/iframe/player.html?vid=o0384ubibhx&tiny=0&auto=0
-         * videoId : 40
+         * title : 解脱歌第一集
+         * info : 元音老人讲解
+         * cover : https://www.xinmizj.com/res/video/cover/yylr-jtgqs.jpg
+         * src : https://v.qq.com/iframe/player.html?vid=t0670xv8e05&tiny=0&auto=0
+         * downloadUrl : https://v.qq.com/iframe/player.html?vid=t0670xv8e05&tiny=0&auto=0
+         * isCollect : false
+         * videoId : 23
          * num : 1
          * srcType : 2
          */
@@ -100,13 +131,10 @@ public class VideoInfoResponse {
         private String cover;
         private String src;
         private String downloadUrl;
+        private boolean isCollect;
         private String videoId;
         private int num;
         private int srcType;
-        private boolean isCollect;
-
-        public EpisodeBean() {
-        }
 
         protected EpisodeBean(Parcel in) {
             id = in.readString();
@@ -116,30 +144,10 @@ public class VideoInfoResponse {
             cover = in.readString();
             src = in.readString();
             downloadUrl = in.readString();
+            isCollect = in.readByte() != 0;
             videoId = in.readString();
             num = in.readInt();
             srcType = in.readInt();
-            isCollect = in.readByte() != 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(id);
-            dest.writeLong(createTime);
-            dest.writeString(title);
-            dest.writeString(info);
-            dest.writeString(cover);
-            dest.writeString(src);
-            dest.writeString(downloadUrl);
-            dest.writeString(videoId);
-            dest.writeInt(num);
-            dest.writeInt(srcType);
-            dest.writeByte((byte) (isCollect ? 1 : 0));
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
         }
 
         public static final Creator<EpisodeBean> CREATOR = new Creator<EpisodeBean>() {
@@ -162,14 +170,6 @@ public class VideoInfoResponse {
             this.id = id;
         }
 
-        public boolean isCollect() {
-            return isCollect;
-        }
-
-        public void setCollect(boolean collect) {
-            isCollect = collect;
-        }
-
         public long getCreateTime() {
             return createTime;
         }
@@ -218,6 +218,14 @@ public class VideoInfoResponse {
             this.downloadUrl = downloadUrl;
         }
 
+        public boolean isIsCollect() {
+            return isCollect;
+        }
+
+        public void setIsCollect(boolean isCollect) {
+            this.isCollect = isCollect;
+        }
+
         public String getVideoId() {
             return videoId;
         }
@@ -242,18 +250,38 @@ public class VideoInfoResponse {
             this.srcType = srcType;
         }
 
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(id);
+            dest.writeLong(createTime);
+            dest.writeString(title);
+            dest.writeString(info);
+            dest.writeString(cover);
+            dest.writeString(src);
+            dest.writeString(downloadUrl);
+            dest.writeByte((byte) (isCollect ? 1 : 0));
+            dest.writeString(videoId);
+            dest.writeInt(num);
+            dest.writeInt(srcType);
+        }
     }
 
-    public static class EpisodesBean {
+    public static class EpisodesBean implements Parcelable{
         /**
-         * id : 249
+         * id : 223
          * createTime : 1528594764000
-         * title : 入楞伽心探玄第一集
-         * info : 齐老师讲解
-         * cover : https://www.xinmizj.com/res/video/episodecover/null
-         * src : https://v.qq.com/iframe/player.html?vid=o0384ubibhx&tiny=0&auto=0
-         * downloadUrl : https://v.qq.com/iframe/player.html?vid=o0384ubibhx&tiny=0&auto=0
-         * videoId : 40
+         * title : 解脱歌第一集
+         * info : 元音老人讲解
+         * cover : https://www.xinmizj.com/res/video/cover/yylr-jtgqs.jpg
+         * src : https://v.qq.com/iframe/player.html?vid=t0670xv8e05&tiny=0&auto=0
+         * downloadUrl : https://v.qq.com/iframe/player.html?vid=t0670xv8e05&tiny=0&auto=0
+         * isCollect : false
+         * videoId : 23
          * num : 1
          * srcType : 2
          */
@@ -265,9 +293,36 @@ public class VideoInfoResponse {
         private String cover;
         private String src;
         private String downloadUrl;
+        private boolean isCollect;
         private String videoId;
         private int num;
         private int srcType;
+
+        protected EpisodesBean(Parcel in) {
+            id = in.readString();
+            createTime = in.readLong();
+            title = in.readString();
+            info = in.readString();
+            cover = in.readString();
+            src = in.readString();
+            downloadUrl = in.readString();
+            isCollect = in.readByte() != 0;
+            videoId = in.readString();
+            num = in.readInt();
+            srcType = in.readInt();
+        }
+
+        public static final Creator<EpisodesBean> CREATOR = new Creator<EpisodesBean>() {
+            @Override
+            public EpisodesBean createFromParcel(Parcel in) {
+                return new EpisodesBean(in);
+            }
+
+            @Override
+            public EpisodesBean[] newArray(int size) {
+                return new EpisodesBean[size];
+            }
+        };
 
         public String getId() {
             return id;
@@ -325,6 +380,14 @@ public class VideoInfoResponse {
             this.downloadUrl = downloadUrl;
         }
 
+        public boolean isIsCollect() {
+            return isCollect;
+        }
+
+        public void setIsCollect(boolean isCollect) {
+            this.isCollect = isCollect;
+        }
+
         public String getVideoId() {
             return videoId;
         }
@@ -347,6 +410,26 @@ public class VideoInfoResponse {
 
         public void setSrcType(int srcType) {
             this.srcType = srcType;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(id);
+            dest.writeLong(createTime);
+            dest.writeString(title);
+            dest.writeString(info);
+            dest.writeString(cover);
+            dest.writeString(src);
+            dest.writeString(downloadUrl);
+            dest.writeByte((byte) (isCollect ? 1 : 0));
+            dest.writeString(videoId);
+            dest.writeInt(num);
+            dest.writeInt(srcType);
         }
     }
 }

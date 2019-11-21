@@ -45,6 +45,9 @@ public class AudioListResponse {
     }
 
     public static class DataBean implements Parcelable {
+        public DataBean() {
+        }
+
         /**
          * id : Z3xZ1oC5oT7sG6n
          * createTime : 1564381320000

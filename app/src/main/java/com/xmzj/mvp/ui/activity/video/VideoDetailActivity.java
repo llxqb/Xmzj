@@ -71,16 +71,18 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
      * 视频url路径
      */
     String urlPath;
-    private VideoInfoResponse.EpisodeBean mEpisodeBean;
+    private String mVideoId;
 
     private List<CommentResponse> commentResponseList = new ArrayList<>();
+    private VideoInfoResponse.EpisodeBean mEpisodeBean;
 
     @Inject
     VideoControl.PresenterVideo mPresenter;
 
-    public static void start(Context context, VideoInfoResponse.EpisodeBean episodeBean) {
+    public static void start(Context context, String videoId, String episodeId) {
         Intent intent = new Intent(context, VideoDetailActivity.class);
-        intent.putExtra("episodeBean", episodeBean);
+        intent.putExtra("videoId", videoId);
+        intent.putExtra("episodeId", episodeId);
         context.startActivity(intent);
     }
 
@@ -94,31 +96,12 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
     @Override
     protected void initView() {
         if (getIntent() != null) {
-            mEpisodeBean = getIntent().getParcelableExtra("episodeBean");
-//            onRequestVideoInfo(mVideoId);
-            mCommonTitleTv.setText(mEpisodeBean.getTitle());
-            Glide.with(this).load(mEpisodeBean.getCover()).into(mMyJzvdStd.thumbImageView);
-            urlPath = mEpisodeBean.getDownloadUrl();
-            LogUtils.e("mEpisodeBean:" + new Gson().toJson(mEpisodeBean));
-            if (!TextUtils.isEmpty(urlPath)) {
-                if (urlPath.contains(".html")) {
-                    mWebViewRl.setVisibility(View.VISIBLE);
-                    mMyJzvdStd.setVisibility(View.GONE);
-                    initWebView(urlPath);
-                } else if (urlPath.contains(".mp4")) {
-                    mMyJzvdStd.setVisibility(View.VISIBLE);
-                    mWebViewRl.setVisibility(View.GONE);
-                    String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
-                    if (!TextUtils.isEmpty(localFilePath)) {
-                        setDownLoadColor();
-                        initPlay();
-                    }
-                }
+            mVideoId = getIntent().getStringExtra("videoId");
+            String episodeId = getIntent().getStringExtra("episodeId");
+            if (episodeId == null) {
+                mPresenter.onRequestVideoInfo(mVideoId);
             } else {
-                showToast("播放路径不正确 ");
-            }
-            if (mEpisodeBean.isCollect()) {
-                setCollectionColor();
+                mPresenter.onRequestVideoInfoByEpisodeId(mVideoId, episodeId);
             }
         }
 //        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -143,6 +126,7 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
 
     @Override
     protected void initData() {
+
     }
 
     @SuppressLint("SetJavaScriptEnabled")
@@ -227,7 +211,31 @@ public class VideoDetailActivity extends BaseActivity implements VideoControl.Vi
      */
     @Override
     public void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse) {
-
+        mEpisodeBean = videoInfoResponse.getEpisode();
+        mCommonTitleTv.setText(mEpisodeBean.getTitle());
+        Glide.with(this).load(mEpisodeBean.getCover()).into(mMyJzvdStd.thumbImageView);
+        urlPath = mEpisodeBean.getDownloadUrl();
+        LogUtils.e("mEpisodeBean:" + new Gson().toJson(mEpisodeBean));
+        if (!TextUtils.isEmpty(urlPath)) {
+            if (urlPath.contains(".html")) {
+                mWebViewRl.setVisibility(View.VISIBLE);
+                mMyJzvdStd.setVisibility(View.GONE);
+                initWebView(urlPath);
+            } else if (urlPath.contains(".mp4")) {
+                mMyJzvdStd.setVisibility(View.VISIBLE);
+                mWebViewRl.setVisibility(View.GONE);
+                String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
+                if (!TextUtils.isEmpty(localFilePath)) {
+                    setDownLoadColor();
+                    initPlay();
+                }
+            }
+        } else {
+            showToast("播放路径不正确 ");
+        }
+        if (mEpisodeBean.isIsCollect()) {
+            setCollectionColor();
+        }
     }
 
     @Override

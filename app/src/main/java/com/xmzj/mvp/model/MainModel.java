@@ -25,10 +25,12 @@ public class MainModel {
     }
 
 
-//    //请求我的-首页接口，更新个人信息
-//    public Observable<ResponseData> onRequestHomeUserInfo(TokenRequest request) {
-//        return mMainApi.onRequestHomeUserInfo(mGson.toJson(request)).map(mTransform::transformCommon);
-//    }
+    /**
+     * 请求homeFragment 推荐音频列表
+     */
+    public Observable<ResponseData> onRequestRecommendAudio() {
+        return mMainApi.onRequestRecommendAudio().map(mTransform::transformCommon);
+    }
 
 
 }

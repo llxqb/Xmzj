@@ -14,7 +14,7 @@ import java.util.List;
 
 
 /**
- * 音频列表adapter
+ * 视频列表adapter
  */
 public class VideoAdapter extends BaseQuickAdapter<VideoListResponse.DataBean, BaseViewHolder> {
 

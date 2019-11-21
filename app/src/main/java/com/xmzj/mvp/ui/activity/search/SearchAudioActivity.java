@@ -23,6 +23,7 @@ import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.constants.Constant;
 import com.xmzj.entity.request.VideoListRequest;
 import com.xmzj.entity.response.AudioListResponse;
+import com.xmzj.entity.response.VideoInfoResponse;
 import com.xmzj.entity.response.VideoListResponse;
 import com.xmzj.listener.DownloadListener;
 import com.xmzj.mvp.ui.activity.audio.AudioPlayDetailActivity;
@@ -182,6 +183,11 @@ public class SearchAudioActivity extends BaseActivity implements SearchControl.S
             mAudioAdapter.addData(audioContentResponseList);
             mAudioAdapter.loadMoreComplete();
         }
+    }
+
+    @Override
+    public void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse) {
+
     }
 
 

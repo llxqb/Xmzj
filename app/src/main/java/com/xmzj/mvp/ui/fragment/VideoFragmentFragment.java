@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.listener.OnItemChildClickListener;
-import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.XmzjApp;
 import com.xmzj.di.components.DaggerVideoFragmentComponent;
@@ -22,11 +21,12 @@ import com.xmzj.di.modules.VideoModule;
 import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.constants.Constant;
 import com.xmzj.entity.request.VideoListRequest;
+import com.xmzj.entity.response.VideoInfoResponse;
 import com.xmzj.entity.response.VideoListResponse;
+import com.xmzj.mvp.ui.activity.video.VideoDetailActivity;
 import com.xmzj.mvp.ui.activity.video.VideoDetailEpisodeActivity;
 import com.xmzj.mvp.ui.activity.video.VideoFragmentControl;
 import com.xmzj.mvp.ui.adapter.VideoAdapter;
-import com.xmzj.mvp.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +54,7 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
     private String mType;//子分类id
     private int page;
     private View mEmptyView;
+    VideoListResponse.DataBean dataBean;
     @Inject
     VideoFragmentControl.VideoFragmentPresenter mPresenter;
 
@@ -101,10 +102,11 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
         mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                VideoListResponse.DataBean dataBean = (VideoListResponse.DataBean) adapter.getItem(position);
+                dataBean = (VideoListResponse.DataBean) adapter.getItem(position);
                 if (view.getId() == R.id.item_video_layout) {
                     assert dataBean != null;
-                    VideoDetailEpisodeActivity.start(getActivity(), dataBean.getId(), dataBean.getTitle());
+//                    VideoDetailEpisodeActivity.start(getActivity(), dataBean.getId(), dataBean.getTitle());
+                    mPresenter.onRequestVideoInfo(dataBean.getId());
                 }
             }
         });
@@ -130,7 +132,7 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
      */
     @Override
     public void getVideoListSuccess(VideoListResponse response) {
-        LogUtils.d("response:" + new Gson().toJson(response));
+//        LogUtils.d("response:" + new Gson().toJson(response));
         videoResponseList = response.getData();
         if (mSwipeLy.isRefreshing()) {
             mSwipeLy.setRefreshing(false);
@@ -149,6 +151,18 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
         }
     }
 
+
+    @Override
+    public void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse) {
+//        LogUtils.e("videoInfoResponse:" + new Gson().toJson(videoInfoResponse));
+        VideoInfoResponse.EpisodeBean episodeBean = videoInfoResponse.getEpisode();
+        if (!videoInfoResponse.getEpisodes().isEmpty()) {
+            VideoDetailEpisodeActivity.start(getActivity(), (ArrayList<VideoInfoResponse.EpisodesBean>) videoInfoResponse.getEpisodes(), dataBean.getTitle());
+        } else {
+            VideoDetailActivity.start(getActivity(), episodeBean.getVideoId(),null);
+        }
+    }
+
     @Override
     public void onRefresh() {
         page = 1;
@@ -160,7 +174,7 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
      */
     @Override
     public void onLoadMoreRequested() {
-        if (page == 1 && videoResponseList.size() <  Constant.PAGESIZE) {
+        if (page == 1 && videoResponseList.size() < Constant.PAGESIZE) {
             mVideoAdapter.loadMoreEnd(true);
         } else {
             if (videoResponseList.size() < Constant.PAGESIZE) {

@@ -20,6 +20,7 @@
         android:layout_height="@dimen/dp_250"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
+        android:src="@mipmap/audio_pic"
         app:civ_border_color="@color/white"
         app:civ_border_width="@dimen/dp_1" />
 

@@ -58,6 +58,11 @@ public interface AudioAndVideoApi {
      */
     @GET("video/{id}")
     Observable<String> onRequestVideoInfo(@Path("id") String videoId);
+    /**
+     * 请求视频详情
+     */
+    @GET("video/{id}/{episodeId}")
+    Observable<String> onRequestVideoInfoByEpisodeId(@Path("id") String videoId,@Path("episodeId") String episodeId);
 
     /**
      * 请求视频收藏

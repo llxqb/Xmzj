@@ -31,6 +31,10 @@ public class VideoControl {
          * 视频详情
          */
         void onRequestVideoInfo(String videoId);
+        /**
+         * 视频详情
+         */
+        void onRequestVideoInfoByEpisodeId(String videoId,String episodeId);
 
         /**
          * 视频收藏

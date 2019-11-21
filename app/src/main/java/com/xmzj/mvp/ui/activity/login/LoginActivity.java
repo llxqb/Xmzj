@@ -206,7 +206,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
             if (ValueUtil.isValidityEmail(mLoginPhoneEt.getText().toString())) {
                 showToast("获取验证码成功，请去邮箱查看");
             } else {
-                mLoginVerifyEt.setText(code);
+//                mLoginVerifyEt.setText(code);
             }
         } else {
             showToast("操作过于频繁，请稍后再试");

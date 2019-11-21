@@ -19,18 +19,31 @@
             android:id="@+id/home_top_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10" />
+            android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_10" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_6"
+            android:layout_marginTop="@dimen/dp_5"
             android:background="@color/app_color_bg" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_12"
+            android:drawableStart="@drawable/bg_rectangle_gray"
+            android:drawablePadding="@dimen/dp_6"
+            android:text="最新" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/home_bottom_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone" />
+            android:layout_marginTop="@dimen/dp_10" />
     </LinearLayout>
 
 </ScrollView>

@@ -3,6 +3,7 @@ package com.xmzj.mvp.ui.activity.search;
 
 import com.xmzj.entity.request.VideoListRequest;
 import com.xmzj.entity.response.AudioListResponse;
+import com.xmzj.entity.response.VideoInfoResponse;
 import com.xmzj.entity.response.VideoListResponse;
 import com.xmzj.mvp.presenter.LoadDataView;
 import com.xmzj.mvp.presenter.Presenter;
@@ -15,6 +16,8 @@ public class SearchControl {
     public interface SearchView extends LoadDataView {
         void getVideoListSuccess(VideoListResponse response);
         void getAudioListSuccess(AudioListResponse response);
+
+        void getVideoInfoSuccess(VideoInfoResponse videoInfoResponse);
     }
 
     public interface PresenterSearch extends Presenter<SearchView> {
@@ -26,6 +29,10 @@ public class SearchControl {
          * 请求音频列表
          */
         void onRequestAudioList(VideoListRequest videoRequest);
+        /**
+         * 视频详情
+         */
+        void onRequestVideoInfo(String videoId);
     }
 
 }
