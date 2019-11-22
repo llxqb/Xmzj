@@ -18,7 +18,6 @@ import com.xmzj.mvp.ui.activity.login.LoginActivity;
 import com.xmzj.mvp.ui.adapter.MyFragmentAdapter;
 import com.xmzj.mvp.ui.fragment.HomeFragment;
 import com.xmzj.mvp.ui.fragment.MineFragment;
-import com.xmzj.mvp.ui.fragment.MoreFragment;
 import com.xmzj.mvp.views.MyNoScrollViewPager;
 
 import java.util.ArrayList;
@@ -55,10 +54,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
         List<Fragment> fragments = new ArrayList<>();
         HomeFragment homeFragment = HomeFragment.newInstance();
         MineFragment mimeFragment = MineFragment.newInstance();
-        MoreFragment moreFragment = MoreFragment.newInstance();
+//        MoreFragment moreFragment = MoreFragment.newInstance();
         fragments.add(homeFragment);
         fragments.add(mimeFragment);
-        fragments.add(moreFragment);
+//        fragments.add(moreFragment);
         MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(), fragments);
         mMainViewpager.setOffscreenPageLimit(fragments.size());
         mMainViewpager.setAdapter(adapter);
@@ -93,10 +92,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 menuItem.setIcon(R.mipmap.main_mine_click);
                 mMainViewpager.setCurrentItem(SWITCH_MESSAGE_PAGE, false);
                 break;
-            case R.id.action_mine:
-                menuItem.setIcon(R.mipmap.main_more_click);
-                mMainViewpager.setCurrentItem(SWITCH_MINE_PAGE, false);
-                break;
+//            case R.id.action_mine:
+//                menuItem.setIcon(R.mipmap.main_more_click);
+//                mMainViewpager.setCurrentItem(SWITCH_MINE_PAGE, false);
+//                break;
         }
         return true;
     }
@@ -104,10 +103,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
     private void resetToDefaultIcon() {
         MenuItem home = mMainBottomNavigation.getMenu().findItem(R.id.action_home);
         MenuItem mine = mMainBottomNavigation.getMenu().findItem(R.id.action_message);
-        MenuItem more = mMainBottomNavigation.getMenu().findItem(R.id.action_mine);
+//        MenuItem more = mMainBottomNavigation.getMenu().findItem(R.id.action_mine);
         home.setIcon(R.mipmap.main_home);
         mine.setIcon(R.mipmap.main_mine);
-        more.setIcon(R.mipmap.main_more);
+//        more.setIcon(R.mipmap.main_more);
     }
 
 

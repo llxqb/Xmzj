@@ -66,7 +66,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     private int[] FunctionImageeString = {R.mipmap.videos, R.mipmap.music};//R.mipmap.books, , R.mipmap.hudong, R.mipmap.luntan, R.mipmap.clock, R.mipmap.mall, R.mipmap.baoming
     private String[] BottomFunctionText = {"视频", "音乐", "书籍"};
     private int[] BottomFunctionImg = {R.mipmap.books, R.mipmap.videos, R.mipmap.music};
-    private List<String> bannerImgList = new ArrayList<>();
+    private List<Integer> bannerImgList = new ArrayList<>();
     private List<HomeFunctionResponse> functionResponseList = new ArrayList<>();
     private HomeRecommendAudioAdapter mHomeRecommendAudioAdapter;
     private List<HomeRecommendAudioResponse.AudiosBean> audiosBeanList = new ArrayList<>();
@@ -101,9 +101,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
 
     @Override
     public void initView() {
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3);
-        mHomeTopRecyclerView.setLayoutManager(gridLayoutManager);
         HomeTopAdapter mHomeTopAdapter = new HomeTopAdapter(getActivity(), functionResponseList, mImageLoaderHelper);
+        mHomeTopRecyclerView.setLayoutManager( new GridLayoutManager(getActivity(), 2));
         mHomeTopRecyclerView.setAdapter(mHomeTopAdapter);
         mHomeTopAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             HomeFunctionResponse homeFunctionResponse = (HomeFunctionResponse) adapter.getItem(position);
@@ -181,8 +180,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
         //设置图片加载器
         mBanner.setImageLoader(new GlideImageLoader());
         //设置图片集合
-        String bannerImg1 = "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1564997869677&di=08d1d748d6cdbdb2e6077cc643cd61fe&imgtype=0&src=http%3A%2F%2Fimg.redocn.com%2Fsheying%2F20141230%2Fshikurulaifozu_3798005.jpg";
-        String bannerImg2 = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1540334387,2375027868&fm=26&gp=0.jpg";
+        int bannerImg1 = R.mipmap.banner1;
+        int bannerImg2 = R.mipmap.banner2;
         bannerImgList.add(bannerImg1);
         bannerImgList.add(bannerImg2);
         mBanner.setImages(bannerImgList);

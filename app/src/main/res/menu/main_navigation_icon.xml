@@ -13,10 +13,10 @@
         android:icon="@mipmap/main_mine"
         android:title="@string/main_bottom_mine"
         app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/action_mine"
-        android:enabled="true"
-        android:icon="@mipmap/main_more"
-        android:title="@string/main_bottom_more"
-        app:showAsAction="ifRoom" />
+    <!--<item-->
+        <!--android:id="@+id/action_mine"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@mipmap/main_more"-->
+        <!--android:title="@string/main_bottom_more"-->
+        <!--app:showAsAction="ifRoom" />-->
 </menu>
