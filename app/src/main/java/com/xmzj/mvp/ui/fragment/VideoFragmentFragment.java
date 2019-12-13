@@ -127,27 +127,61 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
         mPresenter.onRequestVideoList(videoListRequest);
     }
 
+    @Override
+    public void onRefresh() {
+        page = 1;
+        onRequestVideoList();
+    }
+
+    boolean isReqState = false;//加载更多 正在请求状态
+    /**
+     * 加载更多
+     */
+    @Override
+    public void onLoadMoreRequested() {
+        if (!isReqState) {
+            if (!videoResponseList.isEmpty()) {
+                if (page == 1 && videoResponseList.size() < Constant.PAGESIZE) {
+                    mVideoAdapter.loadMoreEnd(true);
+                } else {
+                    if (videoResponseList.size() < Constant.PAGESIZE) {
+                        mVideoAdapter.loadMoreEnd();
+                    } else {
+                        //等于10条
+                        page++;
+                        mVideoAdapter.loadMoreComplete();
+                        onRequestVideoList();
+                        isReqState = true;
+                    }
+                }
+            } else {
+                mVideoAdapter.loadMoreEnd();
+            }
+        }
+    }
+    
     /**
      * 获取视频列表
      */
     @Override
     public void getVideoListSuccess(VideoListResponse response) {
-//        LogUtils.d("response:" + new Gson().toJson(response));
-        videoResponseList = response.getData();
         if (mSwipeLy.isRefreshing()) {
             mSwipeLy.setRefreshing(false);
         }
-        if (page == 1) {
-            if (videoResponseList.size() > 0) {
-                mVideoAdapter.setNewData(videoResponseList);
-                mVideoAdapter.loadMoreComplete();
+        isReqState = false;
+        videoResponseList = response.getData();
+        //加载更多这样设置
+        if (!response.getData().isEmpty()) {
+            if (page == 1) {
+                mVideoAdapter.setNewData(response.getData());
             } else {
-//                加载Empty布局
-                mVideoAdapter.setEmptyView(mEmptyView);
+                mVideoAdapter.addData(response.getData());
             }
         } else {
-            mVideoAdapter.addData(videoResponseList);
-            mVideoAdapter.loadMoreComplete();
+            if (page == 1) {
+                mVideoAdapter.setNewData(null);
+                mVideoAdapter.setEmptyView(mEmptyView);
+            }
         }
     }
 
@@ -163,28 +197,7 @@ public class VideoFragmentFragment extends BaseFragment implements VideoFragment
         }
     }
 
-    @Override
-    public void onRefresh() {
-        page = 1;
-        onRequestVideoList();
-    }
-
-    /**
-     * 加载更多
-     */
-    @Override
-    public void onLoadMoreRequested() {
-        if (page == 1 && videoResponseList.size() < Constant.PAGESIZE) {
-            mVideoAdapter.loadMoreEnd(true);
-        } else {
-            if (videoResponseList.size() < Constant.PAGESIZE) {
-                mVideoAdapter.loadMoreEnd();
-            } else {
-                page++;
-                onRequestVideoList();
-            }
-        }
-    }
+  
 
     @Override
     public void onDestroyView() {

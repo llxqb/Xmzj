@@ -52,6 +52,8 @@ public class JzvdStdMp3 extends JzvdStd {
         void startPreIvClick();
 
         void startNextIvClick();
+
+        void autoPlayNext();
     }
 
     @Override
@@ -78,10 +80,21 @@ public class JzvdStdMp3 extends JzvdStd {
 //                .into(circleImageView);
 
         mAnimator = ObjectAnimator.ofFloat(circleImageView, "rotation", 0.0f, 360.0f);
-        mAnimator.setDuration(8000);//设定转一圈的时间
+        mAnimator.setDuration(10000);//设定转一圈的时间
         mAnimator.setRepeatCount(Animation.INFINITE);//设定无限循环
         mAnimator.setRepeatMode(ObjectAnimator.RESTART);// 循环模式
         mAnimator.setInterpolator(new LinearInterpolator());// 匀速
+    }
+
+    /**
+     * 自动播放下一首
+     */
+    @Override
+    public void onAutoCompletion() {
+        if (mJzStdMp3Listener != null) {
+            mJzStdMp3Listener.autoPlayNext();
+        }
+        super.onAutoCompletion();
     }
 
     @Override
@@ -118,6 +131,7 @@ public class JzvdStdMp3 extends JzvdStd {
             super.onClick(v);
         }
     }
+
 
     //changeUiTo 真能能修改ui的方法
     @Override

@@ -137,8 +137,6 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
         if (!TextUtils.isEmpty(code)) {
             if (ValueUtil.isValidityEmail(mForgetPwdPhoneEt.getText().toString())) {
                 showToast("获取验证码成功，请去邮箱查看");
-            } else {
-                mForgetPwdVerifyEt.setText(code);
             }
         } else {
             showToast("操作过于频繁，请稍后再试");

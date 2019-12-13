@@ -56,6 +56,8 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
     TextView mHotTv;
     @BindView(R.id.newest_tv)
     TextView mNewestTv;
+    @BindView(R.id.all_tv)
+    TextView mAllTv;
     @BindView(R.id.swipe_ly)
     SwipeRefreshLayout mSwipeLy;
     @BindView(R.id.recycler_view)
@@ -115,7 +117,7 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAudioAdapter = new AudioAdapter(getActivity(), audioContentResponseList);
         mRecyclerView.setAdapter(mAudioAdapter);
-
+        mAudioAdapter.setOnLoadMoreListener(this, mRecyclerView);
         mRecyclerView.addOnItemTouchListener(new OnItemChildClickListener() {
             @Override
             public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
@@ -157,20 +159,33 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
     }
 
 
-    @OnClick({R.id.upload_all_tv, R.id.hot_tv, R.id.newest_tv})
+    @OnClick({R.id.upload_all_tv, R.id.hot_tv, R.id.newest_tv, R.id.all_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.upload_all_tv:
-
                 break;
             case R.id.hot_tv://热门
                 page = 1;
-                orderCol = "2";
+                orderCol = "1";
+                mHotTv.setTextColor(getResources().getColor(R.color.color_blue_btn));
+                mNewestTv.setTextColor(getResources().getColor(R.color.color333));
+                mAllTv.setTextColor(getResources().getColor(R.color.color333));
                 onRequestAudioList();
                 break;
-            case R.id.newest_tv:
+            case R.id.newest_tv://最新
                 page = 1;
-                orderCol = "1";
+                orderCol = "2";
+                mNewestTv.setTextColor(getResources().getColor(R.color.color_blue_btn));
+                mHotTv.setTextColor(getResources().getColor(R.color.color333));
+                mAllTv.setTextColor(getResources().getColor(R.color.color333));
+                onRequestAudioList();
+                break;
+            case R.id.all_tv://全部
+                page = 1;
+                orderCol = "0";
+                mNewestTv.setTextColor(getResources().getColor(R.color.color333));
+                mHotTv.setTextColor(getResources().getColor(R.color.color333));
+                mAllTv.setTextColor(getResources().getColor(R.color.color_blue_btn));
                 onRequestAudioList();
                 break;
         }
@@ -226,23 +241,55 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
     }
 
     @Override
+    public void onRefresh() {
+        page = 1;
+        onRequestAudioList();
+    }
+
+    boolean isReqState = false;//加载更多 正在请求状态
+
+    @Override
+    public void onLoadMoreRequested() {
+        if (!isReqState) {
+            if (!audioContentResponseList.isEmpty()) {
+                if (page == 1 && audioContentResponseList.size() < Constant.PAGESIZE) {
+                    mAudioAdapter.loadMoreEnd(true);
+                } else {
+                    if (audioContentResponseList.size() < Constant.PAGESIZE) {
+                        mAudioAdapter.loadMoreEnd();
+                    } else {
+                        //等于10条
+                        page++;
+                        mAudioAdapter.loadMoreComplete();
+                        onRequestAudioList();
+                        isReqState = true;
+                    }
+                }
+            } else {
+                mAudioAdapter.loadMoreEnd();
+            }
+        }
+    }
+
+    @Override
     public void getAudioListSuccess(AudioListResponse audioListResponse) {
-        audioContentResponseList = audioListResponse.getData();
         if (mSwipeLy.isRefreshing()) {
             mSwipeLy.setRefreshing(false);
         }
-        if (page == 1) {
-            if (!audioContentResponseList.isEmpty()) {
-                mAudioAdapter.setNewData(audioContentResponseList);
-                mAudioAdapter.loadMoreComplete();
+        isReqState = false;
+        audioContentResponseList = audioListResponse.getData();
+        //加载更多这样设置
+        if (!audioListResponse.getData().isEmpty()) {
+            if (page == 1) {
+                mAudioAdapter.setNewData(audioListResponse.getData());
             } else {
-                //加载Empty布局
-                mAudioAdapter.setNewData(audioContentResponseList);
-                mAudioAdapter.setEmptyView(mEmptyView);
+                mAudioAdapter.addData(audioListResponse.getData());
             }
         } else {
-            mAudioAdapter.addData(audioContentResponseList);
-            mAudioAdapter.loadMoreComplete();
+            if (page == 1) {
+                mAudioAdapter.setNewData(null);
+                mAudioAdapter.setEmptyView(mEmptyView);
+            }
         }
     }
 
@@ -253,27 +300,6 @@ public class AudioFragmentFragment extends BaseFragment implements AudioFragment
         videoListRequest.pageNo = page;
         videoListRequest.pageSize = Constant.PAGESIZE;
         mPresenter.onRequestAudioList(videoListRequest);
-    }
-
-
-    @Override
-    public void onRefresh() {
-        page = 1;
-        onRequestAudioList();
-    }
-
-    @Override
-    public void onLoadMoreRequested() {
-        if (page == 1 && audioContentResponseList.size() < Constant.PAGESIZE) {
-            mAudioAdapter.loadMoreEnd(true);
-        } else {
-            if (audioContentResponseList.size() < Constant.PAGESIZE) {
-                mAudioAdapter.loadMoreEnd();
-            } else {
-                page++;
-                onRequestAudioList();
-            }
-        }
     }
 
 

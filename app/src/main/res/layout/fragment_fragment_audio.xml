@@ -29,7 +29,8 @@
             android:layout_marginEnd="@dimen/dp_15"
             android:layout_toStartOf="@id/upload_all_tv"
             android:padding="@dimen/dp_5"
-            android:text="热门" />
+            android:text="热门"
+            android:textColor="@color/color333" />
 
         <TextView
             android:id="@+id/newest_tv"
@@ -39,7 +40,19 @@
             android:layout_marginStart="@dimen/dp_15"
             android:layout_toStartOf="@id/hot_tv"
             android:padding="@dimen/dp_5"
-            android:text="最新" />
+            android:text="最新"
+            android:textColor="@color/color333" />
+
+        <TextView
+            android:id="@+id/all_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_15"
+            android:layout_toStartOf="@id/newest_tv"
+            android:padding="@dimen/dp_5"
+            android:text="全部"
+            android:textColor="@color/color_blue_btn" />
 
     </RelativeLayout>
 

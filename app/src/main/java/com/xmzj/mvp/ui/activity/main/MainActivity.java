@@ -52,11 +52,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             Log.e("ddd", "loginUser:" + new Gson().toJson(mBuProcessor.getLoginUser()));
         }
         List<Fragment> fragments = new ArrayList<>();
-        HomeFragment homeFragment = HomeFragment.newInstance();
-        MineFragment mimeFragment = MineFragment.newInstance();
-//        MoreFragment moreFragment = MoreFragment.newInstance();
-        fragments.add(homeFragment);
-        fragments.add(mimeFragment);
+        fragments.add(new HomeFragment());
+        fragments.add(new MineFragment());
 //        fragments.add(moreFragment);
         MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(), fragments);
         mMainViewpager.setOffscreenPageLimit(fragments.size());

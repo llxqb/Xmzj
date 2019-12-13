@@ -16,10 +16,11 @@ import com.xmzj.di.components.DaggerMineFragmentComponent;
 import com.xmzj.di.modules.MainModule;
 import com.xmzj.di.modules.MineFragmentModule;
 import com.xmzj.entity.base.BaseFragment;
-import com.xmzj.entity.constants.Constant;
 import com.xmzj.help.DialogFactory;
 import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.ui.activity.main.MineFragmentControl;
+import com.xmzj.mvp.utils.DataCleanManager;
+import com.xmzj.mvp.utils.SystemUtils;
 import com.xmzj.mvp.views.dialog.CommonDialog;
 
 import java.util.Objects;
@@ -36,15 +37,14 @@ import butterknife.Unbinder;
 
 public class MineFragment extends BaseFragment implements MineFragmentControl.MineView, CommonDialog.CommonDialogListener {
 
-
+    Unbinder unbinder;
     @BindView(R.id.logout_tv)
     TextView mLogoutTv;
-    Unbinder unbinder;
-
-    public static MineFragment newInstance() {
-        return new MineFragment();
-    }
-
+    @BindView(R.id.clear_cache_tv)
+    TextView mClearCacheTv;
+    @BindView(R.id.version_update_tv)
+    TextView mVersionUpdateTv;
+    private int clickPos;//1 清除缓存  2 退出登录
 
     @Nullable
     @Override
@@ -65,21 +65,46 @@ public class MineFragment extends BaseFragment implements MineFragmentControl.Mi
 
     @Override
     public void initData() {
-
+        try {
+            mClearCacheTv.setText(DataCleanManager.getTotalCacheSize(getActivity()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    @OnClick(R.id.logout_tv)
-    public void onViewClicked() {
-        showExitLoginDialog();
+    @OnClick({R.id.clear_cache_ll, R.id.version_update_ll, R.id.logout_tv})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.clear_cache_ll:
+                clickPos = 1;
+                showClearCacheDialog();
+                break;
+            case R.id.version_update_ll:
+                showToast("当前版本：" + SystemUtils.getVersionName(getActivity()));
+                break;
+            case R.id.logout_tv:
+                clickPos = 2;
+                showExitLoginDialog();
+                break;
+        }
     }
 
     private void showExitLoginDialog() {
-        DialogFactory.showCommonDialogFragemnt(getActivity(), this, "你确定要退出？", Constant.DIALOG_FIVE);
+        DialogFactory.showCommonFragmentDialog(getActivity(), this, "退出登录", "你确定要退出？", "取消", "确定");
     }
 
     @Override
     public void commonDialogBtnOkListener() {
-        exitLogin();
+        if (clickPos == 1) {//1 清除缓存  2 退出登录
+            DataCleanManager.clearAllCache(Objects.requireNonNull(getActivity()));
+            try {
+                mClearCacheTv.setText(DataCleanManager.getTotalCacheSize(getActivity()));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else if (clickPos == 2) {
+            exitLogin();
+        }
     }
 
     /**
@@ -94,11 +119,9 @@ public class MineFragment extends BaseFragment implements MineFragmentControl.Mi
         startActivity(intent);
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
+    private void showClearCacheDialog() {
+        String cacheValue = mClearCacheTv.getText().toString();
+        DialogFactory.showCommonFragmentDialog(getActivity(), this, "清除缓存", cacheValue, "取消", "确定");
     }
 
     private void initializeInjector() {
@@ -106,6 +129,12 @@ public class MineFragment extends BaseFragment implements MineFragmentControl.Mi
                 .mainModule(new MainModule((AppCompatActivity) getActivity()))
                 .mineFragmentModule(new MineFragmentModule(this))
                 .build().inject(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
 }

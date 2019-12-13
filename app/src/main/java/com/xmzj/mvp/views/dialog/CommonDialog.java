@@ -1,16 +1,17 @@
 package com.xmzj.mvp.views.dialog;
 
+
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xmzj.R;
-import com.xmzj.entity.constants.Constant;
 import com.xmzj.help.DialogFactory;
 
 import java.util.Objects;
@@ -24,42 +25,49 @@ import butterknife.Unbinder;
 /**
  * 公用提示的dialog
  *
- * @author helei
+ * @author li.liu
  */
 public class CommonDialog extends BaseDialogFragment {
     public static final String TAG = CommonDialog.class.getSimpleName();
-    @BindView(R.id.common_dialog_title)
-    TextView commonDialogTitle;
     @BindView(R.id.iv_close)
-    ImageView ivClose;
-    @BindView(R.id.pop_contain)
-    LinearLayout mPopContain;
-    @BindView(R.id.style5_left_btn)
-    Button mStyle5LeftBtn;
-    @BindView(R.id.style5_right_btn)
-    Button mStyle5RightBtn;
-    @BindView(R.id.dialog_style5_ll)
-    LinearLayout mDialogStyle5Ll;
+    ImageView mIvClose;
+    @BindView(R.id.common_dialog_title)
+    TextView mCommonDialogTitle;
+    @BindView(R.id.common_dialog_subtitle)
+    TextView mCommonDialogSubtitle;
+    @BindView(R.id.style1_left_btn)
+    TextView mStyle1LeftBtn;
+    @BindView(R.id.style1_right_btn)
+    TextView mStyle1RightBtn;
+    @BindView(R.id.dialog_style1_ll)
+    LinearLayout mDialogStyle1Ll;
+    Unbinder unbinder;
     private CommonDialogListener dialogBtnListener;
-    private String title, mContent;
-    private int mType;// 0 方式一  1 方式二
-    private Unbinder bind;
+    private int mStyle;
+    /**
+     * 标题
+     */
+    private String mTitle;
+    /**
+     * 副标题
+     */
+    private String mSubtitle;
+    private String mLeftBtnText;
+    private String mRightBtnText;
 
     public static CommonDialog newInstance() {
         return new CommonDialog();
     }
 
-    public void setStyle(int type) {
-        this.mType = type;
+    public void setValue(String title, String subtitle, String leftBtnText, String rightBtnText) {
+        mTitle = title;
+        mSubtitle = subtitle;
+        mLeftBtnText = leftBtnText;
+        mRightBtnText = rightBtnText;
     }
 
-
-    public void setContent(String content) {
-        this.mContent = content;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    public void setStyle(int style) {
+        this.mStyle = style;
     }
 
     public void setListener(CommonDialogListener dialogBtnListener) {
@@ -67,45 +75,46 @@ public class CommonDialog extends BaseDialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_common, container, true);
-        bind = ButterKnife.bind(this, view);
-          if (mType == Constant.DIALOG_FIVE) {
-            mDialogStyle5Ll.setVisibility(View.VISIBLE);
-            ivClose.setVisibility(View.GONE);
-        }
-        commonDialogTitle.setText(mContent);
+        unbinder = ButterKnife.bind(this, view);
+        initView();
         return view;
     }
 
+    private void initView() {
+        mCommonDialogTitle.setText(mTitle);
+        if (!TextUtils.isEmpty(mSubtitle)) {
+            mCommonDialogSubtitle.setText(mSubtitle);
+        } else {
+            mCommonDialogSubtitle.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(mLeftBtnText)) {
+            mStyle1LeftBtn.setText(mLeftBtnText);
+        }
+        if (!TextUtils.isEmpty(mRightBtnText)) {
+            mStyle1RightBtn.setText(mRightBtnText);
+        }
 
-    @OnClick({R.id.iv_close, R.id.pop_contain,  R.id.common_dialog_layout, R.id.style5_left_btn, R.id.style5_right_btn})
+    }
+
+    @OnClick({R.id.iv_close, R.id.style1_left_btn, R.id.style1_right_btn})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_close:
                 closeCommonDialog();
                 break;
-            case R.id.pop_contain:
-                break;
-            case R.id.style5_left_btn:
+            case R.id.style1_left_btn:
                 closeCommonDialog();
                 break;
-            case R.id.style5_right_btn:
+            case R.id.style1_right_btn:
                 if (dialogBtnListener != null) {
                     dialogBtnListener.commonDialogBtnOkListener();
                 }
                 closeCommonDialog();
                 break;
-            case R.id.common_dialog_layout:
-                break;
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        bind.unbind();
     }
 
 
@@ -121,4 +130,11 @@ public class CommonDialog extends BaseDialogFragment {
             DialogFactory.dismissDialogFragment(Objects.requireNonNull(getActivity()).getSupportFragmentManager(), TAG);
         }
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }
+

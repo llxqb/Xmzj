@@ -16,8 +16,6 @@ import com.xmzj.di.components.DaggerMoreFragmentComponent;
 import com.xmzj.di.modules.MainModule;
 import com.xmzj.di.modules.MoreFragmentModule;
 import com.xmzj.entity.base.BaseFragment;
-import com.xmzj.entity.constants.Constant;
-import com.xmzj.help.DialogFactory;
 import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.ui.activity.main.MoreFragmentControl;
 import com.xmzj.mvp.views.dialog.CommonDialog;
@@ -42,10 +40,6 @@ public class MoreFragment extends BaseFragment implements CommonDialog.CommonDia
     @BindView(R.id.logout_tv)
     TextView mLogoutTv;
     Unbinder unbinder;
-
-    public static MoreFragment newInstance() {
-        return new MoreFragment();
-    }
 
 
     @Nullable
@@ -83,7 +77,7 @@ public class MoreFragment extends BaseFragment implements CommonDialog.CommonDia
     }
 
     private void showExitLoginDialog() {
-        DialogFactory.showCommonDialogFragemnt(getActivity(), this, "你确定要退出？", Constant.DIALOG_FIVE);
+//        DialogFactory.showCommonDialogFragemnt(getActivity(), this, "你确定要退出？", Constant.DIALOG_FIVE);
     }
 
     @Override

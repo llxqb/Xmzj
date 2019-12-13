@@ -77,7 +77,7 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
     @Override
     protected void initContentView() {
         setContentView(R.layout.activity_login);
-        setStatusBarGray();
+        setStatusBar();
         initInjectData();
     }
 
@@ -205,8 +205,6 @@ public class LoginActivity extends BaseActivity implements LoginControl.LoginVie
         if (!TextUtils.isEmpty(code)) {
             if (ValueUtil.isValidityEmail(mLoginPhoneEt.getText().toString())) {
                 showToast("获取验证码成功，请去邮箱查看");
-            } else {
-//                mLoginVerifyEt.setText(code);
             }
         } else {
             showToast("操作过于频繁，请稍后再试");

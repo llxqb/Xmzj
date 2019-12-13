@@ -82,9 +82,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     private FrameLayout mCircleProgressLayout;
     private KbWithWordsCircleProgressBar mCircleProgress;
 
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
-    }
 
     @Nullable
     @Override
@@ -102,7 +99,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     @Override
     public void initView() {
         HomeTopAdapter mHomeTopAdapter = new HomeTopAdapter(getActivity(), functionResponseList, mImageLoaderHelper);
-        mHomeTopRecyclerView.setLayoutManager( new GridLayoutManager(getActivity(), 2));
+        mHomeTopRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
         mHomeTopRecyclerView.setAdapter(mHomeTopAdapter);
         mHomeTopAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             HomeFunctionResponse homeFunctionResponse = (HomeFunctionResponse) adapter.getItem(position);
@@ -118,7 +115,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
         mHomeRecommendAudioAdapter = new HomeRecommendAudioAdapter(getActivity(), audiosBeanList);
         mHomeBottomRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mHomeBottomRecyclerView.setAdapter(mHomeRecommendAudioAdapter);
-
+        mHomeBottomRecyclerView.setNestedScrollingEnabled(false);//解决ScrollView+RecyclerView的滑动冲突问题
         mHomeRecommendAudioAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             HomeRecommendAudioResponse.AudiosBean audiosBean = (HomeRecommendAudioResponse.AudiosBean) adapter.getItem(position);
             mCircleProgressLayout = (FrameLayout) adapter.getViewByPosition(mHomeBottomRecyclerView, position, R.id.fl_circle_progress);

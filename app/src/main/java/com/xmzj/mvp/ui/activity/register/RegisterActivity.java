@@ -130,8 +130,6 @@ public class RegisterActivity extends BaseActivity implements RegisterControl.Re
         if (!TextUtils.isEmpty(code)) {
             if (ValueUtil.isValidityEmail(mRegisterPhoneEt.getText().toString())) {
                 showToast("获取验证码成功，请去邮箱查看");
-            } else {
-                mRegisterVerifyEt.setText(code);
             }
         } else {
             showToast("操作过于频繁，请稍后再试");

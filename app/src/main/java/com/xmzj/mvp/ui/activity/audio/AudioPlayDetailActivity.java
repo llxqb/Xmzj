@@ -78,31 +78,6 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
     protected void initData() {
     }
 
-    /**
-     * 请求音频详情
-     *
-     * @param id
-     */
-    private void onRequestAudioDetailInfo(String id) {
-        mPresenter.onRequestAudioDetailInfo(id);
-    }
-
-    private void initPlay() {
-        String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
-        if (!TextUtils.isEmpty(localFilePath)) {
-            //本地有资源
-            showToast("资源已下载");
-            mJzvdStdMp3.setUp(localFilePath, mAudioDetailInfoResponse.getTitle(), Jzvd.SCREEN_NORMAL);
-            mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
-        } else {
-            if (!TextUtils.isEmpty(urlPath)) {
-                mJzvdStdMp3.setUp(urlPath, mAudioDetailInfoResponse.getTitle(), Jzvd.SCREEN_NORMAL);
-                mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
-            } else {
-                showToast("播放路径不正确 ");
-            }
-        }
-    }
 
     @Override
     public void downLoadBtnCLick() {
@@ -137,6 +112,11 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
         onRequestAudioDetailInfo(mAudioDetailInfoResponse.getNext().getId());
     }
 
+    @Override
+    public void autoPlayNext() {
+        onRequestAudioDetailInfo(mAudioDetailInfoResponse.getNext().getId());
+    }
+
     @OnClick(R.id.common_back)
     public void onViewClicked() {
         finish();
@@ -145,6 +125,13 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
 
     @Override
     public void getAudioClassifySuccess(AudioClassifyResponse audioClassifyResponse) {
+    }
+
+    /**
+     * 请求音频详情
+     */
+    private void onRequestAudioDetailInfo(String id) {
+        mPresenter.onRequestAudioDetailInfo(id);
     }
 
     @Override
@@ -165,10 +152,37 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
         initPlay();
     }
 
+    private void initPlay() {
+        String localFilePath = DownloadUtil.checkFileIsExist(urlPath);
+        if (!TextUtils.isEmpty(localFilePath)) {
+            //本地有资源
+            showToast("资源已下载");
+            mJzvdStdMp3.setUp(localFilePath, mAudioDetailInfoResponse.getTitle(), Jzvd.SCREEN_NORMAL);
+            mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
+            mJzvdStdMp3.startVideo();
+        } else {
+            if (!TextUtils.isEmpty(urlPath)) {
+                mJzvdStdMp3.setUp(urlPath, mAudioDetailInfoResponse.getTitle(), Jzvd.SCREEN_NORMAL);
+                mJzvdStdMp3.setThumb1(this, R.mipmap.audio_pic);
+                mJzvdStdMp3.startVideo();
+            } else {
+                showToast("播放路径不正确 ");
+            }
+        }
+    }
+
+
     @Override
     public void getAudioConnectionSuccess() {
         showToast("收藏成功");
         mJzvdStdMp3.setConnectBg(R.mipmap.connectioned_audio);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mJzvdStdMp3.setBackgroundResource(R.color.app_bg_color);
     }
 
     @Override
