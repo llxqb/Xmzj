@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerAudioComponent;
 import com.xmzj.di.modules.ActivityModule;
@@ -136,7 +135,6 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
 
     @Override
     public void getAudioDetailInfoSuccess(AudioDetailInfoResponse audioDetailInfoResponse) {
-        LogUtils.e("audioDetailInfoResponse:" + new Gson().toJson(audioDetailInfoResponse));
         if (audioDetailInfoResponse.isIsCollect()) {
             mJzvdStdMp3.setConnectBg(R.mipmap.connectioned_audio);
         } else {
@@ -179,11 +177,6 @@ public class AudioPlayDetailActivity extends BaseActivity implements JzvdStdMp3.
     }
 
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mJzvdStdMp3.setBackgroundResource(R.color.app_bg_color);
-    }
 
     @Override
     protected void onPause() {

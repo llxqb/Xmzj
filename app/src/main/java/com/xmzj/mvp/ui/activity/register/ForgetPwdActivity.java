@@ -148,9 +148,14 @@ public class ForgetPwdActivity extends BaseActivity implements RegisterControl.R
      */
     private void onRequestForgetPwd() {
         RegisterRequest forgetPwdRequest = new RegisterRequest();
-        forgetPwdRequest.account = mForgetPwdPhoneEt.getText().toString();
-        forgetPwdRequest.code = mForgetPwdVerifyEt.getText().toString();
+        String forgetPwdPhoneEtValue = mForgetPwdPhoneEt.getText().toString();
+        if (ValueUtil.isValidityEmail(forgetPwdPhoneEtValue)) {//是否是邮箱
+            forgetPwdRequest.email = forgetPwdPhoneEtValue;
+        } else {//手机
+            forgetPwdRequest.phoneNum = forgetPwdPhoneEtValue;
+        }
         forgetPwdRequest.pwd = mForgetPwdEt.getText().toString();
+        forgetPwdRequest.code = mForgetPwdVerifyEt.getText().toString();
         forgetPwdRequest.clientType = Constant.FROM;
         mPresenter.onRequestForgetPwd(forgetPwdRequest);
     }

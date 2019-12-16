@@ -149,7 +149,6 @@ public class JzvdStdMp3 extends JzvdStd {
         Log.e(TAG, "changeUiToPlayingShow()");
         super.changeUiToPlayingShow();
         thumbImageView.setVisibility(View.VISIBLE);
-
     }
 
     @Override

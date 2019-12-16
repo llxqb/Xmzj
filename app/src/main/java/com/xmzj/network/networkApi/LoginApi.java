@@ -31,7 +31,7 @@ public interface LoginApi {
      * 忘记密码
      */
     @POST("auth/resetPwd")
-    Observable<String> onRequestForgetPwd(@Query("account") String account, @Query("pwd") String pwd, @Query("code") String code, @Query("clientType") int clientType);
+    Observable<String> onRequestForgetPwd(@Query("phoneNum") String phoneNum,@Query("email") String email, @Query("pwd") String pwd, @Query("code") String code, @Query("clientType") int clientType);
 
     /**
      * 获取验证码
