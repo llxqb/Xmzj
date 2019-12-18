@@ -1,6 +1,7 @@
 package com.xmzj.mvp.ui.activity.main;
 
 
+import com.xmzj.entity.response.VersionUpdateResponse;
 import com.xmzj.mvp.presenter.LoadDataView;
 import com.xmzj.mvp.presenter.Presenter;
 
@@ -11,21 +12,15 @@ import com.xmzj.mvp.presenter.Presenter;
 public class MainControl {
     public interface MainView extends LoadDataView {
 
-        // void homeUserInfoSuccess(HomeUserInfoResponse homeUserInfoResponse);
-//        void messageIdSuccess(MessageIdResponse messageIdResponse);
+        void getVersionUpdateSuccess(VersionUpdateResponse versionUpdateResponse);
     }
 
     public interface PresenterMain extends Presenter<MainView> {
 
-//        /**
-//         * 根据融云第三方id获取用户头像和昵称
-//         */
-//        UserInfo onRequestUserInfoByRid(UserInfoByRidRequest userInfoByRidRequest);
-//
-//        /**
-//         * 查看用户嗨豆查看私密照片message_id
-//         */
-//        void onRequestMessageId(TokenRequest tokenRequest);
+        /**
+         * 检查版本更新
+         */
+        void onRequestVersionUpdate();
     }
 
 }

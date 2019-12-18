@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_40"
+        android:layout_above="@id/logout_tv"
         android:background="@drawable/ripple_write_bg"
         android:orientation="vertical">
 

@@ -1,11 +1,17 @@
 package com.xmzj.mvp.ui.activity.main;
 
 import android.content.Context;
-import android.net.Uri;
 
+import com.google.gson.Gson;
+import com.xmzj.R;
+import com.xmzj.entity.response.VersionUpdateResponse;
+import com.xmzj.help.RetryWithDelay;
 import com.xmzj.mvp.model.MainModel;
+import com.xmzj.mvp.model.ResponseData;
 
 import javax.inject.Inject;
+
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -26,6 +32,26 @@ public class MainPresenterImpl implements MainControl.PresenterMain {
         mMainView = mainView;
     }
 
+    /**
+     * 请求版本更新
+     */
+    @Override
+    public void onRequestVersionUpdate() {
+        mMainView.showLoading(mContext.getResources().getString(R.string.loading));
+        Disposable disposable = mMainModel.onRequestVersionUpdate().compose(mMainView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
+                .subscribe(this::requestVersionUpdateSuccess, throwable -> mMainView.showErrMessage(throwable),
+                        () -> mMainView.dismissLoading());
+        mMainView.addSubscription(disposable);
+    }
+
+    private void requestVersionUpdateSuccess(ResponseData responseData) {
+        if (responseData.resultCode == 0) {
+            VersionUpdateResponse response = new Gson().fromJson(responseData.mJsonObject.toString(), VersionUpdateResponse.class);
+            mMainView.getVersionUpdateSuccess(response);
+        } else {
+            mMainView.showToast(responseData.errorMsg);
+        }
+    }
 
 
     @Override
@@ -35,4 +61,6 @@ public class MainPresenterImpl implements MainControl.PresenterMain {
     @Override
     public void onDestroy() {
     }
+
+
 }

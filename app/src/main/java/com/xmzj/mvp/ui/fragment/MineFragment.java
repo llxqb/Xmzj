@@ -10,20 +10,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.XmzjApp;
 import com.xmzj.di.components.DaggerMineFragmentComponent;
 import com.xmzj.di.modules.MainModule;
 import com.xmzj.di.modules.MineFragmentModule;
 import com.xmzj.entity.base.BaseFragment;
+import com.xmzj.entity.response.VersionUpdateResponse;
 import com.xmzj.help.DialogFactory;
 import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.ui.activity.main.MineFragmentControl;
 import com.xmzj.mvp.utils.DataCleanManager;
+import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.utils.SystemUtils;
+import com.xmzj.mvp.utils.UpdateManager;
 import com.xmzj.mvp.views.dialog.CommonDialog;
 
 import java.util.Objects;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +43,8 @@ import butterknife.Unbinder;
 
 public class MineFragment extends BaseFragment implements MineFragmentControl.MineView, CommonDialog.CommonDialogListener {
 
+    @Inject
+    MineFragmentControl.mineFragmentPresenter mPresenter;
     Unbinder unbinder;
     @BindView(R.id.logout_tv)
     TextView mLogoutTv;
@@ -60,7 +68,7 @@ public class MineFragment extends BaseFragment implements MineFragmentControl.Mi
 
     @Override
     public void initView() {
-
+        mVersionUpdateTv.setText(SystemUtils.getVersionName(getActivity()));
     }
 
     @Override
@@ -80,12 +88,32 @@ public class MineFragment extends BaseFragment implements MineFragmentControl.Mi
                 showClearCacheDialog();
                 break;
             case R.id.version_update_ll:
-                showToast("当前版本：" + SystemUtils.getVersionName(getActivity()));
+                onRequestVersionUpdate();
                 break;
             case R.id.logout_tv:
                 clickPos = 2;
                 showExitLoginDialog();
                 break;
+        }
+    }
+
+    /**
+     * 检查版本更新
+     */
+    private void onRequestVersionUpdate() {
+        mPresenter.onRequestVersionUpdate();
+    }
+
+    @Override
+    public void getVersionUpdateSuccess(VersionUpdateResponse versionUpdateResponse) {
+        LogUtils.e("versionUpdateResponse:" + new Gson().toJson(versionUpdateResponse));
+        if (versionUpdateResponse != null) {
+            if (Integer.parseInt(versionUpdateResponse.getData().getVersionNumber()) > SystemUtils.getVersionCode(getActivity())) {
+                UpdateManager mUpdateManager = new UpdateManager(getActivity(), versionUpdateResponse.getData());
+                mUpdateManager.checkUpdateInfo();
+            } else {
+                showToast("当前版本：" + SystemUtils.getVersionName(getActivity()));
+            }
         }
     }
 

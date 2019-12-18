@@ -14,19 +14,25 @@ import com.xmzj.di.components.DaggerMainComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.MainModule;
 import com.xmzj.entity.base.BaseActivity;
+import com.xmzj.entity.response.VersionUpdateResponse;
 import com.xmzj.mvp.ui.activity.login.LoginActivity;
 import com.xmzj.mvp.ui.adapter.MyFragmentAdapter;
 import com.xmzj.mvp.ui.fragment.HomeFragment;
 import com.xmzj.mvp.ui.fragment.MineFragment;
+import com.xmzj.mvp.utils.UpdateManager;
 import com.xmzj.mvp.views.MyNoScrollViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity implements BottomNavigationView.OnNavigationItemSelectedListener, MainControl.MainView {
 
+    @Inject
+    MainControl.PresenterMain mPresenter;
     @BindView(R.id.main_bottom_navigation)
     BottomNavigationView mMainBottomNavigation;
     @BindView(R.id.main_viewpager)
@@ -50,20 +56,36 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
             finish();
         } else {
             Log.e("ddd", "loginUser:" + new Gson().toJson(mBuProcessor.getLoginUser()));
-        }
-        List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new HomeFragment());
-        fragments.add(new MineFragment());
+            List<Fragment> fragments = new ArrayList<>();
+            fragments.add(new HomeFragment());
+            fragments.add(new MineFragment());
 //        fragments.add(moreFragment);
-        MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(), fragments);
-        mMainViewpager.setOffscreenPageLimit(fragments.size());
-        mMainViewpager.setAdapter(adapter);
-        mMainBottomNavigation.setOnNavigationItemSelectedListener(this);
+            MyFragmentAdapter adapter = new MyFragmentAdapter(getSupportFragmentManager(), fragments);
+            mMainViewpager.setOffscreenPageLimit(fragments.size());
+            mMainViewpager.setAdapter(adapter);
+            mMainBottomNavigation.setOnNavigationItemSelectedListener(this);
+        }
     }
 
     @Override
     public void initData() {
+        onRequestVersionUpdate();
+    }
 
+    /**
+     * 检查版本更新
+     */
+    private void onRequestVersionUpdate() {
+        mPresenter.onRequestVersionUpdate();
+    }
+
+    @Override
+    public void getVersionUpdateSuccess(VersionUpdateResponse versionUpdateResponse) {
+//        LogUtils.e("versionUpdateResponse:" + new Gson().toJson(versionUpdateResponse));
+        if (versionUpdateResponse != null) {
+            UpdateManager mUpdateManager = new UpdateManager(this, versionUpdateResponse.getData());
+            mUpdateManager.checkUpdateInfo();
+        }
     }
 
     @Override
@@ -142,4 +164,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationView.O
                 .mainModule(new MainModule(MainActivity.this, this))
                 .activityModule(new ActivityModule(this)).build().inject(this);
     }
+
+
 }

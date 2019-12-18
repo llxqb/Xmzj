@@ -32,5 +32,18 @@ public class MainModel {
         return mMainApi.onRequestRecommendAudio().map(mTransform::transformCommon);
     }
 
+    /**
+     * 请求版本更新
+     */
+    public Observable<ResponseData> onRequestVersionUpdate() {
+        return mMainApi.onRequestVersionUpdate().map(mTransform::transformListType);
+    }
+    /**
+     * 请求banner数据
+     */
+    public Observable<ResponseData> onRequestBanner() {
+        return mMainApi.onRequestBanner().map(mTransform::transformListType);
+    }
+
 
 }

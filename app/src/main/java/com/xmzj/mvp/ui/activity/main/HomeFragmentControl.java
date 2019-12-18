@@ -1,6 +1,7 @@
 package com.xmzj.mvp.ui.activity.main;
 
 
+import com.xmzj.entity.response.BannerResponse;
 import com.xmzj.entity.response.HomeRecommendAudioResponse;
 import com.xmzj.mvp.presenter.LoadDataView;
 import com.xmzj.mvp.presenter.Presenter;
@@ -11,9 +12,10 @@ import com.xmzj.mvp.presenter.Presenter;
 
 public class HomeFragmentControl {
     public interface HomeView extends LoadDataView {
-//        void getInfoSuccess(HomeFragmentResponse response);
+        void getRecommendAudioSuccess(HomeRecommendAudioResponse recommendAudioResponse);
 
-        void getRecommendAudio(HomeRecommendAudioResponse recommendAudioResponse);
+        void getBannerSuccess(BannerResponse bannerResponse);
+
     }
 
     public interface homeFragmentPresenter extends Presenter<HomeView> {
@@ -21,6 +23,11 @@ public class HomeFragmentControl {
          * 请求homeFragment 推荐音频列表
          */
         void onRequestRecommendAudio();
+
+        /**
+         * 获取banner数据
+         */
+        void onRequestBanner();
 
     }
 

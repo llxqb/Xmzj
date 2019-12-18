@@ -1,12 +1,9 @@
 package com.xmzj.mvp.views;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,7 +16,7 @@ import cn.jzvd.JzvdStd;
  */
 public class JzvdStdMp3 extends JzvdStd {
     private String TAG = "JzvdStdMp3";
-    private ObjectAnimator mAnimator;
+//    private ObjectAnimator mAnimator;
     private Context mContext;
     private int mConnectBg;
 
@@ -79,11 +76,11 @@ public class JzvdStdMp3 extends JzvdStd {
 //                .load(url)
 //                .into(circleImageView);
 
-        mAnimator = ObjectAnimator.ofFloat(circleImageView, "rotation", 0.0f, 360.0f);
-        mAnimator.setDuration(10000);//设定转一圈的时间
-        mAnimator.setRepeatCount(Animation.INFINITE);//设定无限循环
-        mAnimator.setRepeatMode(ObjectAnimator.RESTART);// 循环模式
-        mAnimator.setInterpolator(new LinearInterpolator());// 匀速
+//        mAnimator = ObjectAnimator.ofFloat(circleImageView, "rotation", 0.0f, 360.0f);
+//        mAnimator.setDuration(10000);//设定转一圈的时间
+//        mAnimator.setRepeatCount(Animation.INFINITE);//设定无限循环
+//        mAnimator.setRepeatMode(ObjectAnimator.RESTART);// 循环模式
+//        mAnimator.setInterpolator(new LinearInterpolator());// 匀速
     }
 
     /**
@@ -156,7 +153,7 @@ public class JzvdStdMp3 extends JzvdStd {
         Log.e(TAG, "changeUiToPlayingClear()");
         super.changeUiToPlayingClear();
         thumbImageView.setVisibility(View.VISIBLE);
-        mAnimator.start();//动画开始
+//        mAnimator.start();//动画开始
     }
 
     @Override
@@ -164,7 +161,7 @@ public class JzvdStdMp3 extends JzvdStd {
         Log.e(TAG, "changeUiToPauseShow()");
         super.changeUiToPauseShow();
         thumbImageView.setVisibility(View.VISIBLE);
-        mAnimator.pause();//动画暂停
+//        mAnimator.pause();//动画暂停
     }
 
     @Override
@@ -179,8 +176,7 @@ public class JzvdStdMp3 extends JzvdStd {
     public void changeUiToComplete() {
         Log.e(TAG, "changeUiToComplete()");
         super.changeUiToComplete();
-//        mAnimator.resume();//动画重新开始
-        mAnimator.pause();
+//        mAnimator.pause();
         onClickUiToggle();
     }
 

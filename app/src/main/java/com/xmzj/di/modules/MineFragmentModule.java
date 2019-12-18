@@ -3,7 +3,6 @@ package com.xmzj.di.modules;
 
 import com.xmzj.di.scopes.PerActivity;
 import com.xmzj.mvp.presenter.LoadDataView;
-import com.xmzj.mvp.ui.activity.main.HomeFragmentControl;
 import com.xmzj.mvp.ui.activity.main.MineFragmentControl;
 
 import dagger.Module;
@@ -18,7 +17,7 @@ public class MineFragmentModule {
     private MineFragmentControl.MineView mMineFragmentView;
 
     public MineFragmentModule(LoadDataView view) {
-        if (view instanceof HomeFragmentControl.HomeView) {
+        if (view instanceof MineFragmentControl.MineView) {
             mMineFragmentView = (MineFragmentControl.MineView) view;
         }
     }

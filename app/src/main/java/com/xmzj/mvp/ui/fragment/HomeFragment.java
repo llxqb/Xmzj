@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.google.gson.Gson;
 import com.xmzj.R;
 import com.xmzj.XmzjApp;
 import com.xmzj.di.components.DaggerHomeFragmentComponent;
@@ -20,6 +21,7 @@ import com.xmzj.di.modules.HomeFragmentModule;
 import com.xmzj.di.modules.MainModule;
 import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.response.AudioListResponse;
+import com.xmzj.entity.response.BannerResponse;
 import com.xmzj.entity.response.HomeFunctionResponse;
 import com.xmzj.entity.response.HomeRecommendAudioResponse;
 import com.xmzj.help.GlideImageLoader;
@@ -66,7 +68,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     private int[] FunctionImageeString = {R.mipmap.videos, R.mipmap.music};//R.mipmap.books, , R.mipmap.hudong, R.mipmap.luntan, R.mipmap.clock, R.mipmap.mall, R.mipmap.baoming
     private String[] BottomFunctionText = {"视频", "音乐", "书籍"};
     private int[] BottomFunctionImg = {R.mipmap.books, R.mipmap.videos, R.mipmap.music};
-    private List<Integer> bannerImgList = new ArrayList<>();
+    private List<String> bannerImgList = new ArrayList<>();
     private List<HomeFunctionResponse> functionResponseList = new ArrayList<>();
     private HomeRecommendAudioAdapter mHomeRecommendAudioAdapter;
     private List<HomeRecommendAudioResponse.AudiosBean> audiosBeanList = new ArrayList<>();
@@ -155,19 +157,13 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     @Override
     public void initData() {
         mPresenter.onRequestRecommendAudio();
-        initBanner();
         for (int i = 0; i < FunctionTextString.length; i++) {
             HomeFunctionResponse homeFunctionResponse = new HomeFunctionResponse();
             homeFunctionResponse.text = FunctionTextString[i];
             homeFunctionResponse.img = FunctionImageeString[i];
             functionResponseList.add(homeFunctionResponse);
         }
-//        for (int i = 0; i < BottomFunctionText.length; i++) {
-//            HomeBottomFunctionResponse homeBottomFunctionResponse = new HomeBottomFunctionResponse();
-//            homeBottomFunctionResponse.text = BottomFunctionText[i];
-//            homeBottomFunctionResponse.img = BottomFunctionImg[i];
-//            bottomFunctionResponseList.add(homeBottomFunctionResponse);
-//        }
+        onRequestBanner();
     }
 
     /**
@@ -176,11 +172,6 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     private void initBanner() {
         //设置图片加载器
         mBanner.setImageLoader(new GlideImageLoader());
-        //设置图片集合
-        int bannerImg1 = R.mipmap.banner1;
-        int bannerImg2 = R.mipmap.banner2;
-        bannerImgList.add(bannerImg1);
-        bannerImgList.add(bannerImg2);
         mBanner.setImages(bannerImgList);
         //设置轮播时间
         mBanner.setDelayTime(5000);
@@ -190,8 +181,25 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
 
 
     @Override
-    public void getRecommendAudio(HomeRecommendAudioResponse homeRecommendAudioResponse) {
+    public void getRecommendAudioSuccess(HomeRecommendAudioResponse homeRecommendAudioResponse) {
         mHomeRecommendAudioAdapter.setNewData(homeRecommendAudioResponse.getAudios());
+    }
+
+
+    /**
+     * 请求banner数据
+     */
+    private void onRequestBanner() {
+        mPresenter.onRequestBanner();
+    }
+
+    @Override
+    public void getBannerSuccess(BannerResponse bannerResponse) {
+        LogUtils.e("bannerResponse:" + new Gson().toJson(bannerResponse));
+        for (BannerResponse.DataBean dataBean :bannerResponse.getData() ){
+            bannerImgList.add(dataBean.getUrl());
+        }
+        initBanner();
     }
 
 
