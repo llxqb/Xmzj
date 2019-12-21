@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.xmzj.R;
-import com.xmzj.entity.response.BookChapterContentResponse;
 import com.xmzj.entity.response.ChapterListResponse;
 import com.xmzj.help.RetryWithDelay;
 import com.xmzj.mvp.model.BookModel;
@@ -53,31 +52,6 @@ public class BookDetailPresenterImpl implements BookDetailControl.PresenterBookD
         if (responseData.resultCode == 0) {
             ChapterListResponse response = new Gson().fromJson(responseData.mJsonObject.toString(), ChapterListResponse.class);
             mBookDetailView.getChapterListSuccess(response);
-        } else {
-            mBookDetailView.showToast(responseData.errorMsg);
-        }
-    }
-
-    /**
-     * 书籍章节内容
-     */
-    @Override
-    public void onRequestChapterContent(String bookId, String sectionId) {
-        mBookDetailView.showLoading(mContext.getResources().getString(R.string.loading));
-        Disposable disposable = mBookModel.onRequestChapterContent(bookId, sectionId).compose(mBookDetailView.applySchedulers()).retryWhen(new RetryWithDelay(3, 3000))
-                .subscribe(this::requestChapterContentSuccess, throwable -> mBookDetailView.showErrMessage(throwable),
-                        () -> mBookDetailView.dismissLoading());
-        mBookDetailView.addSubscription(disposable);
-    }
-
-
-    /**
-     * 书籍章节内容 成功
-     */
-    private void requestChapterContentSuccess(ResponseData responseData) {
-        if (responseData.resultCode == 0) {
-            BookChapterContentResponse response = new Gson().fromJson(responseData.mJsonObject.toString(), BookChapterContentResponse.class);
-            mBookDetailView.getChapterContentSuccess(response);
         } else {
             mBookDetailView.showToast(responseData.errorMsg);
         }

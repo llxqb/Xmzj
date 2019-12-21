@@ -6,14 +6,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
-import com.bifan.txtreaderlib.main.TxtConfig;
-import com.bifan.txtreaderlib.ui.HwTxtPlayActivity;
 import com.xmzj.R;
 import com.xmzj.di.components.DaggerBookDetailComponent;
 import com.xmzj.di.modules.ActivityModule;
 import com.xmzj.di.modules.BookDetailModule;
 import com.xmzj.entity.base.BaseActivity;
-import com.xmzj.entity.response.BookChapterContentResponse;
 import com.xmzj.entity.response.ChapterListResponse;
 import com.xmzj.mvp.ui.adapter.BookSelectionAdapter;
 
@@ -56,14 +53,13 @@ public class BookDetailActivity extends BaseActivity implements BookDetailContro
 
     @Override
     protected void initView() {
-        mCommonTitleTv.setText(mBookName);
         mBookSelectionAdapter = new BookSelectionAdapter(dataBeanList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mBookSelectionAdapter);
         mBookSelectionAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             ChapterListResponse.DataBean dataBean = (ChapterListResponse.DataBean) adapter.getItem(position);
             if (dataBean != null) {
-                onRequestChapterContent(dataBean.getId());
+                ReadBookActivity.start(this, mBookId, dataBean.getId(),mBookName,dataBean.getSectionName());
             }
         });
     }
@@ -73,6 +69,7 @@ public class BookDetailActivity extends BaseActivity implements BookDetailContro
         if (getIntent() != null) {
             mBookId = getIntent().getStringExtra("bookId");
             mBookName = getIntent().getStringExtra("bookName");
+            mCommonTitleTv.setText(mBookName);
             onRequestChapterList();
         }
     }
@@ -92,20 +89,6 @@ public class BookDetailActivity extends BaseActivity implements BookDetailContro
     @Override
     public void getChapterListSuccess(ChapterListResponse chapterListResponse) {
         mBookSelectionAdapter.setNewData(chapterListResponse.getData());
-    }
-
-
-    /**
-     * 书籍章节内容
-     */
-    private void onRequestChapterContent(String chapterId) {
-        mPresenter.onRequestChapterContent(mBookId, chapterId);
-    }
-
-    @Override
-    public void getChapterContentSuccess(BookChapterContentResponse bookChapterContentResponse) {
-        TxtConfig.saveIsOnVerticalPageMode(BookDetailActivity.this, false);
-        HwTxtPlayActivity.loadStr(BookDetailActivity.this, bookChapterContentResponse.getData().getContent());
     }
 
 

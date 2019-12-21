@@ -23,8 +23,16 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
-        <activity android:name=".mvp.ui.activity.book.BookDetailActivity"></activity>
-        <activity android:name=".mvp.ui.activity.book.BooksActivity" />
+        <activity
+            android:name=".mvp.ui.activity.book.ReadBookActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/HwTxtFullScreen" />
+        <activity
+            android:name=".mvp.ui.activity.book.BookDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".mvp.ui.activity.book.BooksActivity"
+            android:screenOrientation="portrait" />
 
         <provider
             android:name=".help.MyProvider"
