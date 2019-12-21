@@ -3,8 +3,8 @@
     android:id="@+id/item_book_selection_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/ripple_trans_bg"
     android:orientation="vertical"
-    android:background="@drawable/ripple_write_bg"
     android:padding="@dimen/dp_12">
 
 
@@ -13,6 +13,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="第一章"
+        android:drawableStart="@drawable/bg_app_color_360"
+        android:drawablePadding="@dimen/dp_5"
         android:textColor="@color/first_text_color"
         android:textSize="@dimen/sp_14" />
 </LinearLayout>

@@ -152,12 +152,27 @@ public class ReadBookActivity extends BaseActivity implements ReadBookControl.Re
         registerListener();
     }
 
-    @OnClick({R.id.chapter_menu_tv, R.id.setting_tv, R.id.clipboar_click, R.id.txtreadr_menu_chapter_pre, R.id.txtreadr_menu_chapter_next})
+    @OnClick({R.id.back_iv, R.id.chapter_menu_tv, R.id.setting_tv, R.id.clipboar_click, R.id.txtreadr_menu_chapter_pre, R.id.txtreadr_menu_chapter_next})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.back_iv:
+                finish();
+                break;
             case R.id.chapter_menu_tv:
                 //显示章节列表
-                onRequestSelectionInfo();
+                if (mChapterListResponse == null) {
+                    onRequestSelectionInfo();
+                } else {
+                    if (mChapterListPopupWindow == null) {
+                        mChapterListPopupWindow = new ChapterListPopupWindow(this, mChapterListResponse, mImageLoaderHelper, this);
+                    } else {
+                        mChapterListPopupWindow.setDismiss();
+                        mChapterListPopupWindow = null;
+                        mChapterListPopupWindow = new ChapterListPopupWindow(this, mChapterListResponse, mImageLoaderHelper, this);
+                    }
+                    mChapterListPopupWindow.initPopWindow(mReadBookLayout);
+                    mChapterListPopupWindow.setBackGroundColor(mTxtReaderView.getBackgroundColor());
+                }
                 break;
             case R.id.setting_tv:
                 Show(mTopMenu, mBottomMenu, mCoverView);
@@ -213,9 +228,11 @@ public class ReadBookActivity extends BaseActivity implements ReadBookControl.Re
     }
 
     private ChapterListPopupWindow mChapterListPopupWindow;
+    private ChapterListResponse mChapterListResponse;
 
     @Override
     public void getChapterListSuccess(ChapterListResponse chapterListResponse) {
+        mChapterListResponse = chapterListResponse;
         if (mChapterListPopupWindow == null) {
             mChapterListPopupWindow = new ChapterListPopupWindow(this, chapterListResponse, mImageLoaderHelper, this);
         } else {
@@ -309,14 +326,11 @@ public class ReadBookActivity extends BaseActivity implements ReadBookControl.Re
     }
 
     protected void setSeekBarListener() {
-        mSeekBar.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-                    mTxtReaderView.loadFromProgress(mSeekBar.getProgress());
-                }
-                return false;
+        mSeekBar.setOnTouchListener((view, motionEvent) -> {
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                mTxtReaderView.loadFromProgress(mSeekBar.getProgress());
             }
+            return false;
         });
     }
 
@@ -427,6 +441,7 @@ public class ReadBookActivity extends BaseActivity implements ReadBookControl.Re
         Gone(ClipboardView);
     }
 
+
     private void setExtraListener() {
         mTextSizeAdd.setOnClickListener(new TextChangeClickListener(true));
         mTextsizeDel.setOnClickListener(new TextChangeClickListener(false));
@@ -531,6 +546,4 @@ public class ReadBookActivity extends BaseActivity implements ReadBookControl.Re
                 .readBookModule(new ReadBookModule(this, this))
                 .activityModule(new ActivityModule(this)).build().inject(this);
     }
-
-
 }

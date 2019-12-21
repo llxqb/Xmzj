@@ -22,8 +22,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_gravity="center_vertical"
-            android:drawableStart="@drawable/shape_little_ball"
+            android:drawableStart="@drawable/bg_app_color_360"
             android:drawablePadding="@dimen/dp_5"
+            android:gravity="center"
             android:padding="@dimen/dp_10"
             android:text="章节"
             android:textColor="#858582" />
@@ -76,6 +77,7 @@
         android:id="@+id/activity_hwtxtplay_readerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toTopOf="@id/activity_hwtxtplay_bottom"
         app:layout_constraintTop_toBottomOf="@id/activity_hwtxtplay_top" />
 
