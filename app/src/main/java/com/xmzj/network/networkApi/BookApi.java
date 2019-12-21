@@ -21,11 +21,18 @@ public interface BookApi {
      */
     @POST("book/list")
     Observable<String> onRequestBookList(@Query("categoryId") String categoryId, @Query("keyword") String keyword, @Query("orderCol") String orderCol, @Query("pageNo") String pageNo, @Query("pageSize") String pageSize);
+
     /**
      * 书籍章节列表
      */
     @POST("book/sectionList")
     Observable<String> onRequestChapterList(@Query("bookId") String bookId);
+
+    /**
+     * 书籍章节内容
+     */
+    @POST("book/contentBySection")
+    Observable<String> onRequestChapterContent(@Query("bookId") String bookId, @Query("sectionId") String sectionId);
 
 
 }

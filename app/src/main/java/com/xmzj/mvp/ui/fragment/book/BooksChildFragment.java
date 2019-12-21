@@ -103,7 +103,7 @@ public class BooksChildFragment extends BaseFragment implements BooksChildFragme
             public void onSimpleItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 BooksListResponse.DataBean dataBean = (BooksListResponse.DataBean) adapter.getItem(position);
                 if (dataBean != null) {
-                    BookDetailActivity.start(getActivity(), dataBean.getId());
+                    BookDetailActivity.start(getActivity(), dataBean.getId(),dataBean.getName());
                 }
             }
         });

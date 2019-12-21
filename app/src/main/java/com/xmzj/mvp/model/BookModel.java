@@ -34,17 +34,26 @@ public class BookModel {
     public Observable<ResponseData> onRequestBookType() {
         return mBookApi.onRequestBookType().map(mTransform::transformListType);
     }
+
     /**
      * 书库列表
      */
     public Observable<ResponseData> onRequestBookList(BooksRequest request) {
-        return mBookApi.onRequestBookList(request.categoryId,request.keyword,request.orderCol,request.pageNo,request.pageSize).map(mTransform::transformListType);
+        return mBookApi.onRequestBookList(request.categoryId, request.keyword, request.orderCol, request.pageNo, request.pageSize).map(mTransform::transformListType);
     }
+
     /**
      * 书籍章节列表
      */
     public Observable<ResponseData> onRequestChapterList(String bookId) {
         return mBookApi.onRequestChapterList(bookId).map(mTransform::transformListType);
+    }
+
+    /**
+     * 书籍章节内容
+     */
+    public Observable<ResponseData> onRequestChapterContent(String bookId, String sectionId) {
+        return mBookApi.onRequestChapterContent(bookId, sectionId).map(mTransform::transformListType);
     }
 
 }
