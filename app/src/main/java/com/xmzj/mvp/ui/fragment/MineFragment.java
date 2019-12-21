@@ -21,6 +21,7 @@ import com.xmzj.entity.response.VersionUpdateResponse;
 import com.xmzj.help.DialogFactory;
 import com.xmzj.mvp.ui.activity.main.MainActivity;
 import com.xmzj.mvp.ui.activity.main.MineFragmentControl;
+import com.xmzj.mvp.ui.activity.user.PersonalInfoActivity;
 import com.xmzj.mvp.utils.DataCleanManager;
 import com.xmzj.mvp.utils.LogUtils;
 import com.xmzj.mvp.utils.SystemUtils;
@@ -74,15 +75,18 @@ public class MineFragment extends BaseFragment implements MineFragmentControl.Mi
     @Override
     public void initData() {
         try {
-            mClearCacheTv.setText(DataCleanManager.getTotalCacheSize(getActivity()));
+            mClearCacheTv.setText(DataCleanManager.getTotalCacheSize(Objects.requireNonNull(getActivity())));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @OnClick({R.id.clear_cache_ll, R.id.version_update_ll, R.id.logout_tv})
+    @OnClick({R.id.avatar_iv, R.id.clear_cache_ll, R.id.version_update_ll, R.id.logout_tv})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.avatar_iv:
+                startActivitys(PersonalInfoActivity.class);
+                break;
             case R.id.clear_cache_ll:
                 clickPos = 1;
                 showClearCacheDialog();

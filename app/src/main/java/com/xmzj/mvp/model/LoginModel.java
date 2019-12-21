@@ -5,6 +5,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.xmzj.entity.request.RegisterRequest;
+import com.xmzj.entity.request.UploadImage;
 import com.xmzj.entity.request.VerifyCodeRequest;
 import com.xmzj.network.networkApi.LoginApi;
 
@@ -61,5 +62,18 @@ public class LoginModel {
      */
     public Observable<ResponseData> onRequestVerifyCode(VerifyCodeRequest verifyCodeRequest) {
         return mLoginApi.onRequestVerifyCode(verifyCodeRequest.phoneNum, verifyCodeRequest.email, verifyCodeRequest.type).map(mTransform::transformCommon);
+    }
+
+    /**
+     * 请求个人信息
+     */
+    public Observable<ResponseData> onRequestPersonalInfo(String token) {
+        return mLoginApi.onRequestPersonalInfo(token).map(mTransform::transformCommon);
+    }
+    /**
+     * 上传图片
+     */
+    public Observable<ResponseData> uploadImageRequest(UploadImage uploadImage) {
+        return mLoginApi.uploadImageRequest(uploadImage.avatarFile).map(mTransform::transformCommon);
     }
 }

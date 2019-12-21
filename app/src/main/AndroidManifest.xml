@@ -23,6 +23,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
+        <activity android:name=".mvp.ui.activity.user.PersonalInfoActivity"></activity>
         <activity
             android:name=".mvp.ui.activity.book.ReadBookActivity"
             android:screenOrientation="portrait"

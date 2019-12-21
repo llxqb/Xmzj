@@ -110,7 +110,7 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.0.0'//RxBinding  使得点击事件更加一致性
     implementation 'com.google.code.gson:gson:2.8.5' //gson
     //glide图片加载库
-    implementation 'jp.wasabeef:glide-transformations:3.1.1'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
     //banner
     implementation 'com.youth.banner:banner:1.4.10'  //最新版本
     //视频加载库
@@ -119,4 +119,6 @@ dependencies {
     //gif
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
     implementation project(':hwtxtreaderlib')
+    //图片加载框架 拍照选相册
+    implementation project(':takephoto_library')
 }
