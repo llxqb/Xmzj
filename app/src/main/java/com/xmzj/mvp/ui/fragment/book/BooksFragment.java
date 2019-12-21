@@ -1,4 +1,4 @@
-package com.xmzj.mvp.ui.fragment;
+package com.xmzj.mvp.ui.fragment.book;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseFragment;
-import com.xmzj.entity.response.VideoClassifyResponse;
+import com.xmzj.entity.response.BookTypeResponse;
 import com.xmzj.mvp.ui.adapter.PageAdapter;
 
 import java.util.ArrayList;
@@ -26,51 +26,47 @@ import butterknife.Unbinder;
  * AudioFragment
  */
 
-public class VideoFragment extends BaseFragment {
+public class BooksFragment extends BaseFragment {
 
-    @BindView(R.id.tab_layout)
-    TabLayout mTabLayout;
-    @BindView(R.id.view_pager)
-    ViewPager mViewPager;
+    @BindView(R.id.fragment_view_pager)
+    ViewPager mFragmentViewPager;
+    @BindView(R.id.fragment_tab_layout)
+    TabLayout mFragmentTabLayout;
     Unbinder unbinder;
     private List<String> titleString = new ArrayList<>();
 
-
-    public static VideoFragment getInstance(VideoClassifyResponse.DataBean dataBean) {
-        VideoFragment fragment = new VideoFragment();
+    public static BooksFragment getInstance(BookTypeResponse.DataBean dataBean) {
+        BooksFragment fragment = new BooksFragment();
         Bundle bd = new Bundle();
         bd.putParcelable("dataBean", dataBean);
         fragment.setArguments(bd);
         return fragment;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_video, container, false);
+        View view = inflater.inflate(R.layout.fragment_books, container, false);
         unbinder = ButterKnife.bind(this, view);
         initView();
         initData();
         return view;
     }
 
-
     @Override
     public void initView() {
-        //    private String mType;
         List<Fragment> fragmentList = new ArrayList<>();
         if (getArguments() != null) {
-            VideoClassifyResponse.DataBean mDataBean = getArguments().getParcelable("dataBean");
+            BookTypeResponse.DataBean mDataBean = getArguments().getParcelable("dataBean");
             if (mDataBean == null) return;
-            for (VideoClassifyResponse.DataBean.ChildsBean childsBean : mDataBean.getChilds()) {
-                titleString.add(childsBean.getName());
-                fragmentList.add(VideoFragmentFragment.getInstance(childsBean.getId()));//传子分类id
+            for (BookTypeResponse.DataBean.ChildBean childBean : mDataBean.getChild()) {
+                titleString.add(childBean.getName());
+                fragmentList.add(BooksChildFragment.getInstance(childBean.getId()));//传子分类id
             }
-            if(!fragmentList.isEmpty()){
-                mViewPager.setAdapter(new PageAdapter(getChildFragmentManager(), fragmentList, titleString));
-//                mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
-                mTabLayout.setupWithViewPager(mViewPager);
+            if (!fragmentList.isEmpty()) {
+                mFragmentViewPager.setAdapter(new PageAdapter(getChildFragmentManager(), fragmentList, titleString));
+//                mFragmentViewPager.setOffscreenPageLimit(fragmentList.size()-1);
+                mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
             }
         }
     }

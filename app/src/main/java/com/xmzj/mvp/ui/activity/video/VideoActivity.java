@@ -16,7 +16,7 @@ import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.VideoClassifyResponse;
 import com.xmzj.entity.response.VideoInfoResponse;
 import com.xmzj.mvp.ui.activity.search.SearchActivity;
-import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
+import com.xmzj.mvp.ui.adapter.PageAdapter;
 import com.xmzj.mvp.ui.fragment.VideoFragment;
 
 import java.util.ArrayList;
@@ -97,7 +97,7 @@ public class VideoActivity extends BaseActivity implements VideoControl.VideoVie
         }
         if (!fragmentList.isEmpty()) {
             mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
-            mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
+            mViewPager.setAdapter(new PageAdapter(getSupportFragmentManager(), fragmentList, titleString));
             mTabLayout.setupWithViewPager(mViewPager);
         }
     }

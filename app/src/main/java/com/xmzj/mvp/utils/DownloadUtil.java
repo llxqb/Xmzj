@@ -125,7 +125,6 @@ public class DownloadUtil {
         }
         InputStream is = response.body().byteStream();
         long totalLength = response.body().contentLength();
-
         try {
             os = new FileOutputStream(file);
             int len;

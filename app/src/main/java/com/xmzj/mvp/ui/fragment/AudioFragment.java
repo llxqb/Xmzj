@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import com.xmzj.R;
 import com.xmzj.entity.base.BaseFragment;
 import com.xmzj.entity.response.AudioClassifyResponse;
-import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
+import com.xmzj.mvp.ui.adapter.PageAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public class AudioFragment extends BaseFragment {
                 fragmentList.add(AudioFragmentFragment.getInstance(childsBean.getId()));//传子分类id
             }
             if(!fragmentList.isEmpty()){
-                mFragmentViewPager.setAdapter(new AudioPageAdapter(getChildFragmentManager(), fragmentList, titleString));
+                mFragmentViewPager.setAdapter(new PageAdapter(getChildFragmentManager(), fragmentList, titleString));
 //                mFragmentViewPager.setOffscreenPageLimit(fragmentList.size()-1);
                 mFragmentTabLayout.setupWithViewPager(mFragmentViewPager);
             }

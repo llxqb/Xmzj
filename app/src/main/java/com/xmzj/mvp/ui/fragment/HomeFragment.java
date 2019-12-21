@@ -28,6 +28,7 @@ import com.xmzj.help.GlideImageLoader;
 import com.xmzj.listener.DownloadListener;
 import com.xmzj.mvp.ui.activity.audio.AudioActivity;
 import com.xmzj.mvp.ui.activity.audio.AudioPlayDetailActivity;
+import com.xmzj.mvp.ui.activity.book.BooksActivity;
 import com.xmzj.mvp.ui.activity.main.HomeFragmentControl;
 import com.xmzj.mvp.ui.activity.video.VideoActivity;
 import com.xmzj.mvp.ui.adapter.HomeRecommendAudioAdapter;
@@ -64,8 +65,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     @BindView(R.id.home_bottom_recycler_view)
     RecyclerView mHomeBottomRecyclerView;
     Unbinder unbinder;
-    private String[] FunctionTextString = {"心密视频", "心密音频"};//"心密书库",, "心密互动", "心密论坛", "打座计时", "商城", "活动报名"
-    private int[] FunctionImageeString = {R.mipmap.videos, R.mipmap.music};//R.mipmap.books, , R.mipmap.hudong, R.mipmap.luntan, R.mipmap.clock, R.mipmap.mall, R.mipmap.baoming
+    private String[] FunctionTextString = {"心密视频", "心密音频","心密书库"};//"心密书库",, "心密互动", "心密论坛", "打座计时", "商城", "活动报名"
+    private int[] FunctionImageeString = {R.mipmap.videos, R.mipmap.music,R.mipmap.books};//, , R.mipmap.hudong, R.mipmap.luntan, R.mipmap.clock, R.mipmap.mall, R.mipmap.baoming
     private String[] BottomFunctionText = {"视频", "音乐", "书籍"};
     private int[] BottomFunctionImg = {R.mipmap.books, R.mipmap.videos, R.mipmap.music};
     private List<String> bannerImgList = new ArrayList<>();
@@ -101,7 +102,7 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
     @Override
     public void initView() {
         HomeTopAdapter mHomeTopAdapter = new HomeTopAdapter(getActivity(), functionResponseList, mImageLoaderHelper);
-        mHomeTopRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+        mHomeTopRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         mHomeTopRecyclerView.setAdapter(mHomeTopAdapter);
         mHomeTopAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             HomeFunctionResponse homeFunctionResponse = (HomeFunctionResponse) adapter.getItem(position);
@@ -111,6 +112,8 @@ public class HomeFragment extends BaseFragment implements HomeFragmentControl.Ho
                     startActivitys(VideoActivity.class);
                 } else if (position == 1) {
                     startActivitys(AudioActivity.class);
+                }else if (position == 2) {//书库
+                    startActivitys(BooksActivity.class);
                 }
             }
         });

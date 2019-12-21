@@ -15,7 +15,7 @@ import com.xmzj.entity.base.BaseActivity;
 import com.xmzj.entity.response.AudioClassifyResponse;
 import com.xmzj.entity.response.AudioDetailInfoResponse;
 import com.xmzj.mvp.ui.activity.search.SearchAudioActivity;
-import com.xmzj.mvp.ui.adapter.AudioPageAdapter;
+import com.xmzj.mvp.ui.adapter.PageAdapter;
 import com.xmzj.mvp.ui.fragment.AudioFragment;
 
 import java.util.ArrayList;
@@ -87,7 +87,7 @@ public class AudioActivity extends BaseActivity implements AudioControl.AudioVie
         }
         if (!fragmentList.isEmpty()) {
             mViewPager.setOffscreenPageLimit(fragmentList.size()-1);
-            mViewPager.setAdapter(new AudioPageAdapter(getSupportFragmentManager(), fragmentList, titleString));
+            mViewPager.setAdapter(new PageAdapter(getSupportFragmentManager(), fragmentList, titleString));
             mTabLayout.setupWithViewPager(mViewPager);
         }
     }

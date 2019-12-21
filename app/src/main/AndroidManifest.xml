@@ -23,6 +23,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:targetApi="n">
+        <activity android:name=".mvp.ui.activity.book.BookDetailActivity"></activity>
+        <activity android:name=".mvp.ui.activity.book.BooksActivity" />
 
         <provider
             android:name=".help.MyProvider"
@@ -43,7 +45,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".mvp.ui.activity.search.SearchAudioActivity"
             android:screenOrientation="portrait" />
@@ -83,7 +84,6 @@
         <activity
             android:name=".mvp.ui.activity.login.LoginActivity"
             android:screenOrientation="portrait" />
-
     </application>
 
 </manifest>

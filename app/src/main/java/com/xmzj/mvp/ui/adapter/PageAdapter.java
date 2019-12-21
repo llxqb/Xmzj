@@ -6,11 +6,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
-public class AudioPageAdapter extends FragmentPagerAdapter {
+public class PageAdapter extends FragmentPagerAdapter {
     private final List<String> titles ;
     private List<Fragment> frag;
 
-    public AudioPageAdapter(FragmentManager fm,List<Fragment> fragmentList, List<String> titleString) {
+    public PageAdapter(FragmentManager fm, List<Fragment> fragmentList, List<String> titleString) {
         super(fm);
         frag= fragmentList;
         titles = titleString;
