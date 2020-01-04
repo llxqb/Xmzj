@@ -25,7 +25,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_12"
-            android:text="jaffer"
             android:textColor="@color/first_text_color"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold" />

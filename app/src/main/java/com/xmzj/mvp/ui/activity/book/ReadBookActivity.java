@@ -252,6 +252,7 @@ public class ReadBookActivity extends BaseActivity implements ReadBookControl.Re
     }
 
     protected void initWhenLoadDone() {
+        TxtConfig.saveIsOnVerticalPageMode(this,false);
         mTitle.setText(mBookName);
         mChapterNameTv.setText(mChapterName);
         mTextSize.setText(String.valueOf(mTxtReaderView.getTextSize()));
